@@ -51,7 +51,7 @@ function Home() {
   return (
     <>
       <Navbar />
-      <section className="flex min-h-screen bg-gray-300 font-poppins">
+      <section className="flex min-h-fit bg-gray-100 font-poppins">
       <div className="container mx-auto px-6 pt-20 pb-24 mt-40">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8 animate-fade-in">
@@ -80,8 +80,101 @@ function Home() {
           </div>
         </div>
       </section>
+
+      <section className="h-fit p-10">
+        <h2 className="text-4xl font-semibold mb-8 text-custom-orange text-center">
+          Dive into our vast video library
+        </h2>
+        <div id="categories" className="relative">
+          {isLoading ? (
+            <div className="flex justify-center items-center min-h-[20vh]">
+              <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-custom-orange border-solid"></div>
+            </div>
+          ) : (
+            <Carousel
+              swipeable={true}
+              draggable={true}
+              showDots={false}
+              responsive={responsive}
+              ssr={true}
+              infinite={true}
+              autoPlay={true}
+              autoPlaySpeed={5000}
+              keyBoardControl={true}
+              customTransition="transform 500ms ease-in-out"
+              transitionDuration={2000}
+              containerClassName="carousel-container"
+              removeArrowOnDeviceType={["tablet", "mobile"]}
+              deviceType={"desktop"}
+              dotListClassName="absolute bottom-0 left-0 right-0 flex justify-center mb-4 custom-dot-list-style"
+              itemClassName="carousel-item-wrapper"
+              arrows={true}
+              renderButtonGroupOutside={true}
+            >
+<div className="group relative overflow-hidden mx-5 rounded-3xl">
+  <img
+    src="https://www.thoughtco.com/thmb/6MsMmUK27akFhb8i89kj95J5iko=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-545286316-433dd345105e4c6ebe4cdd8d2317fdaa.jpg"
+    alt="chemistry"
+    className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+  />
+  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+    <div className="absolute bottom-0 left-0 right-0 p-6">
+      <h3 className="text-xl font-bold text-white mb-2">Chemistry Experiment</h3>
+      <p className="text-gray-200">Chemical Reactions</p>
+    </div>
+  </div>
+</div>
+
+<div className="group relative overflow-hidden mx-5 rounded-3xl">
+  <img
+    src="https://marandahighschool.sc.ke/wp-content/uploads/2023/10/360_F_235711378_x8BsTR14c7Iu9myWbXVBk2DHf7dHsdgg.jpeg"
+    alt="Project 2"
+    className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+  />
+  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+    <div className="absolute bottom-0 left-0 right-0 p-6">
+      <h3 className="text-xl font-bold text-white mb-2">Biology</h3>
+      <p className="text-gray-200">Human anatomy</p>
+    </div>
+  </div>
+</div>
+
+<div className="group relative overflow-hidden mx-5 rounded-3xl">
+  <img
+    src="https://t4.ftcdn.net/jpg/06/32/85/07/360_F_632850771_wxhuaCHM19y63i5zeYsZtEYTEU3LUbWc.jpg"
+    alt="Project 3"
+    className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+  />
+  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+    <div className="absolute bottom-0 left-0 right-0 p-6">
+      <h3 className="text-xl font-bold text-white mb-2">Physics Lab</h3>
+      <p className="text-gray-200">Forces and Motion</p>
+    </div>
+  </div>
+</div>
+
+<div className="group relative overflow-hidden mx-5 rounded-3xl">
+  <img
+    src="https://astro.cornell.edu/sites/default/files/styles/pano/public/2022-11/CarinaNebulaWebb.jpg?h=42541cb7&itok=ROrFJymI"
+    alt="Project 4"
+    className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+  />
+  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+    <div className="absolute bottom-0 left-0 right-0 p-6">
+      <h3 className="text-xl font-bold text-white mb-2">Astronomy Observation</h3>
+      <p className="text-gray-200">Stars and Galaxies</p>
+    </div>
+  </div>
+</div>
+
+
+</Carousel>
+          )}
+        </div>
+      </section>
+
       <section className='h-fit p-20 bg-slate-200'>
-      <div className="container mx-auto px-6">
+<div className="container mx-auto px-6">
   <h2 className="text-4xl font-bold text-center mb-16">Why Vlearn?</h2>
   <div className="grid md:grid-cols-3 text-center gap-12">
     
@@ -116,54 +209,7 @@ function Home() {
 </div>
 
       </section>
-      <section className="h-fit">
-        <h2 className="text-4xl font-semibold mb-8 text-custom-orange text-center">
-          Dive into our vast video library
-        </h2>
-        <div id="categories" className="relative">
-          {isLoading ? (
-            <div className="flex justify-center items-center min-h-[20vh]">
-              <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-custom-orange border-solid"></div>
-            </div>
-          ) : (
-            <Carousel
-              swipeable={true}
-              draggable={true}
-              showDots={false}
-              responsive={responsive}
-              ssr={true}
-              infinite={true}
-              autoPlay={true}
-              autoPlaySpeed={5000}
-              keyBoardControl={true}
-              customTransition="transform 500ms ease-in-out"
-              transitionDuration={2000}
-              containerClassName="carousel-container"
-              removeArrowOnDeviceType={["tablet", "mobile"]}
-              deviceType={"desktop"}
-              dotListClassName="absolute bottom-0 left-0 right-0 flex justify-center mb-4 custom-dot-list-style"
-              itemClassName="carousel-item-wrapper"
-              arrows={true}
-              renderButtonGroupOutside={true}
-            >
-              {categories.map((category) => (
-                <Link to="dashboard" key={category.id}>
-                  <div className="carousel-item">
-                    <img
-                      src={`https://res.cloudinary.com/dfycvaiv7/${category.image}`}
-                      alt={category.title}
-                      className="p-4 items-center w-3/4 md:w-96 md:max-w-xs h-48 rounded-3xl object-cover drop-shadow-3xl"
-                    />
-                    <p className="text-sm font-normal text-center mt-6">{category.title}</p>
-                  </div>
-                </Link>
-              ))}
-            </Carousel>
-          )}
-        </div>
-      </section>
-
-      <section id="how-it-works" className="py-16 px-4 h-auto mt-16">
+      {/* <section id="how-it-works" className="py-16 px-4 h-auto mt-16">
         <div className="flex flex-col md:flex-row items-center justify-around mx-auto">
           <div className="w-full md:w-1/2 mb-8 md:mb-0">
             <img
@@ -210,7 +256,7 @@ function Home() {
             />
           </div>
         </div>
-      </section>
+      </section> */}
 
       <Footer />
     </>
