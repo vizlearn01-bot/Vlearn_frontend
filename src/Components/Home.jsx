@@ -5,6 +5,11 @@ import 'react-multi-carousel/lib/styles.css';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
+import { 
+
+  ChevronRight,
+ 
+} from 'lucide-react';
 
 
 function Home() {
@@ -51,19 +56,31 @@ function Home() {
     <>
       <Navbar />
       <section className="flex min-h-screen bg-gray-300 font-poppins">
-        <div className="flex flex-col md:flex-row justify-between bg-white rounded-lg p-8 items-center w-full">
-          <div className="md:ml-10 sm:mt-32 text-center md:text-left w-full md:w-2/3 pt-32">
-            <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-12 text-custom-blue">
-              Empowering future<span className="text-custom-orange"> minds,</span> one lesson
-              <span className="text-custom-orange"> at a time.</span>
-            </h1>
-          </div>
-          <div className="md:block w-2/3">
-            <img
-              src="https://plus.unsplash.com/premium_photo-1681426678542-613c306013e1?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="sharing"
-              className="rounded-[39%_61%_38%_62%/42%_47%_53%_58%] mx-auto"
-            />
+      <div className="container mx-auto px-6 pt-20 pb-24 mt-32">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8 animate-fade-in">
+              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
+                Discover the Joy of <span className="text-custom-blue">Scientific Learning</span>
+              </h1>
+              <p className="text-xl text-gray-600">
+                Transform your classroom into an interactive laboratory. Engage students with hands-on experiments and comprehensive learning tools.
+              </p>
+              <div className="flex space-x-4">
+                <button className="bg-custom-blue text-white px-8 py-3 rounded-full hover:bg-custom-orange transition-colors flex items-center">
+                  Start Learning <ChevronRight className="ml-2 h-5 w-5" />
+                </button>
+                <button className="border-2 border-custom-blue text-custom-blue px-8 py-3 rounded-full hover:bg-indigo-50 transition-colors hover:border-custom-orange">
+                  Watch Demo
+                </button>
+              </div>
+            </div>
+            <div className="animate-float">
+              <img 
+                src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80"
+                alt="Science Experiment"
+                className="rounded-2xl shadow-2xl"
+              />
+            </div>
           </div>
         </div>
       </section>
