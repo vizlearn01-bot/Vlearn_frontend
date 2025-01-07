@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import Navbar from '../Components/Navbar';
+import Footer from '../Components/Footer';
 // import { Link } from 'react-router-dom';
 import { Rocket,Brain,TestTube,ChevronRight, GraduationCap} from 'lucide-react';
 

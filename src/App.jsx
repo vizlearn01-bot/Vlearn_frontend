@@ -1,14 +1,13 @@
 
 import '/src/index.css'
 import { BrowserRouter, Route , Routes} from 'react-router-dom'
-import Home from './Components/Home'
-import Dashboard from './Components/Dashboard'
-// import MainDash from './Components/MainDash'
-import Form1 from './Components/Form1'
-import Form2 from './Components/Form2'
-import Form3 from './Components/Form3'
-import Form4 from './Components/Form4'
-import ContactUs from './Components/ContactUs'
+import Home from '../src/Pages/Home'
+import Dashboard from '../src/Pages/Dashboard'
+import Form1 from '../src/Pages/Form1'
+import Form2 from '../src/Pages//Form2'
+import Form3 from '../src/Pages/Form3'
+import Form4 from '../src/Pages/Form4'
+import ContactUs from '../src/Pages/ContactUs'
 
 function App() {
 
@@ -19,7 +18,6 @@ function App() {
       <Route path = "/" element = {<Home/>}></Route>
       <Route path = "/dashboard" element = {<Dashboard/>}></Route>
       <Route path="/contact" element = {<ContactUs/>}></Route>
-      {/* <Route path = "/maindash" element = {<MainDash/>}></Route> */}
             <Route path="/form1" element={<Form1 />} />
             <Route path="/form2" element={<Form2 />} />
             <Route path="/form3" element={<Form3 />} />

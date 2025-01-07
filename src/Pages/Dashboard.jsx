@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import SideNav from './SideNav';
-import Form1 from './Form1';
-import Form2 from './Form2';
-import Form3 from './Form3';
-import Form4 from './Form4';
+import SideNav from '../Components/SideNav';
+import Form1 from '../Pages/Form1';
+import Form2 from '../Pages/Form2';
+import Form3 from '../Pages/Form3';
+import Form4 from '../Pages/Form4';
 
 function Dashboard() {
   const [selectedClass, setSelectedClass] = useState('Form1');
