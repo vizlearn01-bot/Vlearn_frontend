@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import AnchorLink from 'react-anchor-link-smooth-scroll';
 import { Link } from 'react-router-dom';
 
 function Navbar() {
@@ -13,7 +12,7 @@ function Navbar() {
         <div className="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
           <div className="flex flex-row items-center justify-between p-4">
             <a className="text-3xl font-bold text-white rounded-3xl focus:outline-none focus:shadow-outline">
-              VizLearn <span className='text-2xl  text-custom-orange'>.</span>
+              VizLearn<span className='text-2xl  text-custom-orange'>.</span>
             </a>
             <button
               className="rounded-3xl md:hidden focus:outline-none focus:shadow-outline"
@@ -38,20 +37,20 @@ function Navbar() {
           </div>
           <nav className={`flex-col flex-grow ${open ? 'flex' : 'hidden'} pb-4 md:pb-0 md:flex md:justify-end md:flex-row`}>
             <a
-              className="px-3 py-2 text-sm bg-transparent text-white rounded-3xl hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+              className="px-3 py-2 mx-2 text-sm bg-transparent text-white rounded-3xl hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
               href="#"
             >
               About us
             </a>
-            <AnchorLink
-              className="px-3 py-2 text-sm bg-transparent text-white rounded-3xl hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+            <Link to="/dashboard"
+              className="px-3 py-2 mx-2 text-sm bg-transparent text-white rounded-3xl hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
               href="#"
             >
               Dashboard
-            </AnchorLink>
+            </Link>
             <Link
               to="/contact"
-              className="px-3 py-2 text-sm bg-transparent text-white rounded-3xl hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+              className="px-3 py-2 mx-2 text-sm bg-transparent text-white rounded-3xl hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
             >
              Contact us
             </Link>
