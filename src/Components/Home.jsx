@@ -4,12 +4,12 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { Link } from 'react-router-dom';
-import { Rocket,Brain,TestTube,ChevronRight,} from 'lucide-react';
+// import { Link } from 'react-router-dom';
+import { Rocket,Brain,TestTube,ChevronRight, GraduationCap} from 'lucide-react';
 
 
 function Home() {
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const URL = 'https://nexus-backend-kia6.onrender.com/categories/';
@@ -20,7 +20,7 @@ function Home() {
       try {
         const response = await axios.get(URL);
         console.log(response.data);
-        setCategories(response.data);
+        // setCategories(response.data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -173,41 +173,49 @@ function Home() {
         </div>
       </section>
 
-      <section className='h-fit p-20 bg-slate-200'>
-<div className="container mx-auto px-6">
-  <h2 className="text-4xl font-bold text-center mb-16">Why Vlearn?</h2>
-  <div className="grid md:grid-cols-3 text-center gap-12">
-    
-    {/* Feature 1 */}
-    <div className="p-8 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform hover:-translate-y-1">
-      <div className="mb-4 flex justify-center items-center">
-        <Brain className="h-12 w-12 text-custom-blue" />
-      </div>
-      <h3 className="text-xl font-semibold mb-4">Interactive Learning</h3>
-      <p className="text-gray-600">Engage with interactive 3D models and simulations</p>
-    </div>
+        <section className='h-fit p-20 bg-slate-200'>
+        <div className="container mx-auto px-6">
+        <h2 className="text-4xl font-bold text-center mb-16">Why Vlearn?</h2>
+        <div className="grid md:grid-cols-3 text-center gap-12">
 
-    {/* Feature 2 */}
-    <div className="p-8 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform hover:-translate-y-1">
-      <div className="mb-4 flex justify-center items-center">
-        <TestTube className="h-12 w-12 text-custom-blue" />
-      </div>
-      <h3 className="text-xl font-semibold mb-4">Virtual Labs</h3>
-      <p className="text-gray-600">Access state-of-the-art virtual laboratory experiences</p>
-    </div>
+        {/* Feature 1 */}
+        <div className="p-8 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform hover:-translate-y-1">
+        <div className="mb-4 flex justify-center items-center">
+          <Brain className="h-12 w-12 text-custom-blue" />
+        </div>
+        <h3 className="text-xl font-semibold mb-4">Interactive Learning</h3>
+        <p className="text-gray-600">Engage with interactive 3D models and simulations</p>
+        </div>
 
-    {/* Feature 3 */}
-    <div className="p-8 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform hover:-translate-y-1">
-      <div className="mb-4 flex justify-center items-center">
-        <Rocket className="h-12 w-12 text-custom-blue" />
-      </div>
-      <h3 className="text-xl font-semibold mb-4">Progress Tracking</h3>
-      <p className="text-gray-600">Monitor student progress with detailed analytics</p>
-    </div>
+        {/* Feature 2 */}
+        <div className="p-8 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform hover:-translate-y-1">
+        <div className="mb-4 flex justify-center items-center">
+          <TestTube className="h-12 w-12 text-custom-blue" />
+        </div>
+        <h3 className="text-xl font-semibold mb-4">Virtual Labs</h3>
+        <p className="text-gray-600">Access state-of-the-art virtual laboratory experiences</p>
+        </div>
 
-  </div>
-</div>
+        {/* Feature 3 */}
+        <div className="p-8 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform hover:-translate-y-1">
+        <div className="mb-4 flex justify-center items-center">
+          <Rocket className="h-12 w-12 text-custom-blue" />
+        </div>
+        <h3 className="text-xl font-semibold mb-4">Progress Tracking</h3>
+        <p className="text-gray-600">Monitor student progress with detailed analytics</p>
+        </div>
 
+        </div>
+        </div>
+
+        </section>
+        <section className="bg-custom-blue py-20">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold text-white mb-8">Ready to Transform Your Science Class?</h2>
+          <button className="bg-white text-custom-blue px-8 py-3 rounded-full hover:bg-gray-100 transition-colors inline-flex items-center">
+            Get Started Now <GraduationCap className="ml-2 h-5 w-5" />
+          </button>
+        </div>
       </section>
       {/* <section id="how-it-works" className="py-16 px-4 h-auto mt-16">
         <div className="flex flex-col md:flex-row items-center justify-around mx-auto">
