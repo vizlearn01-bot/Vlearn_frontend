@@ -59,10 +59,10 @@ function Home() {
       <div className="container mx-auto px-6 pt-20 pb-24 mt-32">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8 animate-fade-in">
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
+              <h1 className="text-5xl md:text-6xl font-bold  md:leading-snug leading-normal">
                 Discover the Joy of <span className="text-custom-blue">Scientific Learning</span>
               </h1>
-              <p className="text-xl text-gray-600">
+              <p className="text-xl w-full">
                 Transform your classroom into an interactive laboratory. Engage students with hands-on experiments and comprehensive learning tools.
               </p>
               <div className="flex space-x-4">
@@ -78,7 +78,7 @@ function Home() {
               <img 
                 src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80"
                 alt="Science Experiment"
-                className="rounded-2xl shadow-2xl"
+                className="rounded-3xl shadow-2xl"
               />
             </div>
           </div>
