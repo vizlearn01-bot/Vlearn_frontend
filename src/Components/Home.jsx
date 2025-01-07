@@ -5,11 +5,7 @@ import 'react-multi-carousel/lib/styles.css';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
-import { 
-
-  ChevronRight,
- 
-} from 'lucide-react';
+import { Rocket,Brain,TestTube,ChevronRight,} from 'lucide-react';
 
 
 function Home() {
@@ -56,13 +52,13 @@ function Home() {
     <>
       <Navbar />
       <section className="flex min-h-screen bg-gray-300 font-poppins">
-      <div className="container mx-auto px-6 pt-20 pb-24 mt-32">
+      <div className="container mx-auto px-6 pt-20 pb-24 mt-40">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8 animate-fade-in">
               <h1 className="text-5xl md:text-6xl font-bold  md:leading-snug leading-normal">
                 Discover the Joy of <span className="text-custom-blue">Scientific Learning</span>
               </h1>
-              <p className="text-xl w-full">
+              <p className="text-xl w-5/6">
                 Transform your classroom into an interactive laboratory. Engage students with hands-on experiments and comprehensive learning tools.
               </p>
               <div className="flex space-x-4">
@@ -74,7 +70,7 @@ function Home() {
                 </button>
               </div>
             </div>
-            <div className="animate-float">
+            <div className="hover:animate-bounce hover:cursor-pointer">
               <img 
                 src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80"
                 alt="Science Experiment"
@@ -84,7 +80,42 @@ function Home() {
           </div>
         </div>
       </section>
+      <section className='h-fit p-20 bg-slate-200'>
+      <div className="container mx-auto px-6">
+  <h2 className="text-4xl font-bold text-center mb-16">Why Vlearn?</h2>
+  <div className="grid md:grid-cols-3 text-center gap-12">
+    
+    {/* Feature 1 */}
+    <div className="p-8 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform hover:-translate-y-1">
+      <div className="mb-4 flex justify-center items-center">
+        <Brain className="h-12 w-12 text-custom-blue" />
+      </div>
+      <h3 className="text-xl font-semibold mb-4">Interactive Learning</h3>
+      <p className="text-gray-600">Engage with interactive 3D models and simulations</p>
+    </div>
 
+    {/* Feature 2 */}
+    <div className="p-8 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform hover:-translate-y-1">
+      <div className="mb-4 flex justify-center items-center">
+        <TestTube className="h-12 w-12 text-custom-blue" />
+      </div>
+      <h3 className="text-xl font-semibold mb-4">Virtual Labs</h3>
+      <p className="text-gray-600">Access state-of-the-art virtual laboratory experiences</p>
+    </div>
+
+    {/* Feature 3 */}
+    <div className="p-8 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform hover:-translate-y-1">
+      <div className="mb-4 flex justify-center items-center">
+        <Rocket className="h-12 w-12 text-custom-blue" />
+      </div>
+      <h3 className="text-xl font-semibold mb-4">Progress Tracking</h3>
+      <p className="text-gray-600">Monitor student progress with detailed analytics</p>
+    </div>
+
+  </div>
+</div>
+
+      </section>
       <section className="h-fit">
         <h2 className="text-4xl font-semibold mb-8 text-custom-orange text-center">
           Dive into our vast video library
