@@ -1,7 +1,7 @@
 
 import { Link } from 'react-router-dom';
 
-const SideNav = ({ setSelectedClass }) => {
+const SideNav = (/*setSelectedClass */) => {
   return (
     <nav className="w-56 h-screen bg-custom-blue text-white flex flex-col justify-between fixed md:relative z-50 top-0 md:translate-x-0 transition-transform duration-300 transform md:translate-none">
       <div className="mt-8">
@@ -13,7 +13,7 @@ const SideNav = ({ setSelectedClass }) => {
           {['Form 1', 'Form 2', 'Form 3', 'Form 4'].map((form, index) => (
             <li key={index}>
               <button
-                onClick={() => setSelectedClass(form)}
+                onClick={() => /*setSelectedClass */(form)}
                 className="block w-2/3 text-left pl-2 ml-3 text-lg rounded-lg transition-colors duration-300 hover:text-custom-orange"
               >
                 {form}

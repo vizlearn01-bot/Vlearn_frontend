@@ -15,8 +15,8 @@ function Dashboard() {
     <>
        <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 p-4">
         <div className="flex items-center gap-2 mb-8">
-          <GraduationCap className="h-8 w-8 text-custom-blue" />
-          <h1 className="text-xl font-bold text-gray-800">EduLearn</h1>
+          <GraduationCap className="h-10 w-10 text-custom-blue" />
+          <h1 className="text-3xl font-bold text-gray-800">VizLearn</h1>
         </div>
         
         <nav className="space-y-2">
@@ -37,7 +37,7 @@ function Dashboard() {
           ))}
         </nav>
       </aside>
-      <main className='ml-64 p-8'>
+      <main className='ml-64 p-8 w-5/6'>
       <header className="flex items-center justify-between mb-8">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-custom-blue" />
