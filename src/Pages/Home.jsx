@@ -88,7 +88,7 @@ function Home() {
         <div id="categories" className="">
           {isLoading ? (
             <div className="flex justify-center items-center min-h-[20vh]">
-              <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-custom-orange border-solid"></div>
+              <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-custom-blue border-solid"></div>
             </div>
           ) : (
             <Carousel
@@ -117,7 +117,7 @@ function Home() {
     alt="chemistry"
     className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
   />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+  <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5  to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
     <div className="absolute bottom-0 left-0 right-0 p-6">
       <h3 className="text-xl font-bold text-white mb-2">Chemistry Experiment</h3>
       <p className="text-gray-200">Chemical Reactions</p>
@@ -131,7 +131,7 @@ function Home() {
     alt="Project 2"
     className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
   />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+  <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
     <div className="absolute bottom-0 left-0 right-0 p-6">
       <h3 className="text-xl font-bold text-white mb-2">Biology</h3>
       <p className="text-gray-200">Human anatomy</p>
@@ -145,7 +145,7 @@ function Home() {
     alt="Project 3"
     className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
   />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+  <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
     <div className="absolute bottom-0 left-0 right-0 p-6">
       <h3 className="text-xl font-bold text-white mb-2">Physics Lab</h3>
       <p className="text-gray-200">Forces and Motion</p>
@@ -159,7 +159,7 @@ function Home() {
     alt="Project 4"
     className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
   />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+  <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
     <div className="absolute bottom-0 left-0 right-0 p-6">
       <h3 className="text-xl font-bold text-white mb-2">Astronomy Observation</h3>
       <p className="text-gray-200">Stars and Galaxies</p>
