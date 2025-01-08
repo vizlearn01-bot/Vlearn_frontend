@@ -11,10 +11,10 @@ function Dashboard() {
 
   const renderClassContent = () => {
     switch (selectedClass) {
-      case 'Form1': return <Form1 />;
-      case 'Form2': return <Form2 />;
-      case 'Form3': return <Form3 />;
-      case 'Form4': return <Form4 />;
+      case 'Form 1': return <Form1 />;
+      case 'Form 2': return <Form2 />;
+      case 'Form 3': return <Form3 />;
+      case 'Form 4': return <Form4 />;
       default: return <Form1 />;
     }
   };
@@ -42,7 +42,7 @@ function Dashboard() {
         {/* Main Content */}
         <div className="flex-1 bg-gray-100 px-4 md:px-6">
           {/* Profile Section */}
-          <div className="bg-white shadow-sm p-4 md:p-6 flex justify-between items-center">
+          <div className="bg-white shadow-sm  p-4 md:p-6 flex justify-between items-center">
             <div className="flex items-center">
               <img
                 className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover"

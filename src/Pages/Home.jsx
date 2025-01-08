@@ -70,7 +70,7 @@ function Home() {
                 </button>
               </div>
             </div>
-            <div className="hover:animate-bounce hover:cursor-pointer">
+            <div className="hover:cursor-pointer">
               <img 
                 src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80"
                 alt="Science Experiment"
