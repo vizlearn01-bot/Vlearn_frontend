@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Login() {
     return (
       <>
@@ -8,7 +10,7 @@ function Login() {
             <div className="relative w-full rounded-3xl px-6 py-4 bg-gray-100 shadow-md">
               <label
                 htmlFor="login"
-                className="block mt-3 text-sm text-gray-700 text-center font-semibold"
+                className="block mt-3 text-xl text-gray-700 text-center font-semibold"
               >
                 Login
               </label>
@@ -85,12 +87,13 @@ function Login() {
                 <div className="mt-7 text-sm">
                   <div className="flex justify-center">
                     <label className="mr-2">Don&apos;t have an account?</label>
-                    <a
-                      href="#"
+                <Link to='/register'>
+                <h
                       className="text-black transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
                     >
                       Create an account
-                    </a>
+                    </h>
+                </Link>
                   </div>
                 </div>
               </form>
