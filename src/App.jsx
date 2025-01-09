@@ -8,6 +8,7 @@ import Form2 from '../src/Pages//Form2'
 import Form3 from '../src/Pages/Form3'
 import Form4 from '../src/Pages/Form4'
 import ContactUs from '../src/Pages/ContactUs'
+import Login from './Pages/Login'
 
 function App() {
 
@@ -18,6 +19,8 @@ function App() {
       <Route path = "/" element = {<Home/>}></Route>
       <Route path = "/dashboard" element = {<Dashboard/>}></Route>
       <Route path="/contact" element = {<ContactUs/>}></Route>
+      <Route path="/login" element = {<Login/>}></Route>
+  
     <Route path="/form1" element={<Form1 />} />
     <Route path="/form2" element={<Form2 />} />
     <Route path="/form3" element={<Form3 />} />

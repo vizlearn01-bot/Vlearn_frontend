@@ -82,7 +82,7 @@ function Home() {
       </section>
 
       <section className="h-fit p-10">
-        <h2 className="text-4xl font-semibold mb-8 text-custom-orange text-center">
+        <h2 className="text-4xl font-semibold mb-8 text-custom-blue text-center">
           Dive into our vast video library
         </h2>
         <div id="categories" className="">

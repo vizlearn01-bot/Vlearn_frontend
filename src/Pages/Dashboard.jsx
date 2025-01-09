@@ -1,22 +1,14 @@
-import { 
-    BookOpen, 
-    Calendar, 
-    GraduationCap, 
-    BarChart2, 
-    Clock, 
-    Award,
-    Bell,
-    Search,
-    User
+import { BookOpen, Calendar, GraduationCap, BarChart2, 
+    Clock, Award,Bell,Search,User
   } from 'lucide-react';
-
+import { Link } from 'react-router-dom';
 function Dashboard() {
   return (
     <>
        <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 p-4">
         <div className="flex items-center gap-2 mb-8">
           <GraduationCap className="h-10 w-10 text-custom-blue" />
-          <h1 className="text-3xl font-bold text-gray-800">VizLearn</h1>
+          <Link to="/"><h1 className="text-3xl font-bold text-gray-800">VizLearn</h1></Link>
         </div>
         
         <nav className="space-y-2">
