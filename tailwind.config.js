@@ -30,6 +30,9 @@ export default {
         bold: 700,
         extrabold: 800,
       },
+      backgroundImage: {
+        'custom-bg': 'url("https://www.thoughtco.com/thmb/6MsMmUK27akFhb8i89kj95J5iko=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-545286316-433dd345105e4c6ebe4cdd8d2317fdaa.jpg")'
+      },
     },
   },
   plugins: [],

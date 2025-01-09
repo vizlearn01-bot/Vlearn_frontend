@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 function Signup() {
   return (
           <>
-            <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full">
+            <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full bg-custom-bg bg-center bg-cover">
               <div className="relative sm:max-w-sm w-full">
                 <div className="card bg-custom-blue shadow-2xl w-full h-full rounded-3xl absolute transform -rotate-6"></div>
                 <div className="card bg-custom-orange shadow-2xl w-full h-full rounded-3xl absolute transform rotate-6"></div>
@@ -91,12 +91,12 @@ function Signup() {
       
                     <div className="mt-7 text-sm">
                       <div className="flex justify-center">
-                        <label className="mr-2">Don&apos;t have an account?</label>
-                    <Link to='/register'>
+                        <label className="mr-2">Have an account?</label>
+                    <Link to='/login'>
                     <h
                           className="text-black transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
                         >
-                          Create an account
+                          Sign in
                         </h>
                     </Link>
                       </div>
