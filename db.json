@@ -1,0 +1,25 @@
+{
+    "courses": [
+      {
+        "title": "Introduction to React",
+        "progress": 75,
+        "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        "title": "Advanced JavaScript",
+        "progress": 45,
+        "image": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        "title": "Advanced JavaScript",
+        "progress": 45,
+        "image": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        "title": "Advanced JavaScript",
+        "progress": 45,
+        "image": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=800&q=80"
+      }
+    ]
+  }
+  
