@@ -1,8 +1,19 @@
+import { useState } from 'react';
 import { BookOpen, Calendar, GraduationCap, BarChart2, 
     Clock, Award,Bell,Search,User
   } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
 function Dashboard() {
+  const [searchItem, setSearchItem] = useState('')
+  const [filteredCourses, setFilteredCourses] = useState([])
+
+  const handleInputChange = (e) => {
+    const searchTerm = e.target.value;
+    setSearchItem(searchTerm)
+
+    const
+  }
   return (
     <>
        <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 p-4">
@@ -36,6 +47,7 @@ function Dashboard() {
             <input
               type="text"
               placeholder="Search courses..."
+              onChange={handleInputChange}
               className="pl-10 pr-4 py-2 border border-gray-200 rounded-3xl w-full focus:outline-none focus:ring-2 focus:ring-custom-blue"
             />
           </div>

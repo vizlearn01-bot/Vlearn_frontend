@@ -11,7 +11,7 @@ import { Rocket,Brain,TestTube,ChevronRight, GraduationCap} from 'lucide-react';
 function Home() {
   // const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  
   const URL = 'https://nexus-backend-kia6.onrender.com/categories/';
 
   // Fetching data on the categories from the JSON file
