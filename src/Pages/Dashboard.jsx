@@ -8,11 +8,35 @@ function Dashboard() {
   const [searchItem, setSearchItem] = useState('')
   const [filteredCourses, setFilteredCourses] = useState([])
 
+  const courses = [
+    {
+      title: 'Introduction to React',
+      progress: 75,
+      image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80',
+    },
+    {
+      title: 'Advanced JavaScript',
+      progress: 45,
+      image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=800&q=80',
+    },
+    {
+      title: 'Advanced JavaScript',
+      progress: 45,
+      image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=800&q=80',
+    },
+    {
+      title: 'Advanced JavaScript',
+      progress: 45,
+      image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=800&q=80',
+    },
+  ]
+
   const handleInputChange = (e) => {
     const searchTerm = e.target.value;
     setSearchItem(searchTerm)
 
-    const
+    const filterItems = courses.filter((course) => course.title.toLowerCase().includes(searchTerm.toLowerCase()))
+    setFilteredCourses(filterItems)
   }
   return (
     <>
@@ -66,18 +90,7 @@ function Dashboard() {
         <section className="mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Current Courses</h2>
           <div className="grid grid-cols-2 gap-6">
-            {[
-              {
-                title: 'Introduction to React',
-                progress: 75,
-                image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80',
-              },
-              {
-                title: 'Advanced JavaScript',
-                progress: 45,
-                image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=800&q=80',
-              },
-            ].map((course, index) => (
+            {filteredCourses.map((course, index) => (
               <div key={index} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                 <img src={course.image} alt={course.title} className="w-full h-48 object-cover" />
                 <div className="p-6">
