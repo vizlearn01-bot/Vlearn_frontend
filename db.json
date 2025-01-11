@@ -3,7 +3,6 @@
     {
       "id": 1,
       "title": "Introduction to React",
-      
       "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Learn the fundamentals of React, including components, state management, and hooks, to build modern, dynamic web applications.",
       "lessons": [
@@ -16,12 +15,12 @@
       "duration": "10 hours",
       "difficulty": "Beginner",
       "instructor": "Jane Doe",
-      "rating": 4.8
+      "rating": 4.8,
+      "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
     },
     {
       "id": 2,
       "title": "Advanced JavaScript",
-      
       "image": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=800&q=80",
       "description": "Deepen your JavaScript skills by exploring advanced concepts such as closures, asynchronous programming, and design patterns.",
       "lessons": [
@@ -34,12 +33,12 @@
       "duration": "15 hours",
       "difficulty": "Intermediate",
       "instructor": "John Smith",
-      "rating": 4.7
+      "rating": 4.7,
+      "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
     },
     {
       "id": 3,
       "title": "JavaScript for Backend Development",
-     
       "image": "https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=800&q=80",
       "description": "Master server-side JavaScript programming with Node.js, exploring how to build scalable and efficient backend applications.",
       "lessons": [
@@ -52,13 +51,13 @@
       "duration": "20 hours",
       "difficulty": "Intermediate",
       "instructor": "Alice Johnson",
-      "rating": 4.9
+      "rating": 4.9,
+      "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
     },
     {
       "id": 4,
       "title": "JavaScript for Frontend Development",
-      
-      "image":"https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
+      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Enhance your frontend development skills by focusing on JavaScript frameworks, DOM manipulation, and frontend optimization techniques.",
       "lessons": [
         "Manipulating the DOM",
@@ -70,13 +69,13 @@
       "duration": "12 hours",
       "difficulty": "Intermediate",
       "instructor": "Michael Brown",
-      "rating": 4.6
+      "rating": 4.6,
+      "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
     },
     {
       "id": 5,
       "title": "Building Modern Web Applications with Vue.js",
-    
-      "image":"https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
+      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Dive into Vue.js to create highly interactive and responsive web applications with a focus on components and state management.",
       "lessons": [
         "Introduction to Vue.js",
@@ -88,12 +87,12 @@
       "duration": "18 hours",
       "difficulty": "Intermediate",
       "instructor": "Emily Clark",
-      "rating": 4.5
+      "rating": 4.5,
+      "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
     },
     {
       "id": 6,
       "title": "Full-Stack Development with MERN",
-      
       "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Learn to build full-stack web applications using MongoDB, Express.js, React, and Node.js, covering both frontend and backend development.",
       "lessons": [
@@ -106,44 +105,8 @@
       "duration": "25 hours",
       "difficulty": "Advanced",
       "instructor": "Daniel Carter",
-      "rating": 4.9
-    },
-    {
-      "id": 6,
-      "title": "Full-Stack Development with MERN",
-      
-      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
-      "description": "Learn to build full-stack web applications using MongoDB, Express.js, React, and Node.js, covering both frontend and backend development.",
-      "lessons": [
-        "Setting Up the MERN Stack",
-        "Building the Backend with Node.js and Express",
-        "Creating a MongoDB Database",
-        "Developing the Frontend with React",
-        "Integrating the Frontend and Backend"
-      ],
-      "duration": "25 hours",
-      "difficulty": "Advanced",
-      "instructor": "Daniel Carter",
-      "rating": 4.9
-    },
-    {
-      "id": 6,
-      "title": "Full-Stack Development with MERN",
-      
-      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
-      "description": "Learn to build full-stack web applications using MongoDB, Express.js, React, and Node.js, covering both frontend and backend development.",
-      "lessons": [
-        "Setting Up the MERN Stack",
-        "Building the Backend with Node.js and Express",
-        "Creating a MongoDB Database",
-        "Developing the Frontend with React",
-        "Integrating the Frontend and Backend"
-      ],
-      "duration": "25 hours",
-      "difficulty": "Advanced",
-      "instructor": "Daniel Carter",
-      "rating": 4.9
+      "rating": 4.9,
+      "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
     }
   ]
-  
 }
