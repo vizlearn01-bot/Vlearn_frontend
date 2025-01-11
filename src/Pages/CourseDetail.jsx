@@ -20,14 +20,38 @@ function CourseDetail() {
     fetchCourseDetails();
   }, [id]);
 
+  // Extract YouTube video ID from the URL
+  const extractVideoID = (url) => {
+    const regex = /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([^&]+)|youtu\.be\/([^&]+)/;
+    const match = url.match(regex);
+    return match ? match[1] || match[2] : null;
+  };
+
+  const videoID = course.videoLink ? extractVideoID(course.videoLink) : null;
+
   return (
     <div className="p-8 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-800">{course.title}</h1>
-      <img
-        src={course.image}
-        alt={course.title}
-        className="w-full h-64 object-cover mt-4 rounded-lg shadow"
-      />
+      
+      {/* Conditionally render video or image */}
+      {videoID ? (
+        <div className="mt-4 aspect-w-16 aspect-h-9">
+          <iframe
+            src={`https://www.youtube.com/embed/${videoID}`}
+            title="Course Video"
+            className="w-full h-96 rounded-lg"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      ) : (
+        <img
+          src={course.image}
+          alt={course.title}
+          className="w-full h-64 object-cover mt-4 rounded-lg shadow"
+        />
+      )}
+
       <p className="mt-4 text-gray-700 leading-relaxed">{course.description}</p>
       
       <h2 className="text-xl font-semibold mt-8 text-gray-800">Lessons:</h2>
@@ -36,26 +60,6 @@ function CourseDetail() {
           <li key={index}>{lesson}</li>
         ))}
       </ul>
-
-      {/* Display additional details */}
-      <h2 className="text-xl font-semibold mt-8 text-gray-800">Additional Resources:</h2>
-      {course.videoLink && (
-        <div className="mt-4">
-          <a
-            href={course.videoLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline hover:text-blue-800"
-          >
-            Watch Course Overview Video
-          </a>
-        </div>
-      )}
-
-      {/* Handle cases where additional details are not available */}
-      {!course.videoLink && (
-        <p className="mt-4 text-gray-500">No additional resources available for this course.</p>
-      )}
     </div>
   );
 }
