@@ -10,6 +10,7 @@ import Form4 from '../src/Pages/Form4'
 import ContactUs from '../src/Pages/ContactUs'
 import Login from './Components/Login'
 import Signup from './Components/Signup'
+import CourseDetail from './Pages/CourseDetail'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
       <Route path="/contact" element = {<ContactUs/>}></Route>
       <Route path="/login" element = {<Login/>}></Route>
       <Route path='/register' element = {<Signup/>}></Route>
+      <Route path='/coursedetails' element = {<CourseDetail/>}></Route>
   
     <Route path="/form1" element={<Form1 />} />
     <Route path="/form2" element={<Form2 />} />

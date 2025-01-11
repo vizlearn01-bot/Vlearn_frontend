@@ -58,7 +58,7 @@
       "id": 4,
       "title": "JavaScript for Frontend Development",
       
-      "image": "https://images.unsplash.com/photo-1551038176-0ba57c9277e4?auto=format&fit=crop&w=800&q=80",
+      "image":"https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Enhance your frontend development skills by focusing on JavaScript frameworks, DOM manipulation, and frontend optimization techniques.",
       "lessons": [
         "Manipulating the DOM",
@@ -76,7 +76,7 @@
       "id": 5,
       "title": "Building Modern Web Applications with Vue.js",
     
-      "image": "https://images.unsplash.com/photo-1531497865143-3c6e4c8472bc?auto=format&fit=crop&w=800&q=80",
+      "image":"https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Dive into Vue.js to create highly interactive and responsive web applications with a focus on components and state management.",
       "lessons": [
         "Introduction to Vue.js",
@@ -94,7 +94,7 @@
       "id": 6,
       "title": "Full-Stack Development with MERN",
       
-      "image": "https://images.unsplash.com/photo-1523475496153-3a6cc9053e51?auto=format&fit=crop&w=800&q=80",
+      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Learn to build full-stack web applications using MongoDB, Express.js, React, and Node.js, covering both frontend and backend development.",
       "lessons": [
         "Setting Up the MERN Stack",
@@ -112,7 +112,7 @@
       "id": 6,
       "title": "Full-Stack Development with MERN",
       
-      "image": "https://images.unsplash.com/photo-1523475496153-3a6cc9053e51?auto=format&fit=crop&w=800&q=80",
+      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Learn to build full-stack web applications using MongoDB, Express.js, React, and Node.js, covering both frontend and backend development.",
       "lessons": [
         "Setting Up the MERN Stack",
@@ -130,7 +130,7 @@
       "id": 6,
       "title": "Full-Stack Development with MERN",
       
-      "image": "https://images.unsplash.com/photo-1523475496153-3a6cc9053e51?auto=format&fit=crop&w=800&q=80",
+      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Learn to build full-stack web applications using MongoDB, Express.js, React, and Node.js, covering both frontend and backend development.",
       "lessons": [
         "Setting Up the MERN Stack",
