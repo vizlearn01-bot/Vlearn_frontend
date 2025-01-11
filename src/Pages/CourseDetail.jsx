@@ -4,8 +4,9 @@ import axios from "axios";
 
 function CourseDetail() {
   const { id } = useParams(); // Get the id from the URL
-  const [course, setCourse] = useState(null);
+  const [course, setCourse] = useState('');
 
+  //fetches the course details using the id passed in the url
   useEffect(() => {
     const fetchCourseDetails = async () => {
       try {
@@ -17,11 +18,7 @@ function CourseDetail() {
     };
 
     fetchCourseDetails();
-  }, [id]); // Re-run when id changes
-
-  if (!course) {
-    return <p>Loading...</p>; // Show a loading message while fetching
-  }
+  }, [id]); 
 
   return (
     <div className="p-8">
