@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function Login() {
     return (
       <>
-        <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full">
+        <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full bg-custom-bg bg-center bg-cover bg-opacity-50">
           <div className="relative sm:max-w-sm w-full">
             <div className="card bg-custom-blue shadow-2xl w-full h-full rounded-3xl absolute transform -rotate-6"></div>
             <div className="card bg-custom-orange shadow-2xl w-full h-full rounded-3xl absolute transform rotate-6"></div>

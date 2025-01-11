@@ -92,19 +92,12 @@ function Dashboard() {
         {/* Current Courses */}
         <section className="mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Current Courses</h2>
-          <div className="flex justify-around">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCourses.map((course, index) => (
-              <div key={index} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+              <div key={index} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden w-11/12 h-auto">
                 <img src={course.image} alt={course.title} className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">{course.title}</h3>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                    <div
-                      className="bg-custom-blue h-2 rounded-full"
-                      style={{ width: `${course.progress}%` }}
-                    />
-                  </div>
-                  <span className="text-sm text-gray-600">{course.progress}% Complete</span>
                 </div>
               </div>
             ))}
