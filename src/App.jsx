@@ -23,7 +23,7 @@ function App() {
       <Route path="/contact" element = {<ContactUs/>}></Route>
       <Route path="/login" element = {<Login/>}></Route>
       <Route path='/register' element = {<Signup/>}></Route>
-      <Route path='/coursedetails' element = {<CourseDetail/>}></Route>
+      <Route path='/coursedetails/:id' element = {<CourseDetail/>}></Route>
   
     <Route path="/form1" element={<Form1 />} />
     <Route path="/form2" element={<Form2 />} />

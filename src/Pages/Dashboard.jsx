@@ -92,17 +92,20 @@ function Dashboard() {
         {/* Current Courses */}
         <section className="mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Current Courses</h2>
-          <Link to='/coursedetails'>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCourses.map((course, index) => (
+              <Link to={`/coursedetails/${course.id}`} key={index}>
               <div key={index} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden w-11/12">
                 <img src={course.image} alt={course.title} className="w-full h-56 object-cover" />
                 <div className="p-6">
                   <h3 className="text-lg font-semibold text-gray-800 ">{course.title}</h3>
                 </div>
               </div>
+              </Link>
             ))}
-          </div></Link>
+          </div>
+    
         </section>
       </main>
     </>
