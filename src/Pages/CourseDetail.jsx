@@ -30,7 +30,7 @@ function CourseDetail() {
   const videoID = course.videoLink ? extractVideoID(course.videoLink) : null;
 
   return (
-    <div className="p-8 mx-auto max-w-4xl flex flex-col gap-8">
+    <div className="p-8 mx-auto max-w-8xl flex flex-col gap-8">
       {/* Video or Image Section */}
       <div>
         {videoID ? (
@@ -55,7 +55,18 @@ function CourseDetail() {
       {/* Course Details */}
       <div>
         <h1 className="text-3xl font-bold text-gray-800">{course.title}</h1>
-        <p className="mt-4 text-gray-700 leading-relaxed">{course.description}</p>
+        <p className="mt-4 text-gray-700 leading-relaxed">{course.description} Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
+          Fuga voluptates enim odio quos ipsum. Vitae, consectetur. Repellat quis harum iure maiores debitis repudiandae nam illo, labore voluptatum, 
+          officiis temporibus nisi exercitationem. Corporis temporibus facilis pariatur architecto repudiandae, quia nostrum magni earum assumenda, 
+          accusamus sit nam placeat, harum reprehenderit quas illo! Non a fugiat recusandae perferendis provident ipsum hic, porro tenetur, 
+          sit nesciunt unde debitis odit earum est esse, iste animi nihil ducimus beatae veniam quia tempore deleniti. Est doloribus numquam molestiae. 
+          Dolorem et laboriosam perferendis quia. Quidem maiores ipsum vero repudiandae consectetur sequi dicta aperiam reprehenderit veritatis doloribus 
+          consequatur explicabo saepe non alias optio laborum labore itaque sunt eaque, illum quos praesentium debitis eligendi modi! Debitis rerum ipsum 
+          nulla recusandae laborum vitae nam provident ad aspernatur eos! Velit hic magni, alias quasi vitae placeat tempora sint expedita commodi quis! 
+          Atque enim veniam ipsam magni excepturi rem rerum inventore corrupti distinctio alias quod doloremque blanditiis consequatur tempore accusantium 
+          quo eligendi, fuga, qui explicabo! Consequatur earum eaque accusamus recusandae aliquam error incidunt doloremque harum dolorem numquam iure odit 
+          dignissimos qui autem minima saepe, optio, explicabo aspernatur, rem iusto sint! Dolor accusamus temporibus, qui libero commodi voluptatum, 
+          ipsum aliquam ipsam laborum alias tenetur!</p>
       </div>
 
       {/* Instructor and Additional Info */}

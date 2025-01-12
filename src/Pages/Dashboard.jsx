@@ -3,7 +3,7 @@ import {
   BookOpen, Calendar, GraduationCap, BarChart2, 
   Clock, Award, Bell, Search, User, Menu
 } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import axios from 'axios';
 
 function Dashboard() {
