@@ -1,49 +1,63 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Calendar, GraduationCap, BarChart2, 
-    Clock, Award, Bell, Search, User
-  } from 'lucide-react';
-import { Link , useParams} from 'react-router-dom';
-import axios from 'axios'; // Import axios
+import {
+  BookOpen, Calendar, GraduationCap, BarChart2, 
+  Clock, Award, Bell, Search, User, Menu
+} from 'lucide-react';
+import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function Dashboard() {
   const [searchItem, setSearchItem] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
-  const [courses, setCourses] = useState([]); // Initialize courses state
-  
-  const URL = "http://localhost:3000/courses"; // The fake API URL
+  const [courses, setCourses] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for sidebar toggle
 
-  // Fetch courses when the component is mounted
+  const URL = "http://localhost:3000/courses";
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(URL);
-        setCourses(response.data); // Set courses to the fetched data
-        setFilteredCourses(response.data); // Set filteredCourses as well
+        setCourses(response.data);
+        setFilteredCourses(response.data);
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
     };
 
     fetchCourses();
-  }, []); // Empty dependency array ensures this runs once when the component mounts
+  }, []);
 
   const handleInputChange = (e) => {
     const searchTerm = e.target.value;
     setSearchItem(searchTerm);
 
     if (searchTerm === '') {
-      setFilteredCourses(courses); // If the search input is empty, show all courses
+      setFilteredCourses(courses);
     } else {
       const filterItems = courses.filter((course) =>
-        course.title.toLowerCase().includes(searchTerm.toLowerCase()) // Filter courses by title
+        course.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredCourses(filterItems); // Update filtered courses
+      setFilteredCourses(filterItems);
     }
   };
 
   return (
     <>
-      <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 p-4">
+    <div className='flex'>
+    <button
+        className="fixed top-4 left-4 z-50 md:hidden bg-custom-blue text-white p-2 rounded-full"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        <Menu className="h-6 w-6" />
+      </button>
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 p-4 z-40 transition-transform duration-300 ease-in-out ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0`}
+      >
         <div className="flex items-center gap-2 mb-8">
           <GraduationCap className="h-10 w-10 text-custom-blue" />
           <Link to="/"><h1 className="text-3xl font-bold text-gray-800">VizLearn</h1></Link>
@@ -67,9 +81,10 @@ function Dashboard() {
           ))}
         </nav>
       </aside>
-      <main className='ml-64 p-8 w-5/6'>
+
+      <main className="md:ml-64 p-8 w-full">
         <header className="flex items-center justify-between mb-8">
-          <div className="relative">
+          <div className="relative w-full md:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-custom-blue" />
             <input
               type="text"
@@ -78,13 +93,13 @@ function Dashboard() {
               className="pl-10 pr-4 py-2 border border-gray-200 rounded-3xl w-full focus:outline-none focus:ring-2 focus:ring-custom-blue"
             />
           </div>
-          <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4">
             <button className="p-3 hover:bg-custom-blue hover:text-white rounded-3xl">
-              <Bell className="h-5 w-5 hover:text-white" />
+              <Bell className="h-5 w-5" />
             </button>
             <button className="flex items-center gap-2 p-3 hover:bg-custom-blue hover:text-white rounded-3xl">
-              <User className="h-5 w-5 hover:text-white" />
-              <span className="text-sm hover:text-white">John Doe</span>
+              <User className="h-5 w-5" />
+              <span className="text-sm">John Doe</span>
             </button>
           </div>
         </header>
@@ -93,21 +108,25 @@ function Dashboard() {
         <section className="mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Current Courses</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredCourses.map((course, index) => (
               <Link to={`/coursedetails/${course.id}`} key={index}>
-              <div key={index} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden w-11/12">
-                <img src={course.image} alt={course.title} className="w-full h-56 object-cover" />
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-800 ">{course.title}</h3>
+                <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                  <img src={course.image} alt={course.title} className="w-full h-56 object-cover" />
+                  <div className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-800">{course.title}</h3>
+                  </div>
                 </div>
-              </div>
               </Link>
             ))}
           </div>
-    
+
         </section>
       </main>
+
+    </div>
+      {/* Hamburger Button for Mobile */}
+
     </>
   );
 }
