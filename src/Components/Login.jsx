@@ -21,17 +21,32 @@ function Login() {
     e.preventDefault(); // Prevent form from reloading the page
 
     try {
-      // Send login credentials to the local json-server (assumes authentication via email and password)
-      const response = await axios.post('http://localhost:3000/users', formData);
+      // Check if user with the given username exists in db.json
+      const response = await axios.get(`http://localhost:3000/users?username=${formData.username}`);
 
-      // Assuming the response contains user data and a success status
-      if (response.data) {
-        console.log('Login successful:', response.data);
-        alert('Login successful!');
-        // Redirect to dashboard or home page after login success
-        navigate('/dashboard');
+      // Check if the response contains any users and validate password
+      if (response.data.length > 0) {
+        const user = response.data[0];
+
+        // Check if the password matches
+        if (user.password === formData.password) {
+          console.log('Login successful:', user);
+          alert('Login successful!');
+          // Redirect to dashboard or home page after login success
+          navigate('/dashboard');
+          setFormData({
+            username: '',
+            password: '',
+          })
+        } else {
+          alert('Incorrect password');
+        }
       } else {
-        alert('Invalid credentials');
+        alert('User not found');
+        setFormData({
+          username: '',
+          password: '',
+        })
       }
     } catch (error) {
       // Handle error
@@ -59,7 +74,7 @@ function Login() {
                   type="text"
                   name="username"
                   placeholder="Username"
-                  value={formData.email}
+                  value={formData.username}
                   onChange={handleInputChange}
                   className="mt-1 block w-full py-2 px-4 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 mb-6"
                   required
