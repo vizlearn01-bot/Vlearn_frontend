@@ -116,6 +116,23 @@
       "username": "Gri4omosh",
       "password": "Griffin",
       "": "Ndede"
+    },
+    {
+      "id": "f32b",
+      "email": "gerald@gmail.com",
+      "username": "Gerry",
+      "password": "12345"
+    },
+    {
+      "id": "51ec",
+      "email": "gerald@gmail.com",
+      "username": "Gerry",
+      "password": "12345"
+    },
+    {
+      "id": "90b7",
+      "username": "Gri4omosh",
+      "password": "Griffin"
     }
   ]
 }

@@ -1,10 +1,10 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios';
 
 function Form1() {
-    const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState([]);
 
-     // Fetch videos from Django backend using Axios when the component loads
+  // Fetch videos from Django backend using Axios when the component loads
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -21,31 +21,31 @@ function Form1() {
   return (
     <div>
       <h3 className="text-2xl font-bold text-gray-700 mb-8">Course Videos</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {videos.length > 0 ? (
-              videos.map((video) => (
-                <div key={video.id} className="bg-white rounded-3xl shadow-2xl">
-                  <img
-                    src={video.cover_image_url}
-                    alt={video.title}
-                    className="w-full h-40 object-cover rounded-t-lg"
-                  />
-                  <div className="p-4 text-center">
-                    <h5 className="text-lg font-semibold text-gray-800 mb-2">{video.title}</h5>
-                    <p className="text-sm text-gray-600 mb-4">{video.description}</p>
-                    <button
-                      className="w-full mt-4  bg-custom-blue text-white py-2 rounded-3xl hover:bg-custom-orange focus:outline-none focus:ring-2 focus:ring-blue-300"
-                      onClick={() => window.open(video.video_url, '_blank')}
-                    >
-                      Watch Video
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-600">No videos available at the moment.</p>
-            )}
-          </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {videos.length > 0 ? (
+          videos.map((video) => (
+            <div key={video.id} className="bg-white rounded-3xl shadow-2xl">
+              <img
+                src={video.cover_image_url}
+                alt={video.title}
+                className="w-full h-40 object-cover rounded-t-lg"
+              />
+              <div className="p-4 text-center">
+                <h5 className="text-lg font-semibold text-gray-800 mb-2">{video.title}</h5>
+                <p className="text-sm text-gray-600 mb-4">{video.description}</p>
+                <button
+                  className="w-full mt-4  bg-custom-blue text-white py-2 rounded-3xl hover:bg-custom-orange focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  onClick={() => window.open(video.video_url, '_blank')}
+                >
+                  Watch Video
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-600">No videos available at the moment.</p>
+        )}
+      </div>
     </div>
   )
 }

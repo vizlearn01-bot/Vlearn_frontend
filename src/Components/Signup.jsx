@@ -28,6 +28,11 @@ function Signup() {
       // Handle success (e.g., show a success message, redirect, etc.)
       console.log('User data submitted:', response.data);
       alert('User signed up successfully!');
+      setFormData({
+        email:"",
+        username:"",
+        password:"",
+      })
     } catch (error) {
       // Handle error
       console.error('There was an error submitting the form!', error);
@@ -54,6 +59,7 @@ function Signup() {
                   value={formData.email}
                   onChange={handleInputChange}
                   className="mt-1 block w-full py-2 px-4 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 mb-6"
+                  required
                 />
               </div>
               <div>
@@ -64,6 +70,7 @@ function Signup() {
                   value={formData.username}
                   onChange={handleInputChange}
                   className="mt-1 block w-full py-2 px-4 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 mb-6"
+                  required
                 />
               </div>
               <div>
@@ -74,6 +81,7 @@ function Signup() {
                   value={formData.password}
                   onChange={handleInputChange}
                   className="mt-1 block w-full py-2 px-4 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
+                  required
                 />
               </div>
               <div className="mt-7">
