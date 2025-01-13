@@ -66,7 +66,7 @@ function Login() {
                   </button>
                 </div>
   
-                <div className="flex mt-7 items-center text-center">
+                {/* <div className="flex mt-7 items-center text-center">
                   <hr className="border-gray-300 border-1 w-full rounded-md" />
                   <label className="block font-medium text-sm text-gray-600 w-full">
                     Or login with
@@ -82,7 +82,7 @@ function Login() {
                   <button className="bg-custom-orange border-none px-4 py-2 rounded-3xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105">
                     Google
                   </button>
-                </div>
+                </div> */}
   
                 <div className="mt-7 text-sm">
                   <div className="flex justify-center">

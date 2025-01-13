@@ -1,7 +1,7 @@
 {
   "courses": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Introduction to React",
       "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Learn the fundamentals of React, including components, state management, and hooks, to build modern, dynamic web applications.",
@@ -19,7 +19,7 @@
       "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Advanced JavaScript",
       "image": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=800&q=80",
       "description": "Deepen your JavaScript skills by exploring advanced concepts such as closures, asynchronous programming, and design patterns.",
@@ -37,7 +37,7 @@
       "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "JavaScript for Backend Development",
       "image": "https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=800&q=80",
       "description": "Master server-side JavaScript programming with Node.js, exploring how to build scalable and efficient backend applications.",
@@ -55,7 +55,7 @@
       "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "JavaScript for Frontend Development",
       "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Enhance your frontend development skills by focusing on JavaScript frameworks, DOM manipulation, and frontend optimization techniques.",
@@ -73,7 +73,7 @@
       "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "Building Modern Web Applications with Vue.js",
       "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Dive into Vue.js to create highly interactive and responsive web applications with a focus on components and state management.",
@@ -91,7 +91,7 @@
       "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
     },
     {
-      "id": 6,
+      "id": "6",
       "title": "Full-Stack Development with MERN",
       "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
       "description": "Learn to build full-stack web applications using MongoDB, Express.js, React, and Node.js, covering both frontend and backend development.",
@@ -109,7 +109,13 @@
       "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
     }
   ],
-  "users" : [
-
+  "users": [
+    {
+      "id": "92df",
+      "email": "omondigriffin4@gmail.com",
+      "username": "Gri4omosh",
+      "password": "Griffin",
+      "": "Ndede"
+    }
   ]
 }
