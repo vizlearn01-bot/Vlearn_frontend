@@ -1,6 +1,19 @@
 import { Link } from "react-router-dom"
+import { useState } from "react";
+
 
 function Signup() {
+
+  const [formData, setFormData] = useState({
+    email: '',
+    username: '',
+    password: '',
+  });
+
+  function handleChange(event){
+    setFormData(event.target.value)
+    console.log(event.target.value)
+  }
   return (
           <>
             <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full bg-custom-bg bg-center bg-cover">
@@ -18,13 +31,18 @@ function Signup() {
                     <div>
                       <input
                         type="email"
+                        name="email"
                         placeholder="Email"
+                        onChange={handleChange}
                         className="mt-1 block w-full py-2 px-4 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 mb-6"
                       />
                     </div>
                     <div>
-                      <input type="text"
+                      <input 
+                      type="text"
+                      name="username"
                       placeholder="username"
+                      onChange={handleChange}
                       className="mt-1 block w-full py-2 px-4 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 mb-6"
                       />
                     </div>
@@ -32,35 +50,11 @@ function Signup() {
                       <input
                         type="password"
                         placeholder="Password"
+                        onChange={handleChange}
                         className="mt-1 block w-full py-2 px-4 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                       />
                     </div>
       
-                    {/* <div className="mt-7 flex">
-                      <label
-                        htmlFor="remember_me"
-                        className="inline-flex items-center w-full cursor-pointer"
-                      >
-                        <input
-                          id="remember_me"
-                          type="checkbox"
-                          className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                          name="remember"
-                        />
-                        <span className="ml-2 text-sm text-gray-600">
-                          Remember me
-                        </span>
-                      </label>
-                    </div> */}
-      
-                    {/* <div className="w-full text-right mt-2">
-                      <a
-                        className="underline text-sm text-gray-600 hover:text-gray-900"
-                        href="#"
-                      >
-                        Forgot your password?
-                      </a>
-                    </div> */}
       
                     <div className="mt-7">
                       <button
