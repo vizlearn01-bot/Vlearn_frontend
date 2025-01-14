@@ -12,7 +12,7 @@ function Dashboard() {
   const [courses, setCourses] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for sidebar toggle
 
-  const URL = "http://localhost:3000/courses";
+  const URL = "https://vlearn-backend-254w.onrender.com/videos/";
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -20,6 +20,7 @@ function Dashboard() {
         const response = await axios.get(URL);
         setCourses(response.data);
         setFilteredCourses(response.data);
+        console.log(response.data)
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -112,7 +113,7 @@ function Dashboard() {
             {filteredCourses.map((course, index) => (
               <Link to={`/coursedetails/${course.id}`} key={index}>
                 <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                  <img src={course.image} alt={course.title} className="w-full h-56 object-cover" />
+                  <img src={course.cover_image_url} alt={course.title} className="w-full h-56 object-cover" />
                   <div className="p-6">
                     <h3 className="text-lg font-semibold text-gray-800">{course.title}</h3>
                   </div>
