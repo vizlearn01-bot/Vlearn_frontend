@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -31,9 +32,7 @@ function Login() {
         // Check if the password matches
         if (user.password === formData.password) {
           console.log('Login successful:', user);
-          alert('Login successful!');
-          // Redirect to dashboard or home page after login success
-          navigate('/dashboard');
+          successAlert();
           setFormData({
             username: '',
             password: '',
@@ -51,10 +50,30 @@ function Login() {
     } catch (error) {
       // Handle error
       console.error('There was an error logging in!', error);
-      alert('Error logging in!');
+      failureAlert()
     }
   };
+  // function to show success alert prompt
+  const successAlert = () => {
+    Swal.fire({
+      title: 'Success',
+      text: 'Login successful',
+      icon: 'success',
+      confirmButtonText: 'OK',
+    }).then(() => {
+      window.location.href = '/dashboard';
+    });
+  };
 
+  // function to show failure alert prompt
+  const failureAlert = (message) => {
+    Swal.fire({
+      title: 'Error',
+      text: message,
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
+  };
   return (
     <>
       <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full bg-custom-bg bg-center bg-cover bg-opacity-50">
