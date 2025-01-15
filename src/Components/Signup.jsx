@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function Signup() {
 
@@ -27,7 +28,7 @@ function Signup() {
 
       // Handle success (e.g., show a success message, redirect, etc.)
       console.log('User data submitted:', response.data);
-      alert('User signed up successfully!');
+      successAlert()
       setFormData({
         email:"",
         username:"",
@@ -36,10 +37,28 @@ function Signup() {
     } catch (error) {
       // Handle error
       console.error('There was an error submitting the form!', error);
-      alert('Error signing up!');
+     failureAlert()
     }
   };
+  // function to show success alert prompt
+  const successAlert = () => {
+    Swal.fire({
+      title: 'Success',
+      text: 'Registration successful',
+      icon: 'success',
+      confirmButtonText: 'OK',
+    })
+  };
 
+  // function to show failure alert prompt
+  const failureAlert = (message) => {
+    Swal.fire({
+      title: 'Error',
+      text: message,
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
+  };
   return (
  <>
       <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full bg-custom-bg bg-center bg-cover">

@@ -134,6 +134,12 @@
       "email": "julia@gmail.com",
       "username": "Julia",
       "password": "12345"
+    },
+    {
+      "id": "b909",
+      "email": "omondi@gmail.com",
+      "username": "timon",
+      "password": "12345"
     }
   ]
 }

@@ -20,7 +20,7 @@ function Dashboard() {
         const response = await axios.get(URL);
         setCourses(response.data);
         setFilteredCourses(response.data);
-        console.log(response.data)
+        
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
