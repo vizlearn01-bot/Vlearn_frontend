@@ -127,12 +127,14 @@ function Dashboard() {
             {filteredCourses.map((course) => (
               <Link to={`/coursedetails/${course.id}`} key={course.id}>
                 <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                  <LazyLoad height={100}>
+                  {/* Apply LazyLoad to the image */}
+                  <LazyLoad height={200} offset={100} once>
                     <img
                       src={course.cover_image_url}
                       alt={course.title}
                       className="w-full h-56 object-cover"
-                      placeholder ={<div>Loading...</div>}
+                      loading="lazy"
+                      placeholder={<p>Loading...</p>}
                     />
                   </LazyLoad>
                   <div className="p-6">
