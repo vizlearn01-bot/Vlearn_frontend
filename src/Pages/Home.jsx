@@ -7,6 +7,7 @@ import Footer from '../Components/Footer';
 import { Link } from 'react-router-dom';
 import { Rocket, Brain, TestTube, ChevronRight, GraduationCap } from 'lucide-react';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
+import Swal from 'sweetalert2';
 
 
 function Home() {
@@ -54,13 +55,58 @@ const form = useRef()
     },
   };
 
-  function handleInputChange() {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
-  }
-  function handleSubmit() {
 
-  }
+    const handleSubmit = (e) => {
+    e.preventDefault();
 
+    emailjs
+      .sendForm('Newsletter_subscription', 'template_eiikc1b', form.current, 'UJSCICIDjktvtT98k')
+      .then(
+        () => {
+          successAlert();
+          setFormData({
+            email: '',
+            name: '',
+            phone: '',
+          })
+        },
+        () => {
+          failureAlert();
+          setFormData({
+            email: '',
+            name: '',
+            phone: '',
+          })
+        },
+      );
+        // function to show success alert prompt
+  const successAlert = () => {
+    Swal.fire({
+      title: 'Success',
+      text: 'Thank you for subscribing to our newsletter',
+      icon: 'success',
+      confirmButtonText: 'OK',
+    })
+  };
+
+  // function to show failure alert prompt
+  const failureAlert = (message) => {
+    Swal.fire({
+      title: 'Error',
+      text: message,
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
+  };
+  };
   return (
     <>
       <Navbar />
@@ -234,7 +280,7 @@ const form = useRef()
             <input
               type="email"
               name='useremail'
-              // value={}
+              value={formData.email}
               onChange={handleInputChange}
               required
               placeholder='Enter your email address'
