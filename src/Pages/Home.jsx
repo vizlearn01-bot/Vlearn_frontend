@@ -61,6 +61,7 @@ const form = useRef()
       ...formData,
       [name]: value,
     });
+    console.log(e.target.value)
   };
 
 
@@ -272,19 +273,20 @@ const form = useRef()
       </section>
       <section className="bg-custom-blue py-20">
         <div className="container mx-auto px-6 text-center" id='demo'>
-          <h2 className="text-4xl font-bold text-white mb-8">Ready to Transform Your Science Class?</h2>
+          <h2 className="text-4xl font-bold text-white mb-4">Ready to Transform Your Science Class?</h2>
+          <h3 className='text-2xl  text-white mb-8'>Book a demo now !</h3>
           <form
           ref={form}
             onSubmit={handleSubmit}
-            className="flex flex-col sm:flex-row items-center mx-auto mt-6 w-full gap-3 sm:gap-4 justify-center">
+            className="flex flex-col  items-center mx-auto mt-6 w-full gap-3 sm:gap-4 justify-center">
             <input
               type="email"
-              name='useremail'
+              name='email'
               value={formData.email}
               onChange={handleInputChange}
               required
               placeholder='Enter your email address'
-              className='py-3 px-2 rounded-3xl w-1/3'
+              className='py-3 px-2 rounded-3xl w-1/3 text-center'
             />
             <button 
             type='submit'
