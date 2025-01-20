@@ -14,10 +14,10 @@ function Home() {
   // const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
-    name:'',
-    email:'',
-    school:'',
-    date:'',
+    name: '',
+    email: '',
+    school: '',
+    date: '',
   })
 
   const form = useRef()
@@ -113,6 +113,33 @@ function Home() {
       });
     };
   };
+
+  const Categories = [
+    {
+      image:
+        "https://www.thoughtco.com/thmb/6MsMmUK27akFhb8i89kj95J5iko=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-545286316-433dd345105e4c6ebe4cdd8d2317fdaa.jpg",
+      title: "Chemistry Experiment",
+      description: "Chemical Reactions",
+    },
+    {
+      image:
+        "https://marandahighschool.sc.ke/wp-content/uploads/2023/10/360_F_235711378_x8BsTR14c7Iu9myWbXVBk2DHf7dHsdgg.jpeg",
+      title: "Biology",
+      description: "Human anatomy",
+    },
+    {
+      image:
+        "https://t4.ftcdn.net/jpg/06/32/85/07/360_F_632850771_wxhuaCHM19y63i5zeYsZtEYTEU3LUbWc.jpg",
+      title: "Physics Lab",
+      description: "Forces and Motion",
+    },
+    {
+      image:
+        "https://astro.cornell.edu/sites/default/files/styles/pano/public/2022-11/CarinaNebulaWebb.jpg?h=42541cb7&itok=ROrFJymI",
+      title: "Astronomy Observation",
+      description: "Stars and Galaxies",
+    },
+  ];
   return (
     <>
       <Navbar />
@@ -149,7 +176,6 @@ function Home() {
           </div>
         </div>
       </section>
-
       <section className="h-fit p-10">
         <h2 className="text-4xl font-semibold mb-8 text-custom-blue text-center">
           Dive into our vast video library
@@ -180,61 +206,23 @@ function Home() {
               arrows={true}
               renderButtonGroupOutside={true}
             >
-              <div className="group  overflow-hidden mx-5 rounded-3xl">
-                <img
-                  src="https://www.thoughtco.com/thmb/6MsMmUK27akFhb8i89kj95J5iko=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-545286316-433dd345105e4c6ebe4cdd8d2317fdaa.jpg"
-                  alt="chemistry"
-                  className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5  to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-xl font-bold text-white mb-2">Chemistry Experiment</h3>
-                    <p className="text-gray-200">Chemical Reactions</p>
+              {Categories.map((item, index) => (
+                <div key={index} className="group overflow-hidden mx-5 rounded-3xl">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <h3 className="text-xl font-bold text-white mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-200">{item.description}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="group  overflow-hidden mx-5 rounded-3xl">
-                <img
-                  src="https://marandahighschool.sc.ke/wp-content/uploads/2023/10/360_F_235711378_x8BsTR14c7Iu9myWbXVBk2DHf7dHsdgg.jpeg"
-                  alt="Project 2"
-                  className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-xl font-bold text-white mb-2">Biology</h3>
-                    <p className="text-gray-200">Human anatomy</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="group  overflow-hidden mx-5 rounded-3xl">
-                <img
-                  src="https://t4.ftcdn.net/jpg/06/32/85/07/360_F_632850771_wxhuaCHM19y63i5zeYsZtEYTEU3LUbWc.jpg"
-                  alt="Project 3"
-                  className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-xl font-bold text-white mb-2">Physics Lab</h3>
-                    <p className="text-gray-200">Forces and Motion</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="group  overflow-hidden mx-5 rounded-3xl">
-                <img
-                  src="https://astro.cornell.edu/sites/default/files/styles/pano/public/2022-11/CarinaNebulaWebb.jpg?h=42541cb7&itok=ROrFJymI"
-                  alt="Project 4"
-                  className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-xl font-bold text-white mb-2">Astronomy Observation</h3>
-                    <p className="text-gray-200">Stars and Galaxies</p>
-                  </div>
-                </div>
-              </div>
+              ))}
             </Carousel>
           )}
         </div>
@@ -279,106 +267,61 @@ function Home() {
       <section className="bg-custom-blue py-20">
         <div className="container mx-auto px-6 text-center" id='demo'>
           <h2 className="text-4xl font-bold text-white mb-4">Ready to Transform Your Science Class?</h2>
-          <h3 className='text-2xl  text-white mb-8'>Book a demo now !</h3>
           <form
             ref={form}
             onSubmit={handleSubmit}
-            className="flex flex-col  items-center mx-auto mt-6 w-full gap-3 sm:gap-4 justify-center">
+            className="flex flex-col items-center mx-auto mt-8 w-2/3 gap-6 sm:gap-8 bg-white shadow-lg rounded-3xl p-6 sm:p-8">
+            <h2 className="text-2xl font-bold text-custom-blue mb-4">
+              Schedule a Demo
+            </h2>
+            <p className="text-gray-600 text-center mb-6">
+              Fill in the details below to book your demo session.
+            </p>
             <input
               type="text"
-              name='name'
+              name="name"
               value={formData.name}
               onChange={handleInputChange}
               required
-              placeholder='Full name'
-              className='py-3 px-2 rounded-3xl w-1/3 text-center'
+              placeholder="Full Name"
+              className="py-3 px-4 rounded-3xl  w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
             />
             <input
               type="email"
-              name='email'
+              name="email"
               value={formData.email}
               onChange={handleInputChange}
               required
-              placeholder='Enter your email address'
-              className='py-3 px-2 rounded-3xl w-1/3 text-center'
+              placeholder="Email Address"
+              className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
             />
-
             <input
               type="text"
-              name='school'
+              name="school"
               value={formData.school}
               onChange={handleInputChange}
               required
-              placeholder='Institution name'
-              className='py-3 px-2 rounded-3xl w-1/3 text-center'
+              placeholder="Institution Name"
+              className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
             />
             <input
               type="date"
-              name='date'
+              name="date"
               value={formData.date}
               onChange={handleInputChange}
               required
-              placeholder='Preferred demo date'
-              className='py-3 px-2 rounded-3xl w-1/3 text-center'
+              className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
             />
-
             <button
-              type='submit'
-              className="bg-white text-custom-blue px-8 py-3 rounded-full hover:bg-gray-100 transition-colors inline-flex items-center">
-              Get Started Now <GraduationCap className="ml-2 h-5 w-5" />
+              type="submit"
+              className="bg-custom-blue text-white px-6 py-3 rounded-full hover:bg-blue-600 transition duration-300 ease-in-out flex items-center justify-center">
+              Get Started Now
+              <GraduationCap className="ml-2 h-5 w-5" />
             </button>
           </form>
+
         </div>
       </section>
-      {/* <section id="how-it-works" className="py-16 px-4 h-auto mt-16">
-        <div className="flex flex-col md:flex-row items-center justify-around mx-auto">
-          <div className="w-full md:w-1/2 mb-8 md:mb-0">
-            <img
-              src="/images/experiments.webp"
-              className="mx-auto w-1/2 object-cover rounded-[58%_42%_88%_12%/44%_37%_63%_56%]"
-              alt="earn"
-            />
-          </div>
-          <div className="lg:w-1/3 md:w-1/2 text-center md:text-left">
-            <h2 className="text-2xl font-medium mb-4 text-custom-orange">
-              Explain concepts faster with learning resources
-            </h2>
-            <p className="text-base font-normal mb-6 mx-auto md:mx-0">
-              Use pre-made visuals to clarify concepts quickly, capture student&apos;s attention, and reduce the need for
-              repeated explanations.
-            </p>
-            <Link to="/dashboard">
-              <button className="bg-custom-orange hover:bg-custom-orange text-white text-base font-medium py-2 px-2.5 rounded-3xl">
-                Learn more
-              </button>
-            </Link>
-          </div>
-        </div>
-        <div className="flex flex-col md:flex-row mt-12 space-x-0 md:space-x-4 items-center justify-around mx-auto">
-          <div className="lg:w-1/3 md:w-1/2 text-center md:text-right mb-8 md:mb-0">
-            <h2 className="text-2xl font-medium mb-4 text-custom-orange">
-              Students can now revisit your science experiments anytime.
-            </h2>
-            <p className="text-base font-normal mb-6 mx-auto md:mx-0">
-              Students can now access your science experiments on demand, enabling them to review concepts anytime they
-              need.
-            </p>
-            <Link to="/products">
-              <button className="bg-custom-orange hover:bg-custom-orange text-white text-base font-medium py-2 px-2.5 rounded-3xl">
-                Learn more
-              </button>
-            </Link>
-          </div>
-          <div className="w-full md:w-1/2">
-            <img
-              src="/images/experiments.webp"
-              className="mx-auto w-1/2 object-cover rounded-[58%_42%_88%_12%/44%_37%_63%_56%]"
-              alt="experiments"
-            />
-          </div>
-        </div>
-      </section> */}
-
       <Footer />
     </>
   );
