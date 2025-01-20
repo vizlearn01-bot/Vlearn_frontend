@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -12,6 +12,11 @@ import AnchorLink from 'react-anchor-link-smooth-scroll';
 function Home() {
   // const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    email:'',
+})
+
+const form = useRef()
 
   const URL = 'https://nexus-backend-kia6.onrender.com/categories/';
 
@@ -48,6 +53,13 @@ function Home() {
       slidesToSlide: 1,
     },
   };
+
+  function handleInputChange() {
+
+  }
+  function handleSubmit() {
+
+  }
 
   return (
     <>
@@ -215,9 +227,25 @@ function Home() {
       <section className="bg-custom-blue py-20">
         <div className="container mx-auto px-6 text-center" id='demo'>
           <h2 className="text-4xl font-bold text-white mb-8">Ready to Transform Your Science Class?</h2>
-          <button className="bg-white text-custom-blue px-8 py-3 rounded-full hover:bg-gray-100 transition-colors inline-flex items-center">
-            Get Started Now <GraduationCap className="ml-2 h-5 w-5" />
-          </button>
+          <form
+          ref={form}
+            onSubmit={handleSubmit}
+            className="flex flex-col sm:flex-row items-center mx-auto mt-6 w-full gap-3 sm:gap-4 justify-center">
+            <input
+              type="email"
+              name='useremail'
+              // value={}
+              onChange={handleInputChange}
+              required
+              placeholder='Enter your email address'
+              className='py-3 px-2 rounded-3xl w-1/3'
+            />
+            <button 
+            type='submit'
+            className="bg-white text-custom-blue px-8 py-3 rounded-full hover:bg-gray-100 transition-colors inline-flex items-center">
+              Get Started Now <GraduationCap className="ml-2 h-5 w-5" />
+            </button>
+          </form>
         </div>
       </section>
       {/* <section id="how-it-works" className="py-16 px-4 h-auto mt-16">
