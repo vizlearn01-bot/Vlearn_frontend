@@ -14,10 +14,13 @@ function Home() {
   // const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
+    name:'',
     email:'',
-})
+    school:'',
+    date:'',
+  })
 
-const form = useRef()
+  const form = useRef()
 
   const URL = 'https://nexus-backend-kia6.onrender.com/categories/';
 
@@ -65,7 +68,7 @@ const form = useRef()
   };
 
 
-    const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     emailjs
@@ -74,39 +77,41 @@ const form = useRef()
         () => {
           successAlert();
           setFormData({
-            email: '',
             name: '',
-            phone: '',
+            email: '',
+            school: '',
+            date: '',
           })
         },
         () => {
           failureAlert();
           setFormData({
-            email: '',
             name: '',
-            phone: '',
+            email: '',
+            school: '',
+            date: '',
           })
         },
       );
-        // function to show success alert prompt
-  const successAlert = () => {
-    Swal.fire({
-      title: 'Success',
-      text: 'Thank you for subscribing to our newsletter',
-      icon: 'success',
-      confirmButtonText: 'OK',
-    })
-  };
+    // function to show success alert prompt
+    const successAlert = () => {
+      Swal.fire({
+        title: 'Success',
+        text: 'Thank you for booking a demo',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      })
+    };
 
-  // function to show failure alert prompt
-  const failureAlert = (message) => {
-    Swal.fire({
-      title: 'Error',
-      text: message,
-      icon: 'error',
-      confirmButtonText: 'OK',
-    });
-  };
+    // function to show failure alert prompt
+    const failureAlert = (message) => {
+      Swal.fire({
+        title: 'Error',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    };
   };
   return (
     <>
@@ -276,9 +281,18 @@ const form = useRef()
           <h2 className="text-4xl font-bold text-white mb-4">Ready to Transform Your Science Class?</h2>
           <h3 className='text-2xl  text-white mb-8'>Book a demo now !</h3>
           <form
-          ref={form}
+            ref={form}
             onSubmit={handleSubmit}
             className="flex flex-col  items-center mx-auto mt-6 w-full gap-3 sm:gap-4 justify-center">
+            <input
+              type="text"
+              name='name'
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+              placeholder='Full name'
+              className='py-3 px-2 rounded-3xl w-1/3 text-center'
+            />
             <input
               type="email"
               name='email'
@@ -288,9 +302,29 @@ const form = useRef()
               placeholder='Enter your email address'
               className='py-3 px-2 rounded-3xl w-1/3 text-center'
             />
-            <button 
-            type='submit'
-            className="bg-white text-custom-blue px-8 py-3 rounded-full hover:bg-gray-100 transition-colors inline-flex items-center">
+
+            <input
+              type="text"
+              name='school'
+              value={formData.school}
+              onChange={handleInputChange}
+              required
+              placeholder='Institution name'
+              className='py-3 px-2 rounded-3xl w-1/3 text-center'
+            />
+            <input
+              type="date"
+              name='date'
+              value={formData.date}
+              onChange={handleInputChange}
+              required
+              placeholder='Preferred demo date'
+              className='py-3 px-2 rounded-3xl w-1/3 text-center'
+            />
+
+            <button
+              type='submit'
+              className="bg-white text-custom-blue px-8 py-3 rounded-full hover:bg-gray-100 transition-colors inline-flex items-center">
               Get Started Now <GraduationCap className="ml-2 h-5 w-5" />
             </button>
           </form>
