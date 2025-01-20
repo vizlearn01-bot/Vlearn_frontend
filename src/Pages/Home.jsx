@@ -4,14 +4,15 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
-// import { Link } from 'react-router-dom';
-import { Rocket,Brain,TestTube,ChevronRight, GraduationCap} from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Rocket, Brain, TestTube, ChevronRight, GraduationCap } from 'lucide-react';
+import AnchorLink from 'react-anchor-link-smooth-scroll';
 
 
 function Home() {
   // const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const URL = 'https://nexus-backend-kia6.onrender.com/categories/';
 
   // Fetching data on the categories from the JSON file
@@ -52,7 +53,7 @@ function Home() {
     <>
       <Navbar />
       <section className="flex min-h-fit bg-gray-100 font-poppins">
-      <div className="container mx-auto px-6 pb-24 mt-40">
+        <div className="container mx-auto px-6 pb-24 mt-40">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8 animate-fade-in">
               <h1 className="text-5xl md:text-6xl font-bold  md:leading-snug leading-normal">
@@ -62,16 +63,20 @@ function Home() {
                 Transform your classroom into an interactive laboratory. Engage students with hands-on experiments and comprehensive learning tools.
               </p>
               <div className="flex space-x-4">
-                <button className="bg-custom-blue text-white px-8 py-3 rounded-full hover:bg-custom-orange transition-colors flex items-center">
-                  Start Learning <ChevronRight className="ml-2 h-5 w-5" />
-                </button>
-                <button className="border-2 border-custom-blue text-custom-blue px-8 py-3 rounded-full hover:bg-indigo-50 transition-colors hover:border-custom-orange">
-                  Watch Demo
-                </button>
+                <Link to="/dashboard">
+                  <button className="bg-custom-blue text-white px-8 py-3 rounded-full hover:bg-custom-orange transition-colors flex items-center">
+                    Start Learning <ChevronRight className="ml-2 h-5 w-5" />
+                  </button>
+                </Link>
+                <AnchorLink href='#demo'>
+                  <button className="border-2 border-custom-blue text-custom-blue px-8 py-3 rounded-full hover:bg-indigo-50 transition-colors hover:border-custom-orange">
+                    Book a demo
+                  </button>
+                </AnchorLink>
               </div>
             </div>
             <div className="hover:cursor-pointer">
-              <img 
+              <img
                 src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80"
                 alt="Science Experiment"
                 className="rounded-3xl shadow-2xl"
@@ -111,104 +116,104 @@ function Home() {
               arrows={true}
               renderButtonGroupOutside={true}
             >
-<div className="group  overflow-hidden mx-5 rounded-3xl">
-  <img
-    src="https://www.thoughtco.com/thmb/6MsMmUK27akFhb8i89kj95J5iko=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-545286316-433dd345105e4c6ebe4cdd8d2317fdaa.jpg"
-    alt="chemistry"
-    className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
-  />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5  to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-    <div className="absolute bottom-0 left-0 right-0 p-6">
-      <h3 className="text-xl font-bold text-white mb-2">Chemistry Experiment</h3>
-      <p className="text-gray-200">Chemical Reactions</p>
-    </div>
-  </div>
-</div>
+              <div className="group  overflow-hidden mx-5 rounded-3xl">
+                <img
+                  src="https://www.thoughtco.com/thmb/6MsMmUK27akFhb8i89kj95J5iko=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-545286316-433dd345105e4c6ebe4cdd8d2317fdaa.jpg"
+                  alt="chemistry"
+                  className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5  to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 className="text-xl font-bold text-white mb-2">Chemistry Experiment</h3>
+                    <p className="text-gray-200">Chemical Reactions</p>
+                  </div>
+                </div>
+              </div>
 
-<div className="group  overflow-hidden mx-5 rounded-3xl">
-  <img
-    src="https://marandahighschool.sc.ke/wp-content/uploads/2023/10/360_F_235711378_x8BsTR14c7Iu9myWbXVBk2DHf7dHsdgg.jpeg"
-    alt="Project 2"
-    className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
-  />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-    <div className="absolute bottom-0 left-0 right-0 p-6">
-      <h3 className="text-xl font-bold text-white mb-2">Biology</h3>
-      <p className="text-gray-200">Human anatomy</p>
-    </div>
-  </div>
-</div>
+              <div className="group  overflow-hidden mx-5 rounded-3xl">
+                <img
+                  src="https://marandahighschool.sc.ke/wp-content/uploads/2023/10/360_F_235711378_x8BsTR14c7Iu9myWbXVBk2DHf7dHsdgg.jpeg"
+                  alt="Project 2"
+                  className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 className="text-xl font-bold text-white mb-2">Biology</h3>
+                    <p className="text-gray-200">Human anatomy</p>
+                  </div>
+                </div>
+              </div>
 
-<div className="group  overflow-hidden mx-5 rounded-3xl">
-  <img
-    src="https://t4.ftcdn.net/jpg/06/32/85/07/360_F_632850771_wxhuaCHM19y63i5zeYsZtEYTEU3LUbWc.jpg"
-    alt="Project 3"
-    className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
-  />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-    <div className="absolute bottom-0 left-0 right-0 p-6">
-      <h3 className="text-xl font-bold text-white mb-2">Physics Lab</h3>
-      <p className="text-gray-200">Forces and Motion</p>
-    </div>
-  </div>
-</div>
+              <div className="group  overflow-hidden mx-5 rounded-3xl">
+                <img
+                  src="https://t4.ftcdn.net/jpg/06/32/85/07/360_F_632850771_wxhuaCHM19y63i5zeYsZtEYTEU3LUbWc.jpg"
+                  alt="Project 3"
+                  className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 className="text-xl font-bold text-white mb-2">Physics Lab</h3>
+                    <p className="text-gray-200">Forces and Motion</p>
+                  </div>
+                </div>
+              </div>
 
-<div className="group  overflow-hidden mx-5 rounded-3xl">
-  <img
-    src="https://astro.cornell.edu/sites/default/files/styles/pano/public/2022-11/CarinaNebulaWebb.jpg?h=42541cb7&itok=ROrFJymI"
-    alt="Project 4"
-    className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
-  />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-    <div className="absolute bottom-0 left-0 right-0 p-6">
-      <h3 className="text-xl font-bold text-white mb-2">Astronomy Observation</h3>
-      <p className="text-gray-200">Stars and Galaxies</p>
-    </div>
-  </div>
-</div>
-</Carousel>
+              <div className="group  overflow-hidden mx-5 rounded-3xl">
+                <img
+                  src="https://astro.cornell.edu/sites/default/files/styles/pano/public/2022-11/CarinaNebulaWebb.jpg?h=42541cb7&itok=ROrFJymI"
+                  alt="Project 4"
+                  className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 className="text-xl font-bold text-white mb-2">Astronomy Observation</h3>
+                    <p className="text-gray-200">Stars and Galaxies</p>
+                  </div>
+                </div>
+              </div>
+            </Carousel>
           )}
         </div>
       </section>
 
-        <section className='h-fit p-20 bg-slate-200'>
+      <section className='h-fit p-20 bg-slate-200'>
         <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-16">Why Vlearn?</h2>
-        <div className="grid md:grid-cols-3 text-center gap-12">
+          <h2 className="text-4xl font-bold text-center mb-16">Why Vlearn?</h2>
+          <div className="grid md:grid-cols-3 text-center gap-12">
 
-        {/* Feature 1 */}
-        <div className="p-4 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
-        <div className="mb-4 flex justify-center items-center">
-          <Brain className="h-12 w-12 text-custom-blue" />
-        </div>
-        <h3 className="text-xl font-semibold mb-4">Interactive Learning</h3>
-        <p className="text-gray-600">Engage with interactive 3D models and simulations</p>
+            {/* Feature 1 */}
+            <div className="p-4 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
+              <div className="mb-4 flex justify-center items-center">
+                <Brain className="h-12 w-12 text-custom-blue" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Interactive Learning</h3>
+              <p className="text-gray-600">Engage with interactive 3D models and simulations</p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="p-4 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
+              <div className="mb-4 flex justify-center items-center">
+                <TestTube className="h-12 w-12 text-custom-blue" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Virtual Labs</h3>
+              <p className="text-gray-600">Access state-of-the-art virtual laboratory experiences</p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="p-4 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
+              <div className="mb-4 flex justify-center items-center">
+                <Rocket className="h-12 w-12 text-custom-blue" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Progress Tracking</h3>
+              <p className="text-gray-600">Monitor student progress with detailed analytics</p>
+            </div>
+
+          </div>
         </div>
 
-        {/* Feature 2 */}
-        <div className="p-4 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
-        <div className="mb-4 flex justify-center items-center">
-          <TestTube className="h-12 w-12 text-custom-blue" />
-        </div>
-        <h3 className="text-xl font-semibold mb-4">Virtual Labs</h3>
-        <p className="text-gray-600">Access state-of-the-art virtual laboratory experiences</p>
-        </div>
-
-        {/* Feature 3 */}
-        <div className="p-4 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
-        <div className="mb-4 flex justify-center items-center">
-          <Rocket className="h-12 w-12 text-custom-blue" />
-        </div>
-        <h3 className="text-xl font-semibold mb-4">Progress Tracking</h3>
-        <p className="text-gray-600">Monitor student progress with detailed analytics</p>
-        </div>
-
-        </div>
-        </div>
-
-        </section>
-        <section className="bg-custom-blue py-20">
-        <div className="container mx-auto px-6 text-center">
+      </section>
+      <section className="bg-custom-blue py-20">
+        <div className="container mx-auto px-6 text-center" id='demo'>
           <h2 className="text-4xl font-bold text-white mb-8">Ready to Transform Your Science Class?</h2>
           <button className="bg-white text-custom-blue px-8 py-3 rounded-full hover:bg-gray-100 transition-colors inline-flex items-center">
             Get Started Now <GraduationCap className="ml-2 h-5 w-5" />
