@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { Rocket, Brain, TestTube, ChevronRight, GraduationCap } from 'lucide-react';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import Swal from 'sweetalert2';
-
+import emailjs from '@emailjs/browser';
 
 function Home() {
   // const [categories, setCategories] = useState([]);
@@ -68,7 +68,7 @@ const form = useRef()
     e.preventDefault();
 
     emailjs
-      .sendForm('Newsletter_subscription', 'template_eiikc1b', form.current, 'UJSCICIDjktvtT98k')
+      .sendForm('Demo_booking', 'template_9hq8xvb', form.current, 'gjyESRJ1hLiyb6BrV')
       .then(
         () => {
           successAlert();
