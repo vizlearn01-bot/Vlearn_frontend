@@ -2,144 +2,79 @@
   "courses": [
     {
       "id": "1",
-      "title": "Introduction to React",
-      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
-      "description": "Learn the fundamentals of React, including components, state management, and hooks, to build modern, dynamic web applications.",
-      "lessons": [
-        "Getting Started with React",
-        "JSX and Rendering Elements",
-        "State and Lifecycle",
-        "Handling Events",
-        "Using React Hooks"
+      "title": "Charles' Law Experiment",
+      "image": "https://www.thoughtco.com/thmb/6MsMmUK27akFhb8i89kj95J5iko=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-545286316-433dd345105e4c6ebe4cdd8d2317fdaa.jpg",
+      "description": "The Charles's Law experiment demonstrates that the volume of a gas is directly proportional to its absolute temperature at constant pressure. Procedure: 1. A narrow capillary tube sealed at one end is partially filled with a colored liquid, trapping a column of gas.\n2. The tube is immersed in a water bath, starting with ice water to lower the temperature.\n3. The length of the gas column (L, proportional to volume) is measured at various temperatures as the water bath is gradually heated.\n4. The temperature is recorded in Kelvin, and the corresponding gas column length is noted.\n\nObservation:\nA graph of gas column length (L) versus temperature (T) produces a straight line, confirming V ∝ T.\n\nConclusion:\nThe experiment verifies Charles's Law and shows that volume increases linearly with temperature at constant pressure.",
+      "requirements": [
+        "Rubber tubing",
+        "Thermometer",
+        "Beaker with water",
+        "Source of heat (e.g., Bunsen burner or hot plate)",
+        "Graph paper or plotting software"
       ],
-      "duration": "10 hours",
-      "difficulty": "Beginner",
-      "instructor": "Jane Doe",
-      "rating": 4.8,
-      "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
+      "duration": "6 min 30 secs",
+      "difficulty": "Intermediate",
+      "instructor": "Mr. John Mwangi",
+      "rating": 4.9,
+      "videoLink": "https://youtu.be/6hC2SHUWc0M"
     },
     {
       "id": "2",
-      "title": "Advanced JavaScript",
-      "image": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=800&q=80",
-      "description": "Deepen your JavaScript skills by exploring advanced concepts such as closures, asynchronous programming, and design patterns.",
-      "lessons": [
-        "Advanced Functions and Closures",
-        "Asynchronous JavaScript with Promises",
-        "Understanding the Event Loop",
-        "JavaScript Design Patterns",
-        "Introduction to Web Performance"
+      "title": "Diffusion in Liquids Experiment",
+      "image": "https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=800&q=80",
+      "description": "Learn how particles move in liquids through diffusion by observing color changes in different solutions.",
+      "requirements": [
+        "Beaker",
+        "Potassium permanganate crystals",
+        "Distilled water",
+        "Stirring rod",
+        "Stopwatch",
+        "Marker for labeling"
       ],
-      "duration": "15 hours",
-      "difficulty": "Intermediate",
-      "instructor": "John Smith",
+      "duration": "1.5 hours",
+      "difficulty": "Beginner",
+      "instructor": "Ms. Grace Wanjiru",
       "rating": 4.7,
-      "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
+      "videoLink": "https://youtu.be/exampleVideoLinkDiffusionLiquids"
     },
     {
       "id": "3",
-      "title": "JavaScript for Backend Development",
-      "image": "https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=800&q=80",
-      "description": "Master server-side JavaScript programming with Node.js, exploring how to build scalable and efficient backend applications.",
-      "lessons": [
-        "Introduction to Node.js",
-        "Working with Express.js",
-        "Database Integration with MongoDB",
-        "Building RESTful APIs",
-        "Authentication and Security"
+      "title": "Diffusion in Gases: Bromine Gas Experiment",
+      "image": "https://images.unsplash.com/photo-1614518441680-fb9799923c85?auto=format&fit=crop&w=800&q=80",
+      "description": "Observe the diffusion of bromine gas in air to understand how gas particles move and spread.",
+      "requirements": [
+        "Gas jar with lid",
+        "Bromine liquid (handle with care)",
+        "Glass tube",
+        "Rubber tubing",
+        "Fume cupboard for safety",
+        "Stopwatch"
       ],
-      "duration": "20 hours",
+      "duration": "2 hours",
       "difficulty": "Intermediate",
-      "instructor": "Alice Johnson",
-      "rating": 4.9,
-      "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
+      "instructor": "Dr. Peter Otieno",
+      "rating": 4.8,
+      "videoLink": "https://youtu.be/exampleVideoLinkBromineGas"
     },
     {
       "id": "4",
-      "title": "JavaScript for Frontend Development",
-      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
-      "description": "Enhance your frontend development skills by focusing on JavaScript frameworks, DOM manipulation, and frontend optimization techniques.",
-      "lessons": [
-        "Manipulating the DOM",
-        "Introduction to Frameworks (Vue, Angular)",
-        "Optimizing Web Performance",
-        "Frontend Testing with Jest",
-        "Deploying Frontend Applications"
+      "title": "Diffusion in Gases: Ammonia Liquid Experiment",
+      "image": "https://images.unsplash.com/photo-1582719478180-e9d87d248df4?auto=format&fit=crop&w=800&q=80",
+      "description": "Study the diffusion of ammonia gas in air by observing its reaction with hydrochloric acid vapors.",
+      "requirements": [
+        "Gas jar or test tube",
+        "Concentrated ammonia solution",
+        "Concentrated hydrochloric acid",
+        "Cotton wool",
+        "Glass rod",
+        "Stopwatch",
+        "Marker for labeling"
       ],
-      "duration": "12 hours",
+      "duration": "1.5 hours",
       "difficulty": "Intermediate",
-      "instructor": "Michael Brown",
-      "rating": 4.6,
-      "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
-    },
-    {
-      "id": "5",
-      "title": "Building Modern Web Applications with Vue.js",
-      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
-      "description": "Dive into Vue.js to create highly interactive and responsive web applications with a focus on components and state management.",
-      "lessons": [
-        "Introduction to Vue.js",
-        "Building and Reusing Components",
-        "Vue Router for Navigation",
-        "State Management with Vuex",
-        "Deploying Vue Applications"
-      ],
-      "duration": "18 hours",
-      "difficulty": "Intermediate",
-      "instructor": "Emily Clark",
-      "rating": 4.5,
-      "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
-    },
-    {
-      "id": "6",
-      "title": "Full-Stack Development with MERN",
-      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
-      "description": "Learn to build full-stack web applications using MongoDB, Express.js, React, and Node.js, covering both frontend and backend development.",
-      "lessons": [
-        "Setting Up the MERN Stack",
-        "Building the Backend with Node.js and Express",
-        "Creating a MongoDB Database",
-        "Developing the Frontend with React",
-        "Integrating the Frontend and Backend"
-      ],
-      "duration": "25 hours",
-      "difficulty": "Advanced",
-      "instructor": "Daniel Carter",
+      "instructor": "Prof. Alice Mutiso",
       "rating": 4.9,
-      "videoLink": "https://youtu.be/s9ALylTC9YQ?si=gxL4_T-BZ4Og7Mkh"
-    }
-  ],
-  "users": [
-    {
-      "id": "92df",
-      "email": "omondigriffin4@gmail.com",
-      "username": "Gri4omosh",
-      "password": "Griffin",
-      "": "Ndede"
-    },
-    {
-      "id": "f32b",
-      "email": "gerald@gmail.com",
-      "username": "Gerry",
-      "password": "12345"
-    },
-    {
-      "id": "51ec",
-      "email": "gerald@gmail.com",
-      "username": "Gerry",
-      "password": "12345"
-    },
-    {
-      "id": "e00e",
-      "email": "julia@gmail.com",
-      "username": "Julia",
-      "password": "12345"
-    },
-    {
-      "id": "b909",
-      "email": "omondi@gmail.com",
-      "username": "timon",
-      "password": "12345"
+      "videoLink": "https://youtu.be/exampleVideoLinkAmmoniaLiquid"
     }
   ]
 }

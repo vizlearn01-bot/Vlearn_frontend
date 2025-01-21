@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import {
   BookOpen,
-  Calendar,
+  // Calendar,
   GraduationCap,
-  BarChart2,
-  Clock,
-  Award,
+  // BarChart2,
+  // Clock,
+  // Award,
   Bell,
   Search,
-  User,
+  // User,
   Menu,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -18,10 +18,90 @@ import LazyLoad from 'react-lazyload';
 function Dashboard() {
   const [searchItem, setSearchItem] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState([
+   [
+      {
+        "id": "1",
+        "title": "Charles' Law Experiment",
+        "image": "https://images.unsplash.com/photo-1581091870622-36d92f9a7932?auto=format&fit=crop&w=800&q=80",
+        "description": "Investigate the relationship between the volume and temperature of a gas at constant pressure to understand Charles' Law.",
+        "requirements": [
+          "Borosilicate glass syringe",
+          "Rubber tubing",
+          "Thermometer",
+          "Beaker with water",
+          "Source of heat (e.g., Bunsen burner or hot plate)",
+          "Graph paper or plotting software"
+        ],
+        "duration": "2 hours",
+        "difficulty": "Intermediate",
+        "instructor": "Mr. John Mwangi",
+        "rating": 4.9,
+        "videoLink": "https://youtu.be/exampleVideoLinkCharlesLaw"
+      },
+      {
+        "id": "2",
+        "title": "Diffusion in Liquids Experiment",
+        "image": "https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=800&q=80",
+        "description": "Learn how particles move in liquids through diffusion by observing color changes in different solutions.",
+        "requirements": [
+          "Beaker",
+          "Potassium permanganate crystals",
+          "Distilled water",
+          "Stirring rod",
+          "Stopwatch",
+          "Marker for labeling"
+        ],
+        "duration": "1.5 hours",
+        "difficulty": "Beginner",
+        "instructor": "Ms. Grace Wanjiru",
+        "rating": 4.7,
+        "videoLink": "https://youtu.be/exampleVideoLinkDiffusionLiquids"
+      },
+      {
+        "id": "3",
+        "title": "Diffusion in Gases: Bromine Gas Experiment",
+        "image": "https://images.unsplash.com/photo-1614518441680-fb9799923c85?auto=format&fit=crop&w=800&q=80",
+        "description": "Observe the diffusion of bromine gas in air to understand how gas particles move and spread.",
+        "requirements": [
+          "Gas jar with lid",
+          "Bromine liquid (handle with care)",
+          "Glass tube",
+          "Rubber tubing",
+          "Fume cupboard for safety",
+          "Stopwatch"
+        ],
+        "duration": "2 hours",
+        "difficulty": "Intermediate",
+        "instructor": "Dr. Peter Otieno",
+        "rating": 4.8,
+        "videoLink": "https://youtu.be/exampleVideoLinkBromineGas"
+      },
+      {
+        "id": "4",
+        "title": "Diffusion in Gases: Ammonia Liquid Experiment",
+        "image": "https://images.unsplash.com/photo-1582719478180-e9d87d248df4?auto=format&fit=crop&w=800&q=80",
+        "description": "Study the diffusion of ammonia gas in air by observing its reaction with hydrochloric acid vapors.",
+        "requirements": [
+          "Gas jar or test tube",
+          "Concentrated ammonia solution",
+          "Concentrated hydrochloric acid",
+          "Cotton wool",
+          "Glass rod",
+          "Stopwatch",
+          "Marker for labeling"
+        ],
+        "duration": "1.5 hours",
+        "difficulty": "Intermediate",
+        "instructor": "Prof. Alice Mutiso",
+        "rating": 4.9,
+        "videoLink": "https://youtu.be/exampleVideoLinkAmmoniaLiquid"
+      }
+    ]
+  ]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const URL = 'https://vlearn-backend-254w.onrender.com/videos/';
+  const URL = 'http://localhost:3000/courses';
 
   // Fetch courses from the API
   useEffect(() => {
@@ -52,6 +132,7 @@ function Dashboard() {
       setFilteredCourses(filtered);
     }
   };
+  
 
   return (
     <div className="flex">
@@ -79,10 +160,10 @@ function Dashboard() {
         <nav className="space-y-2">
           {[
             { icon: BookOpen, text: 'My Courses' },
-            { icon: Calendar, text: 'Schedule' },
-            { icon: BarChart2, text: 'Progress' },
-            { icon: Clock, text: 'Recent' },
-            { icon: Award, text: 'Certificates' },
+            // { icon: Calendar, text: 'Schedule' },
+            // { icon: BarChart2, text: 'Progress' },
+            // { icon: Clock, text: 'Recent' },
+            // { icon: Award, text: 'Certificates' },
           ].map((item, index) => (
             <button
               key={index}
@@ -99,7 +180,7 @@ function Dashboard() {
       <main className="md:ml-64 p-8 w-full">
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
-          <div className="relative w-full md:w-auto">
+          <div className="relative w-full md:w-1/3 border border-custom-blue rounded-3xl">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-custom-blue" />
             <input
               type="text"
@@ -113,10 +194,10 @@ function Dashboard() {
             <button className="p-3 hover:bg-custom-blue hover:text-white rounded-3xl">
               <Bell className="h-5 w-5" />
             </button>
-            <button className="flex items-center gap-2 p-3 hover:bg-custom-blue hover:text-white rounded-3xl">
+            {/* <button className="flex items-center gap-2 p-3 hover:bg-custom-blue hover:text-white rounded-3xl">
               <User className="h-5 w-5" />
               <span className="text-sm">John Doe</span>
-            </button>
+            </button> */}
           </div>
         </header>
 
