@@ -21,7 +21,7 @@ function Dashboard() {
   const [courses, setCourses] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const URL = 'http://127.0.0.1:8000/video-courses/';
+  const URL = 'https://vlearn-backend-254w.onrender.com/video-courses/';
 
   // Fetch courses from the API
   useEffect(() => {

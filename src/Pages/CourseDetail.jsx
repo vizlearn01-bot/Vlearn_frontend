@@ -11,7 +11,7 @@ function CourseDetail() {
   useEffect(() => {
     const fetchCourseDetails = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/courses/${id}`);
+        const response = await axios.get(`https://vlearn-backend-254w.onrender.com/courses/${id}`);
         setCourse(response.data); // Set the course details
         setLoading(false); // Set loading to false when data is fetched
         console.log(response.data); // Check if the data is correct
@@ -77,7 +77,7 @@ function CourseDetail() {
       </div>
 
       {/* Instructor and Additional Info */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-3 gap-6">
         <div>
           <h3 className="text-xl font-semibold text-gray-800">Instructor:</h3>
           <p className="text-gray-700">{course?.instructor}</p>
@@ -85,6 +85,10 @@ function CourseDetail() {
         <div>
           <h3 className="text-xl font-semibold text-gray-800">Duration:</h3>
           <p className="text-gray-700">{course?.duration}</p>
+        </div>
+        <div>
+          <h3 className="text-xl font-semibold text-gray-800"> Uploaded on:</h3>
+          <p className="text-gray-700">{course?.updated_at}</p>
         </div>
       </div>
 
