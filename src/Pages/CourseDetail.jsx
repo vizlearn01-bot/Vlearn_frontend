@@ -4,16 +4,20 @@ import axios from "axios";
 
 function CourseDetail() {
   const { id } = useParams(); // Get the id from the URL
-  const [course, setCourse] = useState('');
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true); // Loading state
 
   // Fetch course details using the id from the URL
   useEffect(() => {
     const fetchCourseDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/courses/${id}`);
+        const response = await axios.get(`http://127.0.0.1:8000/courses/${id}`);
         setCourse(response.data); // Set the course details
+        setLoading(false); // Set loading to false when data is fetched
+        console.log(response.data); // Check if the data is correct
       } catch (error) {
         console.error("Error fetching course details:", error);
+        setLoading(false); // Set loading to false in case of an error
       }
     };
 
@@ -27,7 +31,19 @@ function CourseDetail() {
     return match ? match[1] || match[2] : null;
   };
 
-  const videoID = course.videoLink ? extractVideoID(course.videoLink) : null;
+  // Extract the video ID if available
+  const videoID = course?.video_link ? extractVideoID(course.video_link) : null;
+
+  if (loading) {
+    return (
+      <div className="p-8 mx-auto max-w-6xl flex justify-center items-center">
+        <div className="text-center">
+          <div className="animate-spin border-4 border-t-4 border-custom-blue border-solid rounded-full w-16 h-16 mx-auto mb-4"></div>
+          <p className="text-gray-700">Loading course details...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 mx-auto max-w-6xl flex flex-col gap-8">
@@ -44,36 +60,38 @@ function CourseDetail() {
             ></iframe>
           </div>
         ) : (
-          <img
-            src={course.image}
-            alt={course.title}
-            className="w-full h-64 object-cover rounded-lg shadow-lg"
-          />
+          course?.image && (
+            <img
+              src={course.image}
+              alt={course.title}
+              className="w-full h-64 object-cover rounded-lg shadow-lg"
+            />
+          )
         )}
       </div>
 
       {/* Course Details */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-800">{course.title}</h1>
-        <p className="mt-4 text-gray-700 leading-relaxed">{course.description}</p>
+        <h1 className="text-3xl font-bold text-gray-800">{course?.title}</h1>
+        <p className="mt-4 text-gray-700 leading-relaxed">{course?.description}</p>
       </div>
 
       {/* Instructor and Additional Info */}
       <div className="grid grid-cols-2 gap-6">
         <div>
           <h3 className="text-xl font-semibold text-gray-800">Instructor:</h3>
-          <p className="text-gray-700">{course.instructor}</p>
+          <p className="text-gray-700">{course?.instructor}</p>
         </div>
         <div>
           <h3 className="text-xl font-semibold text-gray-800">Duration:</h3>
-          <p className="text-gray-700">{course.duration}</p>
+          <p className="text-gray-700">{course?.duration}</p>
         </div>
       </div>
 
       {/* Lessons */}
-      <div>
+      {/* <div>
         <h2 className="text-xl font-semibold mt-8 text-gray-800">Requirements:</h2>
-        {course.requirements?.length > 0 ? (
+        {course?.requirements?.length > 0 ? (
           <ul className="list-disc list-inside mt-2 text-gray-600">
             {course.requirements.map((requirement, index) => (
               <li key={index}>{requirement}</li>
@@ -82,7 +100,7 @@ function CourseDetail() {
         ) : (
           <p className="text-gray-600 mt-2">List of requirements not available.</p>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

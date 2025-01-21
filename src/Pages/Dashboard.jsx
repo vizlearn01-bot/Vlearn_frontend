@@ -18,90 +18,10 @@ import LazyLoad from 'react-lazyload';
 function Dashboard() {
   const [searchItem, setSearchItem] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
-  const [courses, setCourses] = useState([
-   [
-      {
-        "id": "1",
-        "title": "Charles' Law Experiment",
-        "image": "https://images.unsplash.com/photo-1581091870622-36d92f9a7932?auto=format&fit=crop&w=800&q=80",
-        "description": "Investigate the relationship between the volume and temperature of a gas at constant pressure to understand Charles' Law.",
-        "requirements": [
-          "Borosilicate glass syringe",
-          "Rubber tubing",
-          "Thermometer",
-          "Beaker with water",
-          "Source of heat (e.g., Bunsen burner or hot plate)",
-          "Graph paper or plotting software"
-        ],
-        "duration": "2 hours",
-        "difficulty": "Intermediate",
-        "instructor": "Mr. John Mwangi",
-        "rating": 4.9,
-        "videoLink": "https://youtu.be/exampleVideoLinkCharlesLaw"
-      },
-      {
-        "id": "2",
-        "title": "Diffusion in Liquids Experiment",
-        "image": "https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=800&q=80",
-        "description": "Learn how particles move in liquids through diffusion by observing color changes in different solutions.",
-        "requirements": [
-          "Beaker",
-          "Potassium permanganate crystals",
-          "Distilled water",
-          "Stirring rod",
-          "Stopwatch",
-          "Marker for labeling"
-        ],
-        "duration": "1.5 hours",
-        "difficulty": "Beginner",
-        "instructor": "Ms. Grace Wanjiru",
-        "rating": 4.7,
-        "videoLink": "https://youtu.be/exampleVideoLinkDiffusionLiquids"
-      },
-      {
-        "id": "3",
-        "title": "Diffusion in Gases: Bromine Gas Experiment",
-        "image": "https://images.unsplash.com/photo-1614518441680-fb9799923c85?auto=format&fit=crop&w=800&q=80",
-        "description": "Observe the diffusion of bromine gas in air to understand how gas particles move and spread.",
-        "requirements": [
-          "Gas jar with lid",
-          "Bromine liquid (handle with care)",
-          "Glass tube",
-          "Rubber tubing",
-          "Fume cupboard for safety",
-          "Stopwatch"
-        ],
-        "duration": "2 hours",
-        "difficulty": "Intermediate",
-        "instructor": "Dr. Peter Otieno",
-        "rating": 4.8,
-        "videoLink": "https://youtu.be/exampleVideoLinkBromineGas"
-      },
-      {
-        "id": "4",
-        "title": "Diffusion in Gases: Ammonia Liquid Experiment",
-        "image": "https://images.unsplash.com/photo-1582719478180-e9d87d248df4?auto=format&fit=crop&w=800&q=80",
-        "description": "Study the diffusion of ammonia gas in air by observing its reaction with hydrochloric acid vapors.",
-        "requirements": [
-          "Gas jar or test tube",
-          "Concentrated ammonia solution",
-          "Concentrated hydrochloric acid",
-          "Cotton wool",
-          "Glass rod",
-          "Stopwatch",
-          "Marker for labeling"
-        ],
-        "duration": "1.5 hours",
-        "difficulty": "Intermediate",
-        "instructor": "Prof. Alice Mutiso",
-        "rating": 4.9,
-        "videoLink": "https://youtu.be/exampleVideoLinkAmmoniaLiquid"
-      }
-    ]
-  ]);
+  const [courses, setCourses] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const URL = 'http://localhost:3000/courses';
+  const URL = 'http://127.0.0.1:8000/video-courses/';
 
   // Fetch courses from the API
   useEffect(() => {
@@ -110,6 +30,7 @@ function Dashboard() {
         const response = await axios.get(URL);
         setCourses(response.data);
         setFilteredCourses(response.data);
+        console.log(response.data)
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
@@ -211,7 +132,7 @@ function Dashboard() {
                   {/* Apply LazyLoad to the image */}
                   <LazyLoad height={200} offset={100} once>
                     <img
-                      src={course.cover_image_url}
+                      src={course.image}
                       alt={course.title}
                       className="w-full h-56 object-cover"
                       loading="lazy"
