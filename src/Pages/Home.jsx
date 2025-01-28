@@ -265,63 +265,89 @@ function Home() {
 
       </section>
       <section className="bg-custom-blue py-20">
-        <div className="container mx-auto px-6 text-center" id='demo'>
-          <h2 className="text-4xl font-bold text-white mb-4">Ready to Transform Your Science Class?</h2>
-          <form
-            ref={form}
-            onSubmit={handleSubmit}
-            className="flex flex-col items-center mx-auto mt-8 w-2/3 gap-6 sm:gap-8 bg-white shadow-lg rounded-3xl p-6 sm:p-8">
-            <h2 className="text-2xl font-bold text-custom-blue mb-4">
-              Schedule a Demo
-            </h2>
-            <p className="text-gray-600 text-center mb-6">
-              Fill in the details below to book your demo session.
-            </p>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-              placeholder="Full Name"
-              className="py-3 px-4 rounded-3xl  w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
-            />
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-              placeholder="Email Address"
-              className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
-            />
-            <input
-              type="text"
-              name="school"
-              value={formData.school}
-              onChange={handleInputChange}
-              required
-              placeholder="Institution Name"
-              className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
-            />
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleInputChange}
-              required
-              className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="bg-custom-blue text-white px-6 py-3 rounded-full hover:bg-blue-600 transition duration-300 ease-in-out flex items-center justify-center">
-              Get Started Now
-              <GraduationCap className="ml-2 h-5 w-5" />
-            </button>
-          </form>
-
+  <div className="container mx-auto px-6" id="demo">
+    <h2 className="text-4xl font-bold text-white mb-6 text-center">
+      Ready to Transform Your Science Class?
+    </h2>
+    <form
+      ref={form}
+      onSubmit={handleSubmit}
+      className="flex flex-col mx-auto mt-10 w-full max-w-6xl gap-6 bg-white shadow-xl rounded-3xl p-8"
+    >
+      <h3 className="text-2xl font-bold text-custom-blue mb-4 text-center">
+        Schedule a Demo
+      </h3>
+      <p className="text-gray-600 text-center mb-6">
+        Fill in the details below to book your demo session.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+            Full Name
+          </label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            required
+            placeholder="Full Name"
+            className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
+          />
         </div>
-      </section>
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            Email Address
+          </label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+            placeholder="Email Address"
+            className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
+          />
+        </div>
+        <div>
+          <label htmlFor="school" className="block text-sm font-medium text-gray-700 mb-2">
+            Institution Name
+          </label>
+          <input
+            type="text"
+            name="school"
+            value={formData.school}
+            onChange={handleInputChange}
+            required
+            placeholder="Institution Name"
+            className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
+          />
+        </div>
+        <div>
+          <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
+            Preferred Demo Date
+          </label>
+          <input
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleInputChange}
+            required
+            className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
+          />
+        </div>
+      </div>
+      <button
+        type="submit"
+        className="bg-custom-blue w-full md:w-1/3 mx-auto text-white px-6 py-3 rounded-3xl hover:bg-custom-orange transition duration-300 ease-in-out flex items-center justify-center mt-4"
+      >
+        Get Started Now
+        <GraduationCap className="ml-2 h-5 w-5" />
+      </button>
+    </form>
+  </div>
+</section>
+
       <Footer />
     </>
   );
