@@ -11,7 +11,7 @@ function CourseDetail() {
   useEffect(() => {
     const fetchCourseDetails = async () => {
       try {
-        const response = await axios.get(`https://vlearn-backend-qw31.onrender.com/course_videos/${id}`);
+        const response = await axios.get(`https://vlearn-backend-qw31.onrender.com/courses/${id}`);
         setCourse(response.data); // Set the course details
         setLoading(false); // Set loading to false when data is fetched
         console.log(response.data); // Check if the data is correct

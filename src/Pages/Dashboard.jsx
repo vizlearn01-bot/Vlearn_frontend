@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  BookOpen,
-  GraduationCap,
-  Bell,
-  Search,
-  Menu,
-} from 'lucide-react';
+import {BookOpen,GraduationCap,Bell,Search,Menu,} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import LazyLoad from 'react-lazyload';
