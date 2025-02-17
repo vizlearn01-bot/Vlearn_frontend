@@ -17,11 +17,12 @@ import LazyLoad from 'react-lazyload';
 
 function Dashboard() {
   const [searchItem, setSearchItem] = useState('');
+  const [isLoading, setIsLoading] = useState(true)
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [courses, setCourses] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const URL = 'https://vlearn-backend-254w.onrender.com/video-courses/';
+  const URL = 'https://vlearn-backend-254w.onrender.com/video-courses';
 
   // Fetch courses from the API
   useEffect(() => {
@@ -33,6 +34,8 @@ function Dashboard() {
         console.log(response.data)
       } catch (error) {
         console.error('Error fetching courses:', error);
+      }finally{
+        setIsLoading(false)
       }
     };
 
@@ -53,7 +56,7 @@ function Dashboard() {
       setFilteredCourses(filtered);
     }
   };
-  
+
 
   return (
     <div className="flex">
@@ -67,9 +70,8 @@ function Dashboard() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 p-4 z-40 transition-transform duration-300 ease-in-out ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0`}
+        className={`fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 p-4 z-40 transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } md:translate-x-0`}
       >
         <div className="flex items-center gap-2 mb-8">
           <GraduationCap className="h-10 w-10 text-custom-blue" />
@@ -124,8 +126,13 @@ function Dashboard() {
 
         {/* Current Courses */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Current Courses</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Current Courses</h2>
+          {isLoading ?(
+   <div className="flex justify-center items-center min-h-[20vh]">
+   <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-custom-blue border-solid"></div>
+ </div>
+          ):(
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredCourses.map((course) => (
               <Link to={`/coursedetails/${course.id}`} key={course.id}>
                 <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
@@ -148,6 +155,10 @@ function Dashboard() {
               </Link>
             ))}
           </div>
+          )
+          }
+          {/* <iframe src="https://player.vimeo.com/video/1057403637?h=b6df6d981e&amp;title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" width="500" height="600" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" title="Charles law"></iframe> */}
+
         </section>
       </main>
     </div>
