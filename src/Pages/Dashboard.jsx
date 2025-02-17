@@ -47,8 +47,8 @@ function Dashboard() {
   }, 300);
 
   const navItems = [
-    { icon: BookOpen, text: 'My Courses', path: '/courses' },
-    { icon: GraduationCap, text: 'Dashboard', path: '/' },
+    { icon: GraduationCap, text: 'Home', path: '/' },
+    { icon: BookOpen, text: 'My Courses', path: '/dashboard' },
   ];
 
   return (
@@ -102,7 +102,7 @@ function Dashboard() {
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="bg-gray-200 rounded-3xl h-56 animate-pulse"></div>
+                <div key={i} className="bg-gray-300 rounded-3xl h-56 animate-pulse"></div>
               ))}
             </div>
           ) : (

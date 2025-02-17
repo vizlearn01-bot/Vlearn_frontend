@@ -228,7 +228,7 @@ function Home() {
         </div>
       </section>
 
-      <section className='h-fit p-20 bg-slate-200'>
+      <section className='h-fit py-10 bg-slate-200'>
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-16">Why Vlearn?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 text-center gap-6">
