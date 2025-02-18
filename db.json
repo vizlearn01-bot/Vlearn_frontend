@@ -76,5 +76,13 @@
       "rating": 4.9,
       "videoLink": "https://youtu.be/exampleVideoLinkAmmoniaLiquid"
     }
+  ],
+  "users": [
+    {
+      "id": "6835",
+      "email": "user@gmail.com",
+      "username": "Tester",
+      "password": "12345"
+    }
   ]
 }

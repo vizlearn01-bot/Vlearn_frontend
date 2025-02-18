@@ -86,10 +86,10 @@ function CourseDetail() {
           <h3 className="text-xl font-semibold text-gray-800">Duration:</h3>
           <p className="text-gray-700">{course?.duration}</p>
         </div>
-        <div>
+        {/* <div>
           <h3 className="text-xl font-semibold text-gray-800"> Uploaded on:</h3>
           <p className="text-gray-700">{course?.updated_at}</p>
-        </div>
+        </div> */}
       </div>
 
       {/* Lessons */}
