@@ -18,12 +18,6 @@ export const UserProvider = ({ children }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
     });
-    alert("Registration successful")
-    .then(
-
-        useNavigate("/login")
-
-    )
 
     if (response.ok) {
       const newUser = await response.json();

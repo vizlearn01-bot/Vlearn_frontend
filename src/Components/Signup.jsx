@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -6,7 +6,8 @@ import { useUser } from "../Context/UserProvider";
 
 
 function Signup() {
-  const {register} = useUser()
+  const { register } = useUser()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -31,15 +32,17 @@ function Signup() {
       // Handle success (e.g., show a success message, redirect, etc.)
       console.log('User data submitted:', response.data);
       successAlert()
+      register(response.data) //updates the user context
       setFormData({
-        email:"",
-        username:"",
-        password:"",
+        email: "",
+        username: "",
+        password: "",
       })
+
     } catch (error) {
       // Handle error
       console.error('There was an error submitting the form!', error);
-     failureAlert()
+      failureAlert()
     }
   };
   // function to show success alert prompt
@@ -49,6 +52,10 @@ function Signup() {
       text: 'Registration successful',
       icon: 'success',
       confirmButtonText: 'OK',
+    }).then(() => { 
+      setTimeout(() => {
+        navigate("/login"); 
+      }, 200);
     })
   };
 
@@ -62,9 +69,9 @@ function Signup() {
     });
   };
   return (
- <>
+    <>
       <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full bg-custom-bg bg-center bg-cover">
-        <div className="relative sm:max-w-sm w-full">
+        <div className="relative sm:max-w-lg w-full md:mx-auto">
           <div className="card bg-custom-blue shadow-2xl w-full h-full rounded-3xl absolute transform -rotate-6"></div>
           <div className="card bg-custom-orange shadow-2xl w-full h-full rounded-3xl absolute transform rotate-6"></div>
           <div className="relative w-full rounded-3xl px-6 py-4 bg-gray-100 shadow-md">
