@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Create the context
 const UserContext = createContext();
@@ -12,11 +13,17 @@ export const UserProvider = ({ children }) => {
 
   // Function to register a new user
   const register = async (userData) => {
-    const response = await fetch("http://localhost:5000/users", {
+    const response = await fetch("http://localhost:3000/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
     });
+    alert("Registration successful")
+    .then(
+
+        useNavigate("/login")
+
+    )
 
     if (response.ok) {
       const newUser = await response.json();
@@ -26,7 +33,7 @@ export const UserProvider = ({ children }) => {
 
   // Function to log in the user
   const login = async ({ email, password }) => {
-    const response = await fetch(`http://localhost:5000/users?email=${email}`);
+    const response = await fetch(`http://localhost:3000/users?email=${email}`);
     const users = await response.json();
 
     if (users.length > 0 && users[0].password === password) {

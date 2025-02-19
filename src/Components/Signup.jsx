@@ -2,9 +2,11 @@ import { Link } from "react-router-dom"
 import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useUser } from "../Context/UserProvider";
+
 
 function Signup() {
-
+  const {register} = useUser()
   const [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -133,3 +135,5 @@ function Signup() {
 }
 
 export default Signup
+
+

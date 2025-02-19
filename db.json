@@ -83,6 +83,30 @@
       "email": "user@gmail.com",
       "username": "Tester",
       "password": "12345"
+    },
+    {
+      "id": "8256",
+      "name": "Griffin Omondi",
+      "email": "omondigriffin4@gmail.com",
+      "password": "12345"
+    },
+    {
+      "id": "e390",
+      "name": "Griffin Omondi",
+      "email": "omondigriffin4@gmail.com",
+      "password": "12345"
+    },
+    {
+      "id": "0b78",
+      "name": "Griffin Omondi",
+      "email": "omondigriffin4@gmail.com",
+      "password": "12345"
+    },
+    {
+      "id": "f738",
+      "email": "user@gmail.com",
+      "username": "Testuser",
+      "password": "12345"
     }
   ]
 }
