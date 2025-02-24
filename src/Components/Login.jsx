@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
+import { useUser } from "../Context/UserProvider";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -9,7 +9,7 @@ function Login() {
     password: '',
   });
   const navigate = useNavigate();
-
+  const {login} =useUser()
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -19,40 +19,19 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent form from reloading the page
-
-    try {
-      // Check if user with the given username exists in db.json
-      const response = await axios.get(`http://localhost:3000/users?username=${formData.username}`);
-
-      // Check if the response contains any users and validate password
-      if (response.data.length > 0) {
-        const user = response.data[0];
-
-        // Check if the password matches
-        if (user.password === formData.password) {
-          console.log('Login successful:', user);
-          successAlert();
-          setFormData({
-            username: '',
-            password: '',
-          })
-        } else {
-          alert('Incorrect password');
-        }
-      } else {
-        alert('User not found');
-        setFormData({
-          username: '',
-          password: '',
-        })
-      }
-    } catch (error) {
-      // Handle error
-      console.error('There was an error logging in!', error);
-      failureAlert()
+    e.preventDefault();
+  
+    const result = await login(formData); // Pass formData directly to login function
+  
+    if (result.success) {
+      console.log("Login successful:", result.user);
+      successAlert();
+      setFormData({ username: "", password: "" });
+    } else {
+      failureAlert(result.message);
     }
   };
+  
   // function to show success alert prompt
   const successAlert = () => {
     Swal.fire({
@@ -61,7 +40,7 @@ function Login() {
       icon: 'success',
       confirmButtonText: 'OK',
     }).then(() => {
-      window.location.href = '/dashboard';
+      navigate('/');
     });
   };
 

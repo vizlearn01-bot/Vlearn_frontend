@@ -1,5 +1,4 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 // Create the context
 const UserContext = createContext();
@@ -26,15 +25,27 @@ export const UserProvider = ({ children }) => {
   };
 
   // Function to log in the user
-  const login = async ({ email, password }) => {
-    const response = await fetch(`http://localhost:3000/users?email=${email}`);
-    const users = await response.json();
+  const login = async ({ username, password }) => {
+    try {
+      const response = await fetch(`http://localhost:3000/users?username=${username}`);
+      const users = await response.json();
 
-    if (users.length > 0 && users[0].password === password) {
-      setUser(users[0]);
-      localStorage.setItem("user", JSON.stringify(users[0])); // Persist user info
-    } else {
-      alert("Invalid credentials");
+      if (users.length > 0) {
+        const foundUser = users[0];
+
+        if (foundUser.password === password) {
+          setUser(foundUser);
+          localStorage.setItem("user", JSON.stringify(foundUser)); // Persist user info
+          return { success: true, user: foundUser };
+        } else {
+          return { success: false, message: "Incorrect password" };
+        }
+      } else {
+        return { success: false, message: "User not found" };
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      return { success: false, message: "An error occurred. Try again later." };
     }
   };
 

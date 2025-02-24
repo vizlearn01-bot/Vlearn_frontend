@@ -46,11 +46,11 @@ function CourseDetail() {
   }
 
   return (
-    <div className="p-8 mx-auto max-w-6xl flex flex-col gap-8">
+    <div className="p-8 mx-auto  flex flex-col gap-8">
       {/* Video or Image Section */}
       <div>
         {videoID ? (
-          <div className="mb-4 aspect-w-16 aspect-h-9">
+          <div className="mb-4 aspect-w-16 mx-auto  max-w-6xl aspect-h-9">
             <iframe
               src={`https://www.youtube.com/embed/${videoID}`}
               title="Course Video"
