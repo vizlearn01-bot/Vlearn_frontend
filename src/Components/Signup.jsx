@@ -71,7 +71,7 @@ function Signup() {
   };
 
   // Wave Function
-  const renderWave = (position, flip = false) => (
+  const renderWave = (position) => (
     <div className={`absolute ${position} left-0 w-full  z-10`}>
       <Wave
         fill="#ff4900"

@@ -1,56 +1,66 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 import Swal from "sweetalert2";
 import { useUser } from "../Context/UserProvider";
 import Wave from "react-wavify"; // Import react-wavify
+import BASE_URL from "../config";
 
 function Login() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
-
+  const [error, setError] = useState(null);
+  const { login } = useUser(); // Extract login function from context
   const navigate = useNavigate();
-  const { login } = useUser();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const result = await login(formData);
-    if (result.success) {
-      console.log("Login successful:", result.user);
-      successAlert();
-      setFormData({ username: "", password: "" });
-    } else {
-      failureAlert(result.message);
+
+    try {
+      const response = await axios.post(`${BASE_URL}/login/`, formData);
+
+      if (response.status === 200) {
+        const token = response.data.token; // Extract token
+        login(token); // Store in context
+
+        Swal.fire({
+          title: "Success",
+          text: "Login successful",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      let errorMessage = "Login failed. Please try again.";
+
+      if (error.response) {
+        const { data } = error.response;
+
+        // Extract error messages dynamically
+        errorMessage = data.non_field_errors?.[0] || 
+                       data.detail || 
+                       Object.values(data).flat().join("\n") || 
+                       errorMessage;
+      }
+
+      setError(errorMessage);
+
+      Swal.fire({
+        title: "Error",
+        text: errorMessage,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
-  };
-
-  const successAlert = () => {
-    Swal.fire({
-      title: "Success",
-      text: "Login successful",
-      icon: "success",
-      confirmButtonText: "OK",
-    }).then(() => {
-      navigate("/");
-    });
-  };
-
-  const failureAlert = (message) => {
-    Swal.fire({
-      title: "Error",
-      text: message,
-      icon: "error",
-      confirmButtonText: "OK",
-    });
   };
 
   // Wave Function
@@ -80,7 +90,10 @@ function Login() {
             >
               Login
             </label>
-            <form onSubmit={handleSubmit} className="mt-10">
+
+            {error && <p className="text-red-500 text-center mt-2">{error}</p>}
+
+            <form onSubmit={handleLogin} className="mt-10">
               <div>
                 <input
                   type="text"
@@ -118,9 +131,9 @@ function Login() {
                 <div className="flex justify-center">
                   <label className="mr-2">Don&apos;t have an account?</label>
                   <Link to="/register">
-                    <h className="text-black transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105">
+                    <span className="text-black transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105">
                       Create an account
-                    </h>
+                    </span>
                   </Link>
                 </div>
               </div>
@@ -130,7 +143,6 @@ function Login() {
 
         {/* Bottom Wave */}
         {renderWave("bottom-0")}
-
       </div>
     </>
   );
