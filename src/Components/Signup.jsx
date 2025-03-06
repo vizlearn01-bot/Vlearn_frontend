@@ -3,7 +3,6 @@ import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import BASE_URL from "../config";
-import Wave from "react-wavify";
 import { Mail, Lock, ArrowRight, User } from 'lucide-react';
 
 
@@ -70,20 +69,7 @@ function Signup() {
     });
   };
 
-  // Wave Function
-  const renderWave = (position) => (
-    <div className={`absolute ${position} left-0 w-full  z-10`}>
-      <Wave
-        fill="#ff4900"
-        options={{
-          height: 65,
-          amplitude: 10,
-          speed: 0.5,
-          points: 10,
-        }}
-      />
-    </div>
-  );
+
 
   return (
     <>
@@ -191,9 +177,6 @@ function Signup() {
         </form>
           </div>
         </div>
-
-        {/* 🟠 Bottom Wave */}
-        {renderWave("bottom-0")}
       </div>
     </>
   );

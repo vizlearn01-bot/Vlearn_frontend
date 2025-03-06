@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+
+import { useState, useContext } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { useUser } from "../Context/UserProvider";
-import Wave from "react-wavify"; // Import react-wavify
+import UserContext from "../Context/UserContext";
 import BASE_URL from "../config";
 
 function Login() {
@@ -12,7 +12,7 @@ function Login() {
     password: "",
   });
   const [error, setError] = useState(null);
-  const { login } = useUser(); // Extract login function from context
+  const { login } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -63,19 +63,7 @@ function Login() {
     }
   };
 
-  // Wave Function
-  const renderWave = (position) => (
-    <Wave
-      className={`absolute ${position} left-0 w-full`}
-      fill="#005f6a"
-      options={{
-        height: 65,  // Wave height
-        amplitude: 10, // Wave curves
-        speed: 1,  // Animation speed
-        points: 10,   // Number of wave points
-      }}
-    />
-  );
+
 
   return (
     <>
@@ -140,9 +128,6 @@ function Login() {
             </form>
           </div>
         </div>
-
-        {/* Bottom Wave */}
-        {renderWave("bottom-0")}
       </div>
     </>
   );
