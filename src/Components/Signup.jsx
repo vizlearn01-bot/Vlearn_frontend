@@ -1,18 +1,23 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { useUser } from "../Context/UserProvider";
+import BASE_URL from "../config";
+import Wave from "react-wavify";
+import { Mail, Lock, ArrowRight, User } from 'lucide-react';
 
 
 function Signup() {
-  const { register } = useUser()
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
-    username: '',
-    password: '',
+    username: "",
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
   });
+
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,125 +27,176 @@ function Signup() {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent form from reloading the page
-
+  const handleSignup = async (e) => {
+    e.preventDefault();
     try {
-      // Send form data to the local json-server
-      const response = await axios.post('http://localhost:3000/users', formData);
-
-      // Handle success (e.g., show a success message, redirect, etc.)
-      console.log('User data submitted:', response.data);
-      successAlert()
-      register(response.data) //updates the user context
-      setFormData({
-        email: "",
-        username: "",
-        password: "",
-      })
-
+      const response = await axios.post(`${BASE_URL}/register/`, formData);
+      if (response.status === 201) {
+        successAlert();
+        navigate("/login");
+      }
     } catch (error) {
-      // Handle error
-      console.error('There was an error submitting the form!', error);
-      failureAlert()
+      console.error("Registration error:", error.response?.data);
+      
+      let errorMessage = "An error occurred. Please try again."; // Default error message
+  
+      if (error.response?.data) {
+        const errorData = error.response.data;
+        errorMessage = Object.values(errorData).flat().join("\n"); // Extract error messages
+      }
+  
+      failureAlert(errorMessage);
     }
   };
-  // function to show success alert prompt
+  
+
+  
+
   const successAlert = () => {
     Swal.fire({
-      title: 'Success',
-      text: 'Registration successful',
-      icon: 'success',
-      confirmButtonText: 'OK',
-    }).then(() => { 
-      setTimeout(() => {
-        navigate("/login"); 
-      }, 200);
-    })
-  };
-
-  // function to show failure alert prompt
-  const failureAlert = (message) => {
-    Swal.fire({
-      title: 'Error',
-      text: message,
-      icon: 'error',
-      confirmButtonText: 'OK',
+      title: "Success",
+      text: "Registration successful",
+      icon: "success",
+      confirmButtonText: "OK",
     });
   };
+
+  const failureAlert = (message) => {
+    Swal.fire({
+      title: "Error",
+      text: message,
+      icon: "error",
+      confirmButtonText: "OK",
+    });
+  };
+
+  // Wave Function
+  const renderWave = (position, flip = false) => (
+    <div className={`absolute ${position} left-0 w-full  z-10`}>
+      <Wave
+        fill="#ff4900"
+        options={{
+          height: 65,
+          amplitude: 10,
+          speed: 0.5,
+          points: 10,
+        }}
+      />
+    </div>
+  );
+
   return (
     <>
       <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full bg-custom-bg bg-center bg-cover">
+
+
         <div className="relative sm:max-w-lg w-full md:mx-auto">
           <div className="card bg-custom-blue shadow-2xl w-full h-full rounded-3xl absolute transform -rotate-6"></div>
           <div className="card bg-custom-orange shadow-2xl w-full h-full rounded-3xl absolute transform rotate-6"></div>
           <div className="relative w-full rounded-3xl px-6 py-4 bg-gray-100 shadow-md">
-            <label htmlFor="login" className="block mt-3 text-xl text-gray-700 text-center font-semibold">
+            <label htmlFor="signup" className="block mt-3 text-xl text-gray-700 text-center font-semibold">
               Sign up
             </label>
-            <form onSubmit={handleSubmit} className="mt-10">
-              <div>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full py-2 px-4 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 mb-6"
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  type="text"
-                  name="username"
-                  placeholder="Username"
-                  value={formData.username}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full py-2 px-4 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 mb-6"
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full py-2 px-4 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
-                  required
-                />
-              </div>
-              <div className="mt-7">
-                <button
-                  type="submit"
-                  className="bg-blue-500 w-fit py-2 px-5 flex justify-center mx-auto rounded-3xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
-                >
-                  Sign up
-                </button>
-              </div>
 
-              <div className="mt-7 text-sm">
-                <div className="flex justify-center">
-                  <label className="mr-2">Have an account?</label>
-                  <Link to="/login">
-                    <h
-                      className="text-black transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
-                    >
-                      Sign in
-                    </h>
-                  </Link>
-                </div>
-              </div>
-            </form>
+            {error && <p className="text-red-500 text-center mt-2">{error}</p>}
+
+            <form onSubmit={handleSignup} className="space-y-10">
+          <div>
+            <label className="block mb-2 text-sm font-medium">Username</label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleInputChange}
+                className="w-full pl-10 pr-4 py-2 text-black border border-gray-300 rounded-3xl outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors"
+                placeholder="Username"
+                required
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium">First Name</label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <input
+                type="text"
+                name="first_name"
+                value={formData.first_name}
+                onChange={handleInputChange}
+                className="w-full pl-10 pr-4 py-2 text-black border border-gray-300 rounded-3xl outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors"
+                placeholder="First Name"
+                required
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium">Last Name</label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <input
+                type="text"
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleInputChange}
+                className="w-full pl-10 pr-4 py-2 text-black border border-gray-300 rounded-3xl outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors"
+                placeholder="Last Name"
+                required
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium">Email</label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-full pl-10 pr-4 py-2 text-black border border-gray-300 rounded-3xl outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium">Password</label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                className="w-full pl-10 pr-4 py-2 text-black border border-gray-300 rounded-3xl outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+          </div>
+          <div>
+          </div>
+          <button
+            type="submit"
+            className="flex items-center justify-center w-full mx-auto py-3 px-2 text-white bg-custom-blue rounded-3xl gap-2 hover:bg-custom-orange transition-colors"
+          >
+            Create account
+            <ArrowRight className="h-5 w-5" />
+          </button>
+          <p className="text-center text-sm">
+            Already have an account? <Link to="/login" className="text-custom-green">Sign in</Link>
+          </p>
+        </form>
           </div>
         </div>
+
+        {/* 🟠 Bottom Wave */}
+        {renderWave("bottom-0")}
       </div>
     </>
-  )
+  );
 }
 
-export default Signup
-
-
+export default Signup;

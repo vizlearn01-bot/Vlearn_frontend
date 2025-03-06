@@ -2,14 +2,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { useUser } from "../Context/UserProvider";
+import Wave from "react-wavify"; // Import react-wavify
 
 function Login() {
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   });
+
   const navigate = useNavigate();
-  const {login} =useUser()
+  const { login } = useUser();
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -20,9 +23,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const result = await login(formData); // Pass formData directly to login function
-  
+    const result = await login(formData);
     if (result.success) {
       console.log("Login successful:", result.user);
       successAlert();
@@ -31,28 +32,41 @@ function Login() {
       failureAlert(result.message);
     }
   };
-  
-  // function to show success alert prompt
+
   const successAlert = () => {
     Swal.fire({
-      title: 'Success',
-      text: 'Login successful',
-      icon: 'success',
-      confirmButtonText: 'OK',
+      title: "Success",
+      text: "Login successful",
+      icon: "success",
+      confirmButtonText: "OK",
     }).then(() => {
-      navigate('/');
+      navigate("/");
     });
   };
 
-  // function to show failure alert prompt
   const failureAlert = (message) => {
     Swal.fire({
-      title: 'Error',
+      title: "Error",
       text: message,
-      icon: 'error',
-      confirmButtonText: 'OK',
+      icon: "error",
+      confirmButtonText: "OK",
     });
   };
+
+  // Wave Function
+  const renderWave = (position) => (
+    <Wave
+      className={`absolute ${position} left-0 w-full`}
+      fill="#005f6a"
+      options={{
+        height: 65,  // Wave height
+        amplitude: 10, // Wave curves
+        speed: 1,  // Animation speed
+        points: 10,   // Number of wave points
+      }}
+    />
+  );
+
   return (
     <>
       <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full bg-custom-bg bg-center bg-cover bg-opacity-50">
@@ -104,9 +118,7 @@ function Login() {
                 <div className="flex justify-center">
                   <label className="mr-2">Don&apos;t have an account?</label>
                   <Link to="/register">
-                    <h
-                      className="text-black transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
-                    >
+                    <h className="text-black transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105">
                       Create an account
                     </h>
                   </Link>
@@ -115,6 +127,10 @@ function Login() {
             </form>
           </div>
         </div>
+
+        {/* Bottom Wave */}
+        {renderWave("bottom-0")}
+
       </div>
     </>
   );

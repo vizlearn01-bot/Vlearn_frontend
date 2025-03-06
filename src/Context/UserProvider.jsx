@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
+import BASE_URL from "../config";
 
 // Create the context
 const UserContext = createContext();
@@ -12,7 +13,7 @@ export const UserProvider = ({ children }) => {
 
   // Function to register a new user
   const register = async (userData) => {
-    const response = await fetch("http://localhost:3000/users", {
+    const response = await fetch(`${BASE_URL}/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
