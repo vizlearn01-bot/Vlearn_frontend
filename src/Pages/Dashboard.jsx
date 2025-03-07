@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import LazyLoad from 'react-lazyload';
 import debounce from 'lodash.debounce';
-import UserContext from '../Context/UserContext'; // Ensure this path is correct
+import UserContext from '../Context/UserContext'; 
+import BASE_URL from '../config';
 
 function Dashboard() {
   const [searchItem, setSearchItem] = useState('');
@@ -13,15 +14,13 @@ function Dashboard() {
   const [courses, setCourses] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [error, setError] = useState(null);
-  const { user, token, logout } = useContext(UserContext);
-
-  const URL = 'https://vlearn-backend-qw31.onrender.com/course_videos/';
+  const { user, token, logout } = useContext(UserContext); // Consume UserContext
 
   // Fetch courses on component mount
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(URL, {
+        const response = await axios.get(`${BASE_URL}/course_videos`, {
           headers: {
             Authorization: `Bearer ${token?.access}`, // Use the token from context
           },

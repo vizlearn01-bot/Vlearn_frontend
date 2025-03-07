@@ -26,7 +26,7 @@ function Login() {
       const response = await axios.post(`${BASE_URL}/login/`, formData);
 
       if (response.status === 200) {
-        const token = response.data.token; // Extract token
+        const token = response.data; // Extract token
         login(token); // Store in context
 
         Swal.fire({
