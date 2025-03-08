@@ -46,23 +46,16 @@ export const UserProvider = ({ children }) => {
 
   const login = (authToken) => {
     try {
-      // Extract the access token from the authToken object
-      const accessToken = authToken.access;
-  
-      // Decode the access token to get user information
-      const decodedUser = jwtDecode(accessToken);
-  
-      // Set user and token in state
+      console.log("Storing token in localStorage:", authToken);
+      const decodedUser = jwtDecode(authToken.access); // Extract user info
       setUser(decodedUser);
-      setToken(accessToken);
-  
-      // Store the access token in local storage
-      localStorage.setItem("token", JSON.stringify(accessToken));
-      console.log("Access token stored in localStorage:", accessToken); // Debugging
+      setToken(authToken);
+      localStorage.setItem("token", JSON.stringify(authToken)); // Store token persistently
     } catch (error) {
       console.error("Invalid token:", error);
     }
   };
+  
 
   const logout = () => {
     setUser(null);

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import LazyLoad from 'react-lazyload';
 import debounce from 'lodash.debounce';
-import UserContext from '../Context/UserContext'; 
+import UserContext from '../Context/UserContext';
 import BASE_URL from '../config';
 
 function Dashboard() {
@@ -15,6 +15,7 @@ function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [error, setError] = useState(null);
   const { user, token, logout } = useContext(UserContext); // Consume UserContext
+
 
   // Fetch courses on component mount
   useEffect(() => {
@@ -83,9 +84,8 @@ function Dashboard() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 h-screen w-64 bg-white border-r p-4 transition-transform duration-300 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0`}
+        className={`fixed left-0 top-0 h-screen w-64 bg-white border-r p-4 transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } md:translate-x-0`}
       >
         <div className="flex items-center gap-2 mb-8">
           <GraduationCap className="h-10 w-10 text-custom-blue" />
@@ -109,44 +109,53 @@ function Dashboard() {
       </aside>
 
       {/* Main Content */}
-      <main className="md:ml-64 p-8 w-full">
-        {/* User Info and Logout */}
-        <div className="flex items-center space-x-4 mb-8">
-          {user ? (
-            <>
-              <span className="font-medium">Welcome, {user.username}</span>
-              <button
-                onClick={handleLogout}
-                className="px-3 py-2 bg-red-600 text-white rounded-3xl text-sm"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <p>Please log in</p>
-          )}
-        </div>
-
+      <main className="md:ml-64 w-full">
         {/* Search Bar */}
-        <header className="flex items-center justify-between mb-8">
-          <div className="relative w-full md:w-1/3 border border-custom-blue rounded-3xl">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-custom-blue" />
-            <input
-              type="text"
-              placeholder="Search courses..."
-              defaultValue={searchItem}
-              onChange={handleInputChange}
-              className="pl-10 pr-4 py-2 border border-gray-200 rounded-3xl w-full focus:outline-none focus:ring-2 focus:ring-custom-blue"
-            />
+        <header className="flex items-center justify-between mb-8 p-4 bg-white shadow-2xl top-0">
+          {/* Search Bar */}
+          <div className="relative w-full md:w-1/3">
+            <div className="flex items-center border border-custom-blue rounded-3xl overflow-hidden">
+              <Search className="absolute left-3 h-5 w-5 text-custom-blue" />
+              <input
+                type="text"
+                placeholder="Search courses..."
+                defaultValue={searchItem}
+                onChange={handleInputChange}
+                className="pl-10 pr-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-custom-blue placeholder-gray-400"
+              />
+            </div>
           </div>
-          <button className="p-3 hover:bg-custom-blue hover:text-white rounded-3xl">
-            <Bell className="h-5 w-5" />
-          </button>
+
+          {/* User Info and Logout */}
+          <div className="flex items-center space-x-6">
+            {/* Notification Bell */}
+            <button className="p-2 hover:bg-custom-blue hover:text-white rounded-3xl transition-colors duration-200">
+              <Bell className="h-6 w-6 text-gray-600 hover:text-white" />
+            </button>
+
+            {/* User Info */}
+            {user ? (
+              <div className="flex items-center space-x-4">
+                <span className="font-medium text-gray-700">Welcome, {user.username}</span>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-red-600 text-white rounded-3xl text-sm hover:bg-red-700 transition-colors duration-200"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <p className="text-gray-600">Please log in</p>
+            )}
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="absolute top-16 left-1/2 transform -translate-x-1/2">
+              <p className="text-red-500 bg-red-100 px-4 py-2 rounded-lg text-sm">{error}</p>
+            </div>
+          )}
         </header>
-
-        {/* Error Message */}
-        {error && <p className="text-red-500">{error}</p>}
-
         {/* Courses Section */}
         <section className="mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Current Courses</h2>

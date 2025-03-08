@@ -2,8 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import UserContext from "../Context/UserContext";
 import BASE_URL from "../config";
+import UserContext from "../Context/UserContext";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -26,8 +26,9 @@ function Login() {
       const response = await axios.post(`${BASE_URL}/login/`, formData);
 
       if (response.status === 200) {
-        const token = response.data; // Extract token
+        const token = response.data; // Extract token and user data
         login(token); // Store in context
+
 
         Swal.fire({
           title: "Success",
@@ -39,20 +40,9 @@ function Login() {
         navigate("/dashboard");
       }
     } catch (error) {
-      let errorMessage = "Login failed. Please try again.";
-
-      if (error.response) {
-        const { data } = error.response;
-
-        // Extract error messages dynamically
-        errorMessage = data.non_field_errors?.[0] || 
-                       data.detail || 
-                       Object.values(data).flat().join("\n") || 
-                       errorMessage;
-      }
-
+      const errorMessage =
+        error.response?.data?.non_field_errors?.[0] || "Login failed. Please try again.";
       setError(errorMessage);
-
       Swal.fire({
         title: "Error",
         text: errorMessage,
