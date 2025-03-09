@@ -136,7 +136,7 @@ function Dashboard() {
             {/* User Info */}
             {user ? (
               <div className="flex items-center space-x-4">
-                <span className="font-medium text-gray-700">Welcome, {user.username}</span>
+                <span className="font-medium text-gray-700">Hi, {user.username}</span>
                 <button
                   onClick={handleLogout}
                   className="px-4 py-2 bg-red-600 text-white rounded-3xl text-sm hover:bg-red-700 transition-colors duration-200"
@@ -145,7 +145,9 @@ function Dashboard() {
                 </button>
               </div>
             ) : (
+              <Link to='/login'>
               <p className="text-gray-600">Please log in</p>
+              </Link>
             )}
           </div>
 
