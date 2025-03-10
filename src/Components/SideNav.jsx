@@ -1,14 +1,35 @@
-import { Link} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, GraduationCap, BookOpen, User, LayoutDashboardIcon, ClipboardPen, FolderClosed } from 'lucide-react';
 import { useState, useContext } from 'react';
 import UserContext from '../Context/UserContext';
+import Swal from 'sweetalert2';
 
 const SideNav = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { logout } = useContext(UserContext);
+  const navigate = useNavigate()
 
   const handleLogout = () => {
-    logout();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log me out!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout(); // Call logout only after confirmation
+        Swal.fire({
+          title: "Logged Out!",
+          text: "You have been successfully logged out.",
+          icon: "success"
+        }).then(() => {
+          navigate("/login")
+        })
+      }
+    });
   };
 
   const navItems = [
@@ -29,9 +50,8 @@ const SideNav = () => {
       </button>
 
       <aside
-        className={`fixed left-0 top-0 h-screen w-64 bg-white border-r p-4 transition-transform duration-300 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0`}
+        className={`fixed left-0 top-0 h-screen w-64 bg-white border-r p-4 transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } md:translate-x-0`}
       >
         <div className="flex items-center gap-2 mb-8">
           <GraduationCap className="h-10 w-10 text-custom-blue" />

@@ -7,7 +7,6 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate
   const [token, setToken] = useState(() => {
     try {
       const storedToken = JSON.parse(localStorage.getItem("token"));
@@ -62,8 +61,6 @@ export const UserProvider = ({ children }) => {
     setUser(null);
     setToken(null);
     localStorage.removeItem("token"); // Remove token from storage
-    navigate("/login")
-
   };
 
   return (
