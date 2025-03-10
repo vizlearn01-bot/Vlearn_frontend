@@ -4,6 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import BASE_URL from "../config";
 import UserContext from "../Context/UserContext";
+import {Lock, User} from "lucide-react"
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -71,26 +72,28 @@ function Login() {
             {error && <p className="text-red-500 text-center mt-2">{error}</p>}
 
             <form onSubmit={handleLogin} className="mt-10">
-              <div>
+              <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <input
                   type="text"
                   name="username"
                   placeholder="Username"
                   value={formData.username}
                   onChange={handleInputChange}
-                  className="mt-1 block w-full py-2 px-4 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 mb-6"
+                  className="mt-1 block w-full py-2 px-4 pl-10 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 mb-6"
                   required
                 />
               </div>
 
-              <div>
+              <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <input
                   type="password"
                   name="password"
-                  placeholder="Password"
+                  placeholder="••••••••"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="mt-1 block w-full py-2 px-4 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
+                  className="mt-1 block w-full py-2 px-4 pl-10 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                   required
                 />
               </div>

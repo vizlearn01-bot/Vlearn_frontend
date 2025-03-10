@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { BookOpen, GraduationCap, Bell, Search, Menu } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import LazyLoad from 'react-lazyload';
 import debounce from 'lodash.debounce';
@@ -15,6 +15,7 @@ function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [error, setError] = useState(null);
   const { user, token, logout } = useContext(UserContext); // Consume UserContext
+  const navigate = useNavigate
 
 
   // Fetch courses on component mount
@@ -63,7 +64,6 @@ function Dashboard() {
   // Handle logout
   const handleLogout = () => {
     logout();
-    // Optionally, redirect to the login page
   };
 
   // Navigation items
@@ -111,7 +111,7 @@ function Dashboard() {
       {/* Main Content */}
       <main className="md:ml-64 w-full">
         {/* Search Bar */}
-        <header className="flex items-center justify-between mb-8 p-4 bg-white shadow-2xl top-0">
+        <header className="flex items-center justify-between p-4 bg-white shadow-2xl top-0">
           {/* Search Bar */}
           <div className="relative w-full md:w-1/3">
             <div className="flex items-center border border-custom-blue rounded-3xl overflow-hidden">
@@ -146,7 +146,7 @@ function Dashboard() {
               </div>
             ) : (
               <Link to='/login'>
-              <p className="text-gray-600">Please log in</p>
+                <p className="text-gray-600">Please log in</p>
               </Link>
             )}
           </div>
@@ -159,8 +159,8 @@ function Dashboard() {
           )}
         </header>
         {/* Courses Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Current Courses</h2>
+        <section className="mb-8 p-6 h-fit">
+          <h2 className="text-xl font-bold mb-4">Current Courses</h2>
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
@@ -181,7 +181,7 @@ function Dashboard() {
                       />
                     </LazyLoad>
                     <div className="p-6">
-                      <h3 className="text-lg font-semibold text-gray-800">{course.title}</h3>
+                      <h3 className="text-lg font-semibold text-gray-800 text-center">{course.title}</h3>
                     </div>
                   </div>
                 </Link>
