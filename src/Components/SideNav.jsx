@@ -1,31 +1,65 @@
+import { Link} from 'react-router-dom';
+import { Menu, GraduationCap, BookOpen, User, LayoutDashboardIcon, ClipboardPen, FolderClosed } from 'lucide-react';
+import { useState, useContext } from 'react';
+import UserContext from '../Context/UserContext';
 
-import { Link } from 'react-router-dom';
+const SideNav = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { logout } = useContext(UserContext);
 
-const SideNav = (/*setSelectedClass */) => {
+  const handleLogout = () => {
+    logout();
+  };
+
+  const navItems = [
+    { icon: LayoutDashboardIcon, text: 'Dashboard', path: '/dashboard' },
+    { icon: User, text: "User profile", path: '/user' },
+    { icon: BookOpen, text: "My courses", path: '/courses' },
+    { icon: ClipboardPen, text: "Quizzes", path: '/quizzes' },
+    { icon: FolderClosed, text: "Resources", path: '/resources' },
+  ];
+
   return (
-    <nav className="w-56 h-screen bg-custom-blue text-white flex flex-col justify-between fixed md:relative z-50 top-0 md:translate-x-0 transition-transform duration-300 transform md:translate-none">
-      <div className="mt-8">
-        <Link to="/">
-          <h2 className="text-3xl font-bold text-left text-white mb-4 p-2 ml-3">Nexus</h2>
-        </Link>
-        <h3 className="text-2xl font-bold text-left text-white p-2 ml-3">Class Levels</h3>
-        <ul className="space-y-4">
-          {['Form 1', 'Form 2', 'Form 3', 'Form 4'].map((form, index) => (
-            <li key={index}>
-              <button
-                onClick={() => /*setSelectedClass */(form)}
-                className="block w-2/3 text-left pl-2 ml-3 text-lg rounded-lg transition-colors duration-300 hover:text-custom-orange"
-              >
-                {form}
-              </button>
-            </li>
+    <>
+      <button
+        className="fixed top-4 left-4 z-50 md:hidden bg-custom-blue text-white p-2 rounded-full"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        <Menu className="h-6 w-6" />
+      </button>
+
+      <aside
+        className={`fixed left-0 top-0 h-screen w-64 bg-white border-r p-4 transition-transform duration-300 ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } md:translate-x-0`}
+      >
+        <div className="flex items-center gap-2 mb-8">
+          <GraduationCap className="h-10 w-10 text-custom-blue" />
+          <Link to="/">
+            <h1 className="text-3xl font-bold text-gray-800">VizLearn</h1>
+          </Link>
+        </div>
+
+        <nav className="space-y-2">
+          {navItems.map((item, index) => (
+            <Link
+              to={item.path}
+              key={index}
+              className="flex items-center gap-3 w-full p-3 text-gray-700 hover:bg-indigo-50 hover:text-custom-blue rounded-lg"
+            >
+              <item.icon className="h-5 w-5" />
+              <span>{item.text}</span>
+            </Link>
           ))}
-        </ul>
-      </div>
-      <div className="p-4">
-        <p className="text-sm text-gray-400">&copy; Nexus 2024</p>
-      </div>
-    </nav>
+          <button
+            onClick={handleLogout}
+            className="px-3 py-2 bg-red-600 w-full text-white rounded-3xl text-sm hover:bg-red-800 transition-colors duration-200"
+          >
+            Logout
+          </button>
+        </nav>
+      </aside>
+    </>
   );
 };
 

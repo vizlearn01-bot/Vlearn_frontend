@@ -48,7 +48,6 @@ export const UserProvider = ({ children }) => {
 
   const login = (authToken) => {
     try {
-      console.log("Storing token in localStorage:", authToken);
       const decodedUser = jwtDecode(authToken.access); // Extract user info
       setUser(decodedUser);
       setToken(authToken);

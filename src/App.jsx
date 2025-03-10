@@ -22,13 +22,13 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />}></Route>
-            <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/contact" element={<ContactUs />}></Route>
             <Route path="/login" element={<Login />}></Route>
             <Route path='/register' element={<Signup />}></Route>
-            <Route path='/coursedetails/:id' element={<CourseDetail />}></Route>
-            <Route path='/users' element={<User/>}></Route>
+            <Route path="/dashboard" element={<Dashboard />}></Route>
+            <Route path='/user' element={<User/>}></Route>
             <Route path='/courses' element={<Courses/>}></Route>
+            <Route path='/coursedetails/:id' element={<CourseDetail />}></Route>
             <Route path='/quizzes' element= {<Quizzes/>}></Route>
             <Route path='/resources' element={<Resources/>}></Route>
           </Routes>

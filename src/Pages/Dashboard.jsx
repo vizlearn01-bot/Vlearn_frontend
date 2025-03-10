@@ -1,21 +1,20 @@
 import { useState, useEffect, useContext } from 'react';
-import { BookOpen, GraduationCap, Bell, Search, Menu } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import {  Bell, Search } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import LazyLoad from 'react-lazyload';
 import debounce from 'lodash.debounce';
 import UserContext from '../Context/UserContext';
 import BASE_URL from '../config';
+import SideNav from '../Components/SideNav';
 
 function Dashboard() {
   const [searchItem, setSearchItem] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [courses, setCourses] = useState([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [error, setError] = useState(null);
-  const { user, token, logout } = useContext(UserContext); // Consume UserContext
-  const navigate = useNavigate
+  const { user, token } = useContext(UserContext); // Consume UserContext
 
 
   // Fetch courses on component mount
@@ -61,53 +60,11 @@ function Dashboard() {
     }
   }, 300);
 
-  // Handle logout
-  const handleLogout = () => {
-    logout();
-  };
 
-  // Navigation items
-  const navItems = [
-    { icon: GraduationCap, text: 'Home', path: '/' },
-    { icon: BookOpen, text: 'My Courses', path: '/dashboard' },
-  ];
 
   return (
     <div className="flex">
-      {/* Sidebar Toggle Button */}
-      <button
-        className="fixed top-4 left-4 z-50 md:hidden bg-custom-blue text-white p-2 rounded-full"
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-      >
-        <Menu className="h-6 w-6" />
-      </button>
-
-      {/* Sidebar */}
-      <aside
-        className={`fixed left-0 top-0 h-screen w-64 bg-white border-r p-4 transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          } md:translate-x-0`}
-      >
-        <div className="flex items-center gap-2 mb-8">
-          <GraduationCap className="h-10 w-10 text-custom-blue" />
-          <Link to="/">
-            <h1 className="text-3xl font-bold text-gray-800">VizLearn</h1>
-          </Link>
-        </div>
-
-        <nav className="space-y-2">
-          {navItems.map((item, index) => (
-            <Link
-              to={item.path}
-              key={index}
-              className="flex items-center gap-3 w-full p-3 text-gray-700 hover:bg-indigo-50 hover:text-custom-blue rounded-lg"
-            >
-              <item.icon className="h-5 w-5" />
-              <span>{item.text}</span>
-            </Link>
-          ))}
-        </nav>
-      </aside>
-
+      <SideNav />
       {/* Main Content */}
       <main className="md:ml-64 w-full">
         {/* Search Bar */}
@@ -137,12 +94,6 @@ function Dashboard() {
             {user ? (
               <div className="flex items-center space-x-4">
                 <span className="font-medium text-gray-700">Hi, {user.username}</span>
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 bg-red-600 text-white rounded-3xl text-sm hover:bg-red-700 transition-colors duration-200"
-                >
-                  Logout
-                </button>
               </div>
             ) : (
               <Link to='/login'>
