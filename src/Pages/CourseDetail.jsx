@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../config";
 
 function CourseDetail() {
   const { id } = useParams(); // Get the id from the URL
@@ -11,10 +12,10 @@ function CourseDetail() {
   useEffect(() => {
     const fetchCourseDetails = async () => {
       try {
-        const response = await axios.get(`https://vlearn-backend-qw31.onrender.com/courses/${id}`);
+        const response = await axios.get(`${BASE_URL}/courses/${id}`);
         setCourse(response.data); // Set the course details
         setLoading(false); // Set loading to false when data is fetched
-        console.log(response.data); // Check if the data is correct
+        console.log(response.data)
       } catch (error) {
         console.error("Error fetching course details:", error);
         setLoading(false); // Set loading to false in case of an error

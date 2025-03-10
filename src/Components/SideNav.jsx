@@ -33,11 +33,11 @@ const SideNav = () => {
   };
 
   const navItems = [
-    { icon: LayoutDashboardIcon, text: 'Dashboard', path: '/dashboard' },
-    { icon: User, text: "User profile", path: '/user' },
-    { icon: BookOpen, text: "My courses", path: '/courses' },
-    { icon: ClipboardPen, text: "Quizzes", path: '/quizzes' },
-    { icon: FolderClosed, text: "Resources", path: '/resources' },
+    { icon: LayoutDashboardIcon, text: 'Dashboard', path: 'dashboard' },
+    { icon: User, text: "User profile", path: 'user' },
+    { icon: BookOpen, text: "My courses", path: 'courses' },
+    { icon: ClipboardPen, text: "Quizzes", path: 'quizzes' },
+    { icon: FolderClosed, text: "Resources", path: 'resources' },
   ];
 
   return (
