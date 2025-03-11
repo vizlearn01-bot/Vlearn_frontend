@@ -30,7 +30,7 @@ export default function Courses() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">My Courses</h1>
-        <button className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+        <button className="bg-custom-blue text-white px-4 py-2 rounded-md hover:bg-indigo-700">
           Browse All Courses
         </button>
       </div>
@@ -57,25 +57,25 @@ export default function Courses() {
               <div className="relative pt-1">
                 <div className="flex mb-2 items-center justify-between">
                   <div>
-                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-indigo-600 bg-indigo-200">
+                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-custom-blue bg-gray-200">
                       Progress
                     </span>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-semibold inline-block text-indigo-600">
+                    <span className="text-xs font-semibold inline-block text-custom-blue">
                       {course.progress}%
                     </span>
                   </div>
                 </div>
-                <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-indigo-200">
+                <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
                   <div
                     style={{ width: `${course.progress}%` }}
-                    className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-indigo-600"
+                    className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-custom-blue"
                   ></div>
                 </div>
               </div>
 
-              <button className="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+              <button className="w-full bg-custom-blue text-white px-4 py-2 rounded-md hover:bg-indigo-700">
                 Continue Learning
               </button>
             </div>
