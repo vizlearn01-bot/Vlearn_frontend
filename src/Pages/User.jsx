@@ -71,7 +71,8 @@ function User() {
                 <div className="mt-2 flex items-center justify-center sm:justify-start">
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
                     <GraduationCap className="w-4 h-4 mr-1" />
-                    {user.role}
+                    {/* {user.role} */}
+                    Student
                   </span>
                 </div>
               </div>
@@ -98,7 +99,7 @@ function User() {
               <div className="flex items-center justify-center h-12 w-12 rounded-md bg-yellow-100 text-yellow-600 mx-auto">
                 <BarChart className="h-6 w-6" />
               </div>
-              <p className="mt-2 text-3xl font-semibold text-gray-900">{user.averageScore}%</p>
+              <p className="mt-2 text-3xl font-semibold text-gray-900">{user.averageScore}</p>
               <p className="text-sm text-gray-500">Average Score</p>
             </div>
             <div className="text-center">

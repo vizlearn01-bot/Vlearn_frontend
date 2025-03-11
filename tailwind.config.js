@@ -8,7 +8,7 @@ export default {
     extend: {
       colors: {
         'custom-orange': '#ff4900',
-        'custom-blue': '#005f6a',
+        'custom-blue': '#02a0bf',
         "custom-white": ""
       },
       screens: {
