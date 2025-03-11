@@ -1,8 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BookOpen, Trophy, Clock, Calendar, GraduationCap, BarChart, BookMarked, AlignCenterVertical as Certificate } from 'lucide-react';
 
 function User() {
-  // This would typically come from your auth/user context
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(URL);
+        console.log(response.data);
+        // setCategories(response.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
   const user = {
     name: "Sarah Anderson",
     role: "Student",

@@ -66,7 +66,7 @@ function Dashboard() {
     <div className="flex">
       <SideNav />
       {/* Main Content */}
-      <main className="md:ml-64 w-full">
+      <main className="w-full">
         {/* Search Bar */}
         <header className="flex items-center justify-between p-4 bg-white shadow-2xl top-0">
           {/* Search Bar */}
