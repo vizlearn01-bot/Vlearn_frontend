@@ -33,7 +33,7 @@ const SideNav = () => {
   };
 
   const navItems = [
-    { icon: Home, text: 'Home', path: '/dashboard/home' },
+    { icon: Home, text: 'Dashboard', path: '/dashboard/home' },
     { icon: User, text: "User profile", path: '/dashboard/user' },
     { icon: BookOpen, text: "My courses", path: '/dashboard/courses' },
     { icon: ClipboardPen, text: "Quizzes", path: '/dashboard/quizzes' },
@@ -65,7 +65,7 @@ const SideNav = () => {
             <Link
               to={item.path}
               key={index}
-              className="flex items-center gap-3 w-full p-3 text-gray-700 hover:bg-blue-100 hover:text-custom-blue rounded-3xl"
+              className="flex items-center gap-3 w-full p-3 text-gray-700 hover:bg-indigo-50 hover:text-custom-blue rounded-lg"
             >
               <item.icon className="h-5 w-5" />
               <span>{item.text}</span>

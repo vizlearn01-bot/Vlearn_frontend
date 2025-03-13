@@ -73,7 +73,7 @@ function User() {
               <img
                 src={avatarUrl}
                 alt={user.username}
-                className="w-24 h-24 rounded-full border-4 border-white shadow-lg"
+                className="w-24 h-24 rounded-full border-4 object-cover border-white shadow-lg"
               />
               <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
                 <h1 className="text-2xl font-bold text-gray-900">{user.username}</h1>
