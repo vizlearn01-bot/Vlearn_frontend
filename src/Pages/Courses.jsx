@@ -1,5 +1,6 @@
 import React from 'react';
 import { BookOpen, Clock, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const courses = [
   {
@@ -27,17 +28,18 @@ const courses = [
 
 export default function Courses() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">My Courses</h1>
-        <button className="bg-custom-blue text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+        <Link to="/dashboard/home">
+        <button className="bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange">
           Browse All Courses
-        </button>
+        </button></Link>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course) => (
-          <div key={course.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div key={course.id} className="bg-white rounded-3xl shadow-md overflow-hidden">
             <img src={course.image} alt={course.title} className="w-full h-48 object-cover" />
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">{course.title}</h3>
@@ -57,7 +59,7 @@ export default function Courses() {
               <div className="relative pt-1">
                 <div className="flex mb-2 items-center justify-between">
                   <div>
-                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-custom-blue bg-gray-200">
+                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-3xl text-custom-blue bg-gray-200">
                       Progress
                     </span>
                   </div>
@@ -75,7 +77,7 @@ export default function Courses() {
                 </div>
               </div>
 
-              <button className="w-full bg-custom-blue text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+              <button className="w-full bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange">
                 Continue Learning
               </button>
             </div>

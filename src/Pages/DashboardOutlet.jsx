@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import SideNav from '../Components/SideNav';
 
-function Dashboard() {
+function DashboardOutlet() {
   return (
     <div className="flex">
       <SideNav />
@@ -13,4 +13,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default DashboardOutlet;

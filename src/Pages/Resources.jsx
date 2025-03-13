@@ -62,7 +62,7 @@ export default function Resources() {
             <div key={resource.id} className="p-6 hover:bg-gray-50">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <FileText className="h-8 w-8 text-indigo-600" />
+                  <FileText className="h-8 w-8 text-custom-blue" />
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">{resource.title}</h3>
                     <div className="flex items-center mt-1">
@@ -85,7 +85,7 @@ export default function Resources() {
                       {resource.downloads.toLocaleString()} downloads
                     </div>
                   )}
-                  <button className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                  <button className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-custom-blue hover:bg-custom-orange">
                     {resource.external ? (
                       <>
                         <ExternalLink className="h-4 w-4 mr-2" />
