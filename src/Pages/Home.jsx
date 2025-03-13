@@ -22,23 +22,21 @@ function Home() {
 
   const form = useRef()
 
-  const URL = 'https://nexus-backend-kia6.onrender.com/categories/';
-
-  // Fetching data on the categories from the JSON file
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(URL);
-        console.log(response.data);
-        // setCategories(response.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchCategories();
-  }, []);
+  // // Fetching data on the categories from the JSON file
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const response = await axios.get(URL);
+  //       console.log(response.data);
+  //       // setCategories(response.data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchCategories();
+  // }, []);
 
   const responsive = {
     desktop: {

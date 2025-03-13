@@ -29,6 +29,7 @@ function App() {
               <Route path="courses" element={<Courses />} />
               <Route path="quizzes" element={<Quizzes />} />
               <Route path="resources" element={<Resources />} />
+              <Route index element={<Dashboard/>}/>
             </Route>
             <Route path="/coursedetails/:id" element={<CourseDetail />} />
           </Routes>

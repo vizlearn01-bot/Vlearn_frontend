@@ -33,7 +33,7 @@ const SideNav = () => {
   };
 
   const navItems = [
-    { icon: Home, text: 'Dashboard', path: '/dashboard/home' },
+    { icon: Home, text: 'Home', path: '/dashboard/home' },
     { icon: User, text: "User profile", path: '/dashboard/user' },
     { icon: BookOpen, text: "My courses", path: '/dashboard/courses' },
     { icon: ClipboardPen, text: "Quizzes", path: '/dashboard/quizzes' },

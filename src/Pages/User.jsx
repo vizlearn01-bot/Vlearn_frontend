@@ -5,6 +5,11 @@ import axios from 'axios';
 import UserContext from '../Context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
+
+// Define your Cloudinary base URL
+const CLOUDINARY_BASE_URL = 'https://res.cloudinary.com/dfycvaiv7/';
+
+
 function User() {
   const { user: contextUser, token } = useContext(UserContext); // Use contextUser to avoid conflict
   const [user, setUser] = useState(null); // State to store fetched user data
@@ -50,6 +55,11 @@ function User() {
     return <div className="min-h-screen flex items-center justify-center">No user data available.</div>;
   }
 
+
+    // Construct the full image URL
+    const avatarUrl = `${CLOUDINARY_BASE_URL}${user.profile.avatar}`;
+
+    
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -61,13 +71,15 @@ function User() {
           <div className="p-6 sm:p-8 border-b border-gray-200">
             <div className="flex flex-col sm:flex-row items-center">
               <img
-                src={user.avatar}
-                alt={user.name}
+                src={avatarUrl}
+                alt={user.username}
                 className="w-24 h-24 rounded-full border-4 border-white shadow-lg"
               />
               <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
                 <h1 className="text-2xl font-bold text-gray-900">{user.username}</h1>
                 <p className="text-gray-500">{user.email}</p>
+                <p className="text-gray-500">{user.profile.phone_number}</p>
+
                 <div className="mt-2 flex items-center justify-center sm:justify-start">
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
                     <GraduationCap className="w-4 h-4 mr-1" />
@@ -85,28 +97,28 @@ function User() {
               <div className="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600 mx-auto">
                 <BookOpen className="h-6 w-6" />
               </div>
-              <p className="mt-2 text-3xl font-semibold text-gray-900">{user.enrolledCourses}</p>
+              <p className="mt-2 text-3xl font-semibold text-gray-900">{user.profile.enrolled_courses}</p>
               <p className="text-sm text-gray-500">Enrolled Courses</p>
             </div>
             <div className="text-center">
               <div className="flex items-center justify-center h-12 w-12 rounded-md bg-green-100 text-green-600 mx-auto">
                 <Trophy className="h-6 w-6" />
               </div>
-              <p className="mt-2 text-3xl font-semibold text-gray-900">{user.completedCourses}</p>
+              <p className="mt-2 text-3xl font-semibold text-gray-900">{user.profile.completed_courses}</p>
               <p className="text-sm text-gray-500">Completed</p>
             </div>
             <div className="text-center">
               <div className="flex items-center justify-center h-12 w-12 rounded-md bg-yellow-100 text-yellow-600 mx-auto">
                 <BarChart className="h-6 w-6" />
               </div>
-              <p className="mt-2 text-3xl font-semibold text-gray-900">{user.averageScore}</p>
+              <p className="mt-2 text-3xl font-semibold text-gray-900">{user.profile.average_score}</p>
               <p className="text-sm text-gray-500">Average Score</p>
             </div>
             <div className="text-center">
               <div className="flex items-center justify-center h-12 w-12 rounded-md bg-purple-100 text-purple-600 mx-auto">
                 <Clock className="h-6 w-6" />
               </div>
-              <p className="mt-2 text-3xl font-semibold text-gray-900">{user.totalHours}</p>
+              <p className="mt-2 text-3xl font-semibold text-gray-900">{user.profile.total_hours}</p>
               <p className="text-sm text-gray-500">Learning Hours</p>
             </div>
           </div>
