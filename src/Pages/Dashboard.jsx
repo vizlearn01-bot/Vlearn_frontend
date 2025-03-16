@@ -97,7 +97,7 @@ function Dashboard() {
               </div>
             ) : (
               <Link to='/login'>
-                <p className="text-gray-600">Please log in</p>
+                <p className="text-gray-600 hover:pointer-cursor">Please log in</p>
               </Link>
             )}
           </div>
