@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import BASE_URL from "../config";
+import { Brain, Users2 } from "lucide-react";
 
 function CourseDetail() {
   const { id } = useParams(); // Get the id from the URL
@@ -47,54 +48,74 @@ function CourseDetail() {
   }
 
   return (
+
     <div className="p-8 mx-auto  flex flex-col gap-8">
-      {/* Video or Image Section */}
-      <div>
-        {videoID ? (
-          <div className="mb-4 aspect-w-16 mx-auto  max-w-6xl aspect-h-9">
-            <iframe
-              src={`https://www.youtube.com/embed/${videoID}`}
-              title="Course Video"
-              className="w-full h-96 rounded-3xl shadow-lg"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+      {/* Main Content */}
+      <div className="pt-16 pb-8">
+        {/* Course Header */}
+        <div className="bg-white border-b border-slate-200">
+          <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-slate-900">{course?.title}</h1>
+                {/* <p className="mt-1 text-slate-500">{course.subtitle}</p> */}
+              </div>
+              <div className="mt-4 md:mt-0 flex items-center space-x-2">
+                <div className="flex items-center text-slate-700">
+                  <Users2 className="h-5 w-5 mr-2" />
+                  {/* <span>{course.instructor.students.toLocaleString()} students</span> */}
+                </div>
+              </div>
+            </div>
           </div>
-        ) : (
-          course?.image && (
-            <img
-              src={course.image}
-              alt={course.title}
-              className="w-full h-64 object-cover rounded-lg shadow-lg"
-            />
-          )
-        )}
-      </div>
-
-      {/* Course Details */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-800">{course?.title}</h1>
-        <p className="mt-4 text-gray-700 leading-relaxed">{course?.description}</p>
-      </div>
-
-      {/* Instructor and Additional Info */}
-      <div className="grid grid-cols-3 gap-6">
-        <div>
-          <h3 className="text-xl font-semibold text-gray-800">Instructor:</h3>
-          <p className="text-gray-700">{course?.instructor}</p>
         </div>
+        {/* Video or Image Section */}
         <div>
-          <h3 className="text-xl font-semibold text-gray-800">Duration:</h3>
-          <p className="text-gray-700">{course?.duration}</p>
+          {videoID ? (
+            <div className="mb-4 aspect-w-16 mx-auto  max-w-6xl aspect-h-9">
+              <iframe
+                src={`https://www.youtube.com/embed/${videoID}`}
+                title="Course Video"
+                className="w-full h-96 rounded-3xl shadow-lg"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          ) : (
+            course?.image && (
+              <img
+                src={course.image}
+                alt={course.title}
+                className="w-full h-64 object-cover rounded-lg shadow-lg"
+              />
+            )
+          )}
         </div>
-        {/* <div>
+
+        {/* Course Details */}
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">{course?.title}</h1>
+          <p className="mt-4 text-gray-700 leading-relaxed">{course?.description}</p>
+        </div>
+
+        {/* Instructor and Additional Info */}
+        <div className="grid grid-cols-3 gap-6">
+          <div>
+            <h3 className="text-xl font-semibold text-gray-800">Instructor:</h3>
+            <p className="text-gray-700">{course?.instructor}</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-gray-800">Duration:</h3>
+            <p className="text-gray-700">{course?.duration}</p>
+          </div>
+          {/* <div>
           <h3 className="text-xl font-semibold text-gray-800"> Uploaded on:</h3>
           <p className="text-gray-700">{course?.updated_at}</p>
         </div> */}
-      </div>
+        </div>
 
-      {/* Lessons */}
-      {/* <div>
+        {/* Lessons */}
+        {/* <div>
         <h2 className="text-xl font-semibold mt-8 text-gray-800">Requirements:</h2>
         {course?.requirements?.length > 0 ? (
           <ul className="list-disc list-inside mt-2 text-gray-600">
@@ -106,8 +127,9 @@ function CourseDetail() {
           <p className="text-gray-600 mt-2">List of requirements not available.</p>
         )}
       </div> */}
-    </div>
-  );
+      </div>
+      </div>
+      );
 }
 
-export default CourseDetail;
+      export default CourseDetail;
