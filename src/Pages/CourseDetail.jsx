@@ -66,8 +66,8 @@ function CourseDetail() {
               <p className="mt-1 text-slate-600">Course subtitle: {course?.subtitle}</p>
             </div>
           </div>
-          <div className="items-center text-slate-700 mt-6 md:mt-0 hidden md:flex">
-            <Users2 className="h-5 w-5 mr-2" />
+          <div className="items-center text-slate-700 mt-6 md:mt-0 hidden md:flex mr-4 p-4">
+            <Users2 className="h-5 w-5 mr-" />
             <span>8 students</span>
           </div>
         </nav>
@@ -102,7 +102,7 @@ function CourseDetail() {
                 {/* Course Details */}
                 <div className="bg-white rounded-3xl shadow-2xl p-6 mt-8">
                   <h2 className="text-2xl font-bold text-slate-900">{course.title}</h2>
-                  <p className="text-slate-600 mt-2">lorem200{course.description}</p>
+                  <p className="text-slate-600 mt-2">{course.description}</p>
                   <p className="text-slate-500 mt-4">
                     Duration: <span className="font-semibold">{course.duration}</span>
                   </p>
@@ -156,7 +156,7 @@ function CourseDetail() {
               {/* Right Column: Additional Course Information */}
               <div className="col-span-1">
                 <div className="bg-white rounded-xl shadow-2xl p-6 mb-8">
-                  <h2 className="text-2xl font-bold text-slate-900 mb-6">Additional Information</h2>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6">About the experiment</h2>
                   <div className="space-y-4">
                     <div>
                       <p className="text-sm text-slate-500">Instructor</p>
