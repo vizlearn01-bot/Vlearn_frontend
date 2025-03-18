@@ -155,7 +155,7 @@ function CourseDetail() {
 
               {/* Right Column: Additional Course Information */}
               <div className="col-span-1">
-                <div className="bg-white rounded-xl shadow-sm p-6">
+                <div className="bg-white rounded-xl shadow-2xl p-6 mb-8">
                   <h2 className="text-2xl font-bold text-slate-900 mb-6">Additional Information</h2>
                   <div className="space-y-4">
                     <div>
@@ -164,55 +164,50 @@ function CourseDetail() {
                     </div>
                     <div>
                       <p className="text-sm text-slate-500">Category</p>
-                      <p className="text-lg font-semibold text-slate-900">{course.category}</p>
+                      <p className="text-lg font-semibold text-slate-900">Chemistry{course.category}</p>
                     </div>
                     <div>
                       <p className="text-sm text-slate-500">Level</p>
-                      <p className="text-lg font-semibold text-slate-900">{course.level}</p>
+                      <p className="text-lg font-semibold text-slate-900">Grade: 12{course.level}</p>
                     </div>
                     <div>
                       <p className="text-sm text-slate-500">Last Updated</p>
-                      <p className="text-lg font-semibold text-slate-900">{course.lastUpdated}</p>
+                      <p className="text-lg font-semibold text-slate-900">
+                        {new Date().toLocaleDateString()} {course.lastUpdated}
+                      </p>
                     </div>
                   </div>
                 </div>
                 {/* Current Progress */}
-                <div className="bg-white rounded-xl shadow-sm p-6">
+                <div className="bg-white rounded-xl shadow-2xl p-6">
                   <h2 className="text-lg font-semibold text-slate-900 mb-4">Current Section</h2>
                   <div className="space-y-4">
                     <div>
                       <div className="flex justify-between items-center mb-2">
                         <p className="text-slate-900 font-medium">{course.title}</p>
-                        <span className="text-sm text-slate-500">{course.duration}%</span>
+                        <span className="text-sm text-slate-500 ">{course.duration}%</span>
                       </div>
                       <div className="w-full bg-slate-200 rounded-full h-2">
-                        <div
-                          className="bg-purple-600 h-2 rounded-full"
-                        >
-                                                    {course.duration}
-
-                        </div>
+                        <div className="bg-custom-orange h-2 rounded-full mt-2"></div>
                       </div>
                     </div>
-                    <div>
-                      <p className="text-sm text-slate-500">Next up:</p>
+                    <div className="border-t border-slate-300 w-fit">
+                      <p className="text-sm text-slate-500 mt-2">Next up:</p>
                       <p className="text-slate-900 font-medium">{course.title}</p>
                     </div>
                   </div>
                 </div>
-</div>
               </div>
             </div>
           </div>
-
-
         </div>
-      </>
+      </div>
+    </>
 
-      );
+  );
 }
 
-      export default CourseDetail;
+export default CourseDetail;
 
 
 
