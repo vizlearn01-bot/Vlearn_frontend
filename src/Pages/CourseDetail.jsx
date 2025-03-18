@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import BASE_URL from "../config";
-import { GraduationCap, Users2 } from "lucide-react";
+import { GraduationCap, Users2, Clock, BookOpen, BarChart2, Award } from "lucide-react";
 
 function CourseDetail() {
   const { id } = useParams(); // Get the id from the URL
@@ -15,7 +15,7 @@ function CourseDetail() {
       try {
         const response = await axios.get(`${BASE_URL}/courses/${id}`);
         setCourse(response.data); // Set the course details
-        setLoading(false); // Set loading to false when data is fetched
+        setLoading(false); // Set loading to false when  is fetched
         console.log(response.data)
       } catch (error) {
         console.error("Error fetching course details:", error);
@@ -51,89 +51,168 @@ function CourseDetail() {
     <>
       <div className="mx-auto flex flex-col">
         {/* Course Header */}
-        <nav className="fixed w-full flex flex-col md:flex-row items-center justify-between p-2 shadow-2xl">
+        <nav className="fixed w-full flex flex-col md:flex-row items-center justify-between p-2 shadow-2xl bg-white">
           {/* First Section: Logo and VizLearn Heading */}
-          <div className="items-center gap-2 hidden md:flex">
+          <div className="items-center gap-2 hidden md:flex p-4">
             <GraduationCap className="h-10 w-10 text-custom-blue" />
             <Link to="/dashboard">
               <h1 className="text-3xl font-bold text-gray-800">VizLearn</h1>
             </Link>
           </div>
           {/* Second Section: Course Title, Subtitle, and Student Count */}
-          <div className="flex flex-col md:flex-row items-center gap-4 text-center mt-6 md:mt-0">
+          <div className="flex flex-col md:flex-row items-center  text-center mt-2 md:mt-0">
             <div>
               <h1 className="text-3xl font-bold text-custom-blue">{course?.title}</h1>
               <p className="mt-1 text-slate-600">Course subtitle: {course?.subtitle}</p>
             </div>
-
           </div>
           <div className="items-center text-slate-700 mt-6 md:mt-0 hidden md:flex">
-              <Users2 className="h-5 w-5 mr-2" />
-              <span>8 students</span>
-            </div>
+            <Users2 className="h-5 w-5 mr-2" />
+            <span>8 students</span>
+          </div>
         </nav>
-        {/* Video or Image Section */}
-        <div className="mt-48 md:mt-28">
-          {videoID ? (
-            <div className="mb-4 aspect-w-16 mx-auto  max-w-6xl aspect-h-9">
-              <iframe
-                src={`https://www.youtube.com/embed/${videoID}`}
-                title="Course Video"
-                className="w-full h-96 rounded-3xl shadow-lg"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+        <div className="mt-28">
+          <div className=" mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left Column: Video and Course Details */}
+              <div className="col-span-1 lg:col-span-2">
+                {/* Video Player */}
+                <div className="rounded-3xl shadow-lg overflow-hidden">
+                  {videoID ? (
+                    <div className="aspect-video w-full">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${videoID}`}
+                        title="Course Video"
+                        className="w-full h-full rounded-t-xl"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </div>
+                  ) : (
+                    course?.image && (
+                      <img
+                        src={course.image}
+                        alt={course.title}
+                        className="w-full h-64 object-cover rounded-t-xl"
+                      />
+                    )
+                  )}
+                </div>
+
+                {/* Course Details */}
+                <div className="bg-white rounded-3xl shadow-2xl p-6 mt-8">
+                  <h2 className="text-2xl font-bold text-slate-900">{course.title}</h2>
+                  <p className="text-slate-600 mt-2">lorem200{course.description}</p>
+                  <p className="text-slate-500 mt-4">
+                    Duration: <span className="font-semibold">{course.duration}</span>
+                  </p>
+                </div>
+
+                {/* Progress Overview */}
+                <div className="bg-white rounded-3xl shadow-2xl p-6 my-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-purple-100 rounded-lg p-3">
+                        <Clock className="h-6 w-6 text-purple-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-slate-500">Hours Watched</p>
+                        <p className="text-xl font-semibold text-slate-900">{course.hoursWatched}h</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-blue-100 rounded-lg p-3">
+                        <BookOpen className="h-6 w-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-slate-500">Completed</p>
+                        <p className="text-xl font-semibold text-slate-900">
+                          {course.completed}/{course.totalLessons}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-green-100 rounded-lg p-3">
+                        <BarChart2 className="h-6 w-6 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-slate-500">Avg. Score</p>
+                        <p className="text-xl font-semibold text-slate-900">{course.avgScore}%</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-orange-100 rounded-lg p-3">
+                        <Award className="h-6 w-6 text-orange-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-slate-500">Progress</p>
+                        <p className="text-xl font-semibold text-slate-900">{course.progress}%</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Additional Course Information */}
+              <div className="col-span-1">
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6">Additional Information</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-sm text-slate-500">Instructor</p>
+                      <p className="text-lg font-semibold text-slate-900">{course.instructor}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-slate-500">Category</p>
+                      <p className="text-lg font-semibold text-slate-900">{course.category}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-slate-500">Level</p>
+                      <p className="text-lg font-semibold text-slate-900">{course.level}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-slate-500">Last Updated</p>
+                      <p className="text-lg font-semibold text-slate-900">{course.lastUpdated}</p>
+                    </div>
+                  </div>
+                </div>
+                {/* Current Progress */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h2 className="text-lg font-semibold text-slate-900 mb-4">Current Section</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex justify-between items-center mb-2">
+                        <p className="text-slate-900 font-medium">{course.title}</p>
+                        <span className="text-sm text-slate-500">{course.duration}%</span>
+                      </div>
+                      <div className="w-full bg-slate-200 rounded-full h-2">
+                        <div
+                          className="bg-purple-600 h-2 rounded-full"
+                        >
+                                                    {course.duration}
+
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm text-slate-500">Next up:</p>
+                      <p className="text-slate-900 font-medium">{course.title}</p>
+                    </div>
+                  </div>
+                </div>
+</div>
+              </div>
             </div>
-          ) : (
-            course?.image && (
-              <img
-                src={course.image}
-                alt={course.title}
-                className="w-full h-64 object-cover rounded-lg shadow-lg"
-              />
-            )
-          )}
-        </div>
-
-        {/* Course Details */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">{course?.title}</h1>
-          <p className="mt-4 text-gray-700 leading-relaxed">{course?.description}</p>
-        </div>
-
-        {/* Instructor and Additional Info */}
-        <div className="grid grid-cols-3 gap-6">
-          <div>
-            <h3 className="text-xl font-semibold text-gray-800">Instructor:</h3>
-            <p className="text-gray-700">{course?.instructor}</p>
           </div>
-          <div>
-            <h3 className="text-xl font-semibold text-gray-800">Duration:</h3>
-            <p className="text-gray-700">{course?.duration}</p>
-          </div>
-          {/* <div>
-          <h3 className="text-xl font-semibold text-gray-800"> Uploaded on:</h3>
-          <p className="text-gray-700">{course?.updated_at}</p>
-        </div> */}
+
+
         </div>
+      </>
 
-        {/* Lessons */}
-        {/* <div>
-        <h2 className="text-xl font-semibold mt-8 text-gray-800">Requirements:</h2>
-        {course?.requirements?.length > 0 ? (
-          <ul className="list-disc list-inside mt-2 text-gray-600">
-            {course.requirements.map((requirement, index) => (
-              <li key={index}>{requirement}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-gray-600 mt-2">List of requirements not available.</p>
-        )}
-      </div> */}
-      </div>
-    </>
-
-  );
+      );
 }
 
-export default CourseDetail;
+      export default CourseDetail;
+
+
+
