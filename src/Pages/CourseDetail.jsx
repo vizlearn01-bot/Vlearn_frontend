@@ -38,6 +38,7 @@ function CourseDetail() {
   // Extract the video ID if available
   const videoID = course?.video_link ? extractVideoID(course.video_link) : null;
 
+console.log(user)
   if (loading) {
     return (
       <div className="p-8 mx-auto max-w-6xl flex justify-center items-center">
@@ -174,7 +175,9 @@ function CourseDetail() {
                     </div>
                     <div>
                       <p className="text-sm text-slate-500">Last Updated</p>
-                      <p className="text-lg font-semibold text-slate-900"> {course.created_at}</p>
+                      <p className="text-lg font-semibold text-slate-900">
+                        {new Date().toLocaleDateString()} {course.lastUpdated}
+                      </p>
                     </div>
                   </div>
                 </div>
