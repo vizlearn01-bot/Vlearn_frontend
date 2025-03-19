@@ -21,7 +21,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/course_videos`, {
+        const response = await axios.get(`${BASE_URL}/experiment_videos`, {
           headers: {
             Authorization: `Bearer ${token?.access}`, // Use the token from context
           },

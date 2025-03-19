@@ -1,13 +1,15 @@
 import { useParams, Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import BASE_URL from "../config";
-import { GraduationCap, Users2, Clock, BookOpen, BarChart2, Award } from "lucide-react";
+import { GraduationCap, User, Clock, BookOpen, BarChart2, Award } from "lucide-react";
+import UserContext from "../Context/UserContext";
 
 function CourseDetail() {
   const { id } = useParams(); // Get the id from the URL
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true); // Loading state
+  const { user } = useContext(UserContext)
 
   // Fetch course details using the id from the URL
   useEffect(() => {
@@ -67,8 +69,8 @@ function CourseDetail() {
             </div>
           </div>
           <div className="items-center text-slate-700 mt-6 md:mt-0 hidden md:flex mr-4 p-4">
-            <Users2 className="h-5 w-5 mr-" />
-            <span>8 students</span>
+            <User className="h-5 w-5 mr-" />
+            {user ? (<span>{user.username}</span>) : (<User/>)}
           </div>
         </nav>
         <div className="mt-28">
@@ -172,9 +174,7 @@ function CourseDetail() {
                     </div>
                     <div>
                       <p className="text-sm text-slate-500">Last Updated</p>
-                      <p className="text-lg font-semibold text-slate-900">
-                        {new Date().toLocaleDateString()} {course.lastUpdated}
-                      </p>
+                      <p className="text-lg font-semibold text-slate-900"> {course.created_at}</p>
                     </div>
                   </div>
                 </div>
