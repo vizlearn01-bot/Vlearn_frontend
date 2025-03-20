@@ -66,7 +66,7 @@ function User() {
       <div className="bg-custom-blue h-48"></div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32">
-        <div className="bg-white rounded-lg shadow">
+        <div className="bg-white rounded-3xl shadow-2xl">
           {/* Profile Header */}
           <div className="p-6 sm:p-8 border-b border-gray-200">
             <div className="flex flex-col sm:flex-row items-center">
