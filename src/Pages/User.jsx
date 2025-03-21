@@ -16,6 +16,7 @@ function User() {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
   const navigate = useNavigate();
+  const [analytics, setAnalytics] = useState([])
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -23,26 +24,43 @@ function User() {
         navigate('/login'); // Redirect to login if no token is available
         return;
       }
-
+  
       try {
         const response = await axios.get(`${BASE_URL}/profile`, {
-          headers: {
-            Authorization: `Bearer ${token.access}`,
-          },
+          headers: { Authorization: `Bearer ${token.access}` },
         });
-        setUser(response.data); // Set fetched user data
-        console.log(response.data)
+        setUser(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);
-        setError('Failed to fetch user data. Please try again.'); // Set error message
+        setError('Failed to fetch user data. Please try again.');
       } finally {
-        setLoading(false); // Set loading to false after request completes
+        setLoading(false);
       }
     };
-
+  
     fetchUser();
   }, [token, navigate]);
-
+  
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      if (!token?.access) return;
+  
+      try {
+        const response = await axios.get(`${BASE_URL}/video_interactions`, {
+          headers: { Authorization: `Bearer ${token.access}` },
+        });
+        setAnalytics(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching user analytics', error);
+        setError('Failed to fetch user analytics.');
+      }
+    };
+  
+    fetchAnalytics();
+  }, [token]);
+  
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
@@ -118,13 +136,13 @@ function User() {
               <div className="flex items-center justify-center h-12 w-12 rounded-md bg-purple-100 text-purple-600 mx-auto">
                 <Clock className="h-6 w-6" />
               </div>
-              <p className="mt-2 text-3xl font-semibold text-gray-900">{user.profile.total_hours}</p>
+              <p className="mt-2 text-3xl font-semibold text-gray-900">{analytics.watched_duration}</p>
               <p className="text-sm text-gray-500">Learning Hours</p>
             </div>
           </div>
 
           {/* Current Courses */}
-          {user.currentCourses && (
+          {user.analytics && (
             <div className="p-6 sm:p-8 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Current Courses</h2>
               <div className="space-y-4">
@@ -133,7 +151,7 @@ function User() {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center">
                         <BookMarked className="h-5 w-5 text-indigo-600 mr-2" />
-                        <h3 className="font-medium text-gray-900">{course.name}</h3>
+                        <h3 className="font-medium text-gray-900">{user.analytics.video_url}</h3>
                       </div>
                       <span className="text-sm text-gray-500">
                         Last accessed: {course.lastAccessed}
