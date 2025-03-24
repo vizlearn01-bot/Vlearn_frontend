@@ -12,6 +12,7 @@ import Courses from './Pages/Courses';
 import Quizzes from './Pages/Quizzes';
 import Resources from './Pages/Resources';
 import DashboardOutlet from './Pages/DashboardOutlet';
+import Quiz from './Pages/Quiz';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               <Route path="courses" element={<Courses />} />
               <Route path="quizzes" element={<Quizzes />} />
               <Route path="resources" element={<Resources />} />
+              <Route path='quiz' element={<Quiz/>}/>
               <Route index element={<Dashboard/>}/>
             </Route>
             <Route path="/coursedetails/:id" element={<CourseDetail />} />
