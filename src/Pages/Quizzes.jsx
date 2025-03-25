@@ -53,7 +53,7 @@ function Quizzes() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {quizzes.map((quiz) => (
-          <div key={quiz.video} className="bg-white rounded-3xl shadow-2xl p-6 w-full">
+          <div key={quiz.id} className="bg-white rounded-3xl shadow-2xl p-6 w-full">
             <h3 className="text-xl font-semibold text-gray-900 mb-2">{quiz.title}</h3>
             <p className="text-gray-600 mb-4">{quiz.description}</p>
 
@@ -73,8 +73,8 @@ function Quizzes() {
             </div>
 
             <div className="flex space-x-3">
-              <Link to={`/dashboard/quiz/${quiz.video}`}>
-                <button className="flex-1 bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange w-full">
+              <Link to={`/dashboard/quiz/${quiz.id}`} className='flex-1'>
+                <button className=" bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange w-full">
                   Start Quiz
                 </button>
               </Link>
