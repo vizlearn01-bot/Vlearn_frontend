@@ -30,7 +30,7 @@ function App() {
               <Route path="courses" element={<Courses />} />
               <Route path="quizzes" element={<Quizzes />} />
               <Route path="resources" element={<Resources />} />
-              <Route path='quiz' element={<Quiz/>}/>
+              <Route path='quiz/:id' element={<Quiz/>}/>
               <Route index element={<Dashboard/>}/>
             </Route>
             <Route path="/coursedetails/:id" element={<CourseDetail />} />
