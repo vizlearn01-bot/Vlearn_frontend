@@ -175,7 +175,7 @@ function CourseDetail() {
               {/* Left Column: Video and Course Details */}
               <div className="col-span-1 lg:col-span-2">
                 {/* Video Player */}
-                <div className="rounded-3xl shadow-lg overflow-hidden">
+                <div className="rounded-3xl shadow-2xl overflow-hidden">
                   {videoID ? (
                     <div className="aspect-video w-full ">
                       <div id="ytplayer" className="w-full h-full rounded-t-xl"></div>
@@ -192,7 +192,7 @@ function CourseDetail() {
                 </div>
 
                 {/* Course Details */}
-                <div className="bg-white rounded-3xl shadow-2xl p-6 mt-8">
+                <div className="rounded-3xl shadow-2xl p-6 mt-8">
                   <h2 className="text-2xl font-bold text-slate-900">{course.title}</h2>
                   <p className="text-slate-600 mt-2">{course.description}</p>
                   <p className="text-slate-500 mt-4">
