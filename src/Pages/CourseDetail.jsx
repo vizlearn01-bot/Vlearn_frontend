@@ -12,6 +12,7 @@ function CourseDetail() {
   const { user, token } = useContext(UserContext);
   const [watchedDuration, setWatchedDuration] = useState(0);
   const intervalRef = useRef(null);
+  const [quiz, setQuiz] = useState([])
 
   // Fetch course details using the id from the URL
   useEffect(() => {
@@ -27,6 +28,20 @@ function CourseDetail() {
     };
 
     fetchCourseDetails();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/quizzes/`);
+        // Find the quiz for this course (assuming quiz.video matches course.id)
+        const courseQuiz = response.data.find(q => q.video === parseInt(id));
+        setQuiz(courseQuiz); // Set the single quiz object or null
+      } catch (err) {
+        console.error("Error fetching quizzes:", err);
+      }
+    };
+    fetchQuizzes();
   }, [id]);
 
   // Extract YouTube video ID from the URL
@@ -232,7 +247,7 @@ function CourseDetail() {
 
               {/* Right Column: Additional Course Information */}
               <div className="col-span-1">
-                <div className="bg-white rounded-xl shadow-2xl p-6 mb-8">
+                <div className="bg-white rounded-3xl shadow-2xl p-6 mb-8">
                   <h2 className="text-2xl font-bold text-slate-900 mb-6">About the experiment</h2>
                   <div className="space-y-4">
                     <div>
@@ -255,8 +270,10 @@ function CourseDetail() {
                     </div>
                   </div>
                 </div>
+
+
                 {/* Current Progress */}
-                <div className="bg-white rounded-xl shadow-2xl p-6">
+                <div className="bg-white rounded-3xl shadow-2xl p-6 ">
                   <h2 className="text-lg font-semibold text-slate-900 mb-4">Current Section</h2>
                   <div className="space-y-4">
                     <div>
@@ -274,6 +291,20 @@ function CourseDetail() {
                     </div>
                   </div>
                 </div>
+                {quiz && (
+                  <Link to={`/dashboard/quiz/${quiz.id}`} className="block mt-8 text-center">
+                    <div className="bg-white rounded-3xl shadow-2xl p-6 mt-10 text-center hover:shadow-3xl hover:cursor-pointer w-fit mx-auto border border-custom-blue">
+                      <h2 className="text-lg font-semibold text-slate-900 mb-4">Test your understanding</h2>
+                      <div className="space-y-4">
+                        <div className="text-center">
+                          <div className="items-center mb-2">
+                            <p className="text-custom-blue font-medium">Go to quizzes</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                )}
               </div>
             </div>
           </div>

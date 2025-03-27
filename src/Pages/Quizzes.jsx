@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 function Quizzes() {
 
-  const [quizzes, setQuizzes] = useState([])
+  const [quizzes, setQuizzes] = useState(null)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
