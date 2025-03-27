@@ -34,7 +34,7 @@ function CourseDetail() {
     const fetchQuizzes = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/quizzes/`);
-        // Find the quiz for this course (assuming quiz.video matches course.id)
+        // Find the quiz for this course (by matching quiz.video to course.id)
         const courseQuiz = response.data.find(q => q.video === parseInt(id));
         setQuiz(courseQuiz); // Set the single quiz object or null
       } catch (err) {
@@ -292,13 +292,13 @@ function CourseDetail() {
                   </div>
                 </div>
                 {quiz && (
-                  <Link to={`/dashboard/quiz/${quiz.id}`} className="block mt-8 text-center">
+                  <Link to={`/dashboard/quiz/${quiz.id}`} className="block my-8 text-center">
                     <div className="bg-white rounded-3xl shadow-2xl p-6 mt-10 text-center hover:shadow-3xl hover:cursor-pointer w-fit mx-auto border border-custom-blue">
                       <h2 className="text-lg font-semibold text-slate-900 mb-4">Test your understanding</h2>
                       <div className="space-y-4">
                         <div className="text-center">
                           <div className="items-center mb-2">
-                            <p className="text-custom-blue font-medium">Go to quizzes</p>
+                            <p className="text-custom-blue font-medium">Go to {course.title.toLowerCase()} quiz</p>
                           </div>
                         </div>
                       </div>
