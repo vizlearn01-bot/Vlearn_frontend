@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import BASE_URL from "../config";
@@ -14,6 +14,7 @@ function CourseDetail() {
   const [watchedDuration, setWatchedDuration] = useState(0);
   const intervalRef = useRef(null);
   const [quiz, setQuiz] = useState([])
+  const navigate = useNavigate()
 
   // Fetch course details using the id from the URL
   useEffect(() => {
@@ -146,52 +147,52 @@ function CourseDetail() {
     );
   }
 
-   const countDownAlert = (quizId) => {
-      let seconds =5; // Set countdown time in seconds
-      let timerInterval;
-  
-      Swal.fire({
-        title: "Your test begins in",
-        html: `
+  const countDownAlert = (quizId) => {
+    let seconds = 5; // Set countdown time in seconds
+    let timerInterval;
+
+    Swal.fire({
+      title: "Your test begins in",
+      html: `
           <div class="items-center gap-2">
             <b id="countdown" class="text-4xl font-bold text-custom-blue texts-center">${seconds}</b>
             <span class="text-gray-600 items-center text-2xl">seconds</span>
           </div>
         `,
-        timer: seconds * 1000, // Convert to milliseconds
-        timerProgressBar: false,
-        showConfirmButton: false,
-        customClass: {
-          popup: 'rounded-3xl shadow-2xl p-10 w-fit'
-        },
-        allowOutsideClick: false,
-        didOpen: () => {
-          const countdownElement = Swal.getHtmlContainer().querySelector("#countdown");
-          timerInterval = setInterval(() => {
-            seconds--;
-            countdownElement.textContent = seconds;
-          }, 1000);
-        },
-        willClose: () => {
-          clearInterval(timerInterval);
-        }
-      }).then((result) => {
-        if (result.dismiss === Swal.DismissReason.timer) {
-          Swal.fire({
-            title: "Your quiz starts now!",
-            timer: 1500, // Show for 1.5 seconds
-            timerProgressBar: false,
-            showConfirmButton: false,
-            customClass: {
-              popup: 'rounded-3xl shadow-2xl p-10 w-fit text-custom-orange'
-            },
-            willClose: () => {
-              navigate(`/dashboard/quiz/${quizId}`);
-            }
-          });
-        }
-      });
-    }
+      timer: seconds * 1000, // Convert to milliseconds
+      timerProgressBar: false,
+      showConfirmButton: false,
+      customClass: {
+        popup: 'rounded-3xl shadow-2xl p-10 w-fit'
+      },
+      allowOutsideClick: false,
+      didOpen: () => {
+        const countdownElement = Swal.getHtmlContainer().querySelector("#countdown");
+        timerInterval = setInterval(() => {
+          seconds--;
+          countdownElement.textContent = seconds;
+        }, 1000);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      }
+    }).then((result) => {
+      if (result.dismiss === Swal.DismissReason.timer) {
+        Swal.fire({
+          title: "Your quiz starts now!",
+          timer: 1500, // Show for 1.5 seconds
+          timerProgressBar: false,
+          showConfirmButton: false,
+          customClass: {
+            popup: 'rounded-3xl shadow-2xl p-10 w-fit text-custom-orange'
+          },
+          willClose: () => {
+            navigate(`/dashboard/quiz/${quizId}`);
+          }
+        });
+      }
+    });
+  }
   return (
     <>
       <div className="mx-auto flex flex-col">
@@ -338,11 +339,14 @@ function CourseDetail() {
                     </div>
                   </div>
                 </div>
-                <button
-                onClick={() => countDownAlert(quiz.id)}
-                className="bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange w-full">
-                Start Quiz
-              </button>
+                <div className=" backdrop-blur-2xl mt-10 items-center text-center p-8 rounded-3xl w-fit mx-auto shadow-2xl">
+                  <h3 className="text-custom-blue text-xl">Test your understanding</h3>
+                  <button
+                    onClick={() => countDownAlert(quiz.id)}
+                    className="bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange w-fit mx-auto flex mt-4">
+                    Attempt quiz
+                  </button>
+                </div>
               </div>
             </div>
           </div>
