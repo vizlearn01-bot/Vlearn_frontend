@@ -4,6 +4,7 @@ import axios from "axios";
 import BASE_URL from "../config";
 import { GraduationCap, User, Clock, BookOpen, BarChart2, Award } from "lucide-react";
 import UserContext from "../Context/UserContext";
+import Swal from "sweetalert2";
 
 function CourseDetail() {
   const { id } = useParams(); // Get the id from the URL
@@ -145,6 +146,52 @@ function CourseDetail() {
     );
   }
 
+   const countDownAlert = (quizId) => {
+      let seconds =5; // Set countdown time in seconds
+      let timerInterval;
+  
+      Swal.fire({
+        title: "Your test begins in",
+        html: `
+          <div class="items-center gap-2">
+            <b id="countdown" class="text-4xl font-bold text-custom-blue texts-center">${seconds}</b>
+            <span class="text-gray-600 items-center text-2xl">seconds</span>
+          </div>
+        `,
+        timer: seconds * 1000, // Convert to milliseconds
+        timerProgressBar: false,
+        showConfirmButton: false,
+        customClass: {
+          popup: 'rounded-3xl shadow-2xl p-10 w-fit'
+        },
+        allowOutsideClick: false,
+        didOpen: () => {
+          const countdownElement = Swal.getHtmlContainer().querySelector("#countdown");
+          timerInterval = setInterval(() => {
+            seconds--;
+            countdownElement.textContent = seconds;
+          }, 1000);
+        },
+        willClose: () => {
+          clearInterval(timerInterval);
+        }
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+          Swal.fire({
+            title: "Your quiz starts now!",
+            timer: 1500, // Show for 1.5 seconds
+            timerProgressBar: false,
+            showConfirmButton: false,
+            customClass: {
+              popup: 'rounded-3xl shadow-2xl p-10 w-fit text-custom-orange'
+            },
+            willClose: () => {
+              navigate(`/dashboard/quiz/${quizId}`);
+            }
+          });
+        }
+      });
+    }
   return (
     <>
       <div className="mx-auto flex flex-col">
@@ -291,20 +338,11 @@ function CourseDetail() {
                     </div>
                   </div>
                 </div>
-                {quiz && (
-                  <Link to={`/dashboard/quiz/${quiz.id}`} className="block my-8 text-center">
-                    <div className="bg-white rounded-3xl shadow-2xl p-6 mt-10 text-center hover:shadow-3xl hover:cursor-pointer w-fit mx-auto border border-custom-blue">
-                      <h2 className="text-lg font-semibold text-slate-900 mb-4">Test your understanding</h2>
-                      <div className="space-y-4">
-                        <div className="text-center">
-                          <div className="items-center mb-2">
-                            <p className="text-custom-blue font-medium">Go to {course.title.toLowerCase()} quiz</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                )}
+                <button
+                onClick={() => countDownAlert(quiz.id)}
+                className="bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange w-full">
+                Start Quiz
+              </button>
               </div>
             </div>
           </div>
