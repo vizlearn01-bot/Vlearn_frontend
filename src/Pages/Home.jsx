@@ -141,7 +141,7 @@ function Home() {
   return (
     <>
       <Navbar />
-      <section className="flex min-h-fit bg-gray-100 font-poppins">
+      <section className="flex min-h-fit bg-slate-200 font-poppins">
         <div className="container mx-auto px-6 pb-24 mt-40">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8 animate-fade-in">
@@ -174,7 +174,7 @@ function Home() {
           </div>
         </div>
       </section>
-      <section className="h-fit p-10">
+      <section className="h-fit p-10 bg-white">
         <h2 className="text-4xl font-semibold mb-8 text-custom-blue text-center">
           Dive into our vast video library
         </h2>
@@ -227,8 +227,8 @@ function Home() {
       </section>
 
       <section className='h-fit py-10 bg-slate-200'>
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-16">Why Vlearn?</h2>
+        <div className="container mx-auto px-6 mb-8">
+          <h2 className="text-4xl font-bold text-center mb-8">Why Vlearn?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 text-center gap-6">
 
             {/* Feature 1 */}
@@ -236,7 +236,7 @@ function Home() {
               <div className="mb-4 flex justify-center items-center">
                 <Brain className="h-12 w-12 text-custom-blue" />
               </div>
-              <h3 className="text-xl font-semibold mb-4">Interactive Learning</h3>
+              <h3 className="text-xl font-semibold mb-4 ">Interactive Learning</h3>
               <p className="text-gray-600">Engage with interactive 3D models and simulations</p>
             </div>
 
@@ -263,88 +263,88 @@ function Home() {
 
       </section>
       <section className="bg-custom-blue py-20">
-  <div className="container mx-auto px-6" id="demo">
-    <h2 className="text-4xl font-bold text-white mb-6 text-center">
-      Ready to Transform Your Science Class?
-    </h2>
-    <form
-      ref={form}
-      onSubmit={handleSubmit}
-      className="flex flex-col mx-auto mt-10 w-full max-w-6xl gap-6 bg-white shadow-xl rounded-3xl p-8"
-    >
-      <h3 className="text-2xl font-bold text-custom-blue mb-4 text-center">
-        Schedule a Demo
-      </h3>
-      <p className="text-gray-600 text-center mb-6">
-        Fill in the details below to book your demo session.
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-            Full Name
-          </label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-            placeholder="Full Name"
-            className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
-          />
+        <div className="container mx-auto px-6 " id="demo" >
+          <h2 className="text-4xl font-bold text-white mb-6 text-center">
+            Ready to Transform Your Science Class?
+          </h2>
+          <form
+            ref={form}
+            onSubmit={handleSubmit}
+            className="flex flex-col mx-auto mt-10 w-full max-w-6xl gap-6  bg-white/50 backdrop-blur-2xl shadow-xl rounded-3xl p-8"
+          >
+            <h3 className="text-3xl font-bold text-black mb-4 text-center">
+              Schedule a Demo
+            </h3>
+            <p className="text-gray-600 text-center mb-6">
+              Fill in the details below to book your demo session.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-900 mb-2">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="Full Name"
+                  className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="Email Address"
+                  className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
+                />
+              </div>
+              <div>
+                <label htmlFor="school" className="block text-sm font-medium text-gray-900 mb-2">
+                  Institution Name
+                </label>
+                <input
+                  type="text"
+                  name="school"
+                  value={formData.school}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="Institution Name"
+                  className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
+                />
+              </div>
+              <div>
+                <label htmlFor="date" className="block text-sm font-medium text-gray-900 mb-2">
+                  Preferred Demo Date
+                </label>
+                <input
+                  type="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleInputChange}
+                  required
+                  className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="bg-custom-blue w-full md:w-1/3 mx-auto text-white px-6 py-3 rounded-3xl hover:bg-custom-orange transition duration-300 ease-in-out flex items-center justify-center mt-4"
+            >
+              Get Started Now
+              <GraduationCap className="ml-2 h-5 w-5" />
+            </button>
+          </form>
         </div>
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-            Email Address
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-            placeholder="Email Address"
-            className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
-          />
-        </div>
-        <div>
-          <label htmlFor="school" className="block text-sm font-medium text-gray-700 mb-2">
-            Institution Name
-          </label>
-          <input
-            type="text"
-            name="school"
-            value={formData.school}
-            onChange={handleInputChange}
-            required
-            placeholder="Institution Name"
-            className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
-          />
-        </div>
-        <div>
-          <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
-            Preferred Demo Date
-          </label>
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleInputChange}
-            required
-            className="py-3 px-4 rounded-3xl w-full border border-gray-300 focus:ring-2 focus:ring-custom-blue focus:outline-none"
-          />
-        </div>
-      </div>
-      <button
-        type="submit"
-        className="bg-custom-blue w-full md:w-1/3 mx-auto text-white px-6 py-3 rounded-3xl hover:bg-custom-orange transition duration-300 ease-in-out flex items-center justify-center mt-4"
-      >
-        Get Started Now
-        <GraduationCap className="ml-2 h-5 w-5" />
-      </button>
-    </form>
-  </div>
-</section>
+      </section>
 
       <Footer />
     </>
