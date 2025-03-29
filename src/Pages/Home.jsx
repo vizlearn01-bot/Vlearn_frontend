@@ -270,7 +270,7 @@ function Home() {
           <form
             ref={form}
             onSubmit={handleSubmit}
-            className="flex flex-col mx-auto mt-10 w-full max-w-6xl gap-6  bg-white/50 backdrop-blur-2xl shadow-xl rounded-3xl p-8"
+            className="flex flex-col mx-auto mt-10 w-full max-w-6xl gap-6  bg-white shadow-xl rounded-3xl p-8"
           >
             <h3 className="text-3xl font-bold text-black mb-4 text-center">
               Schedule a Demo
