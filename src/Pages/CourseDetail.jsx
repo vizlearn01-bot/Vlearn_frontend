@@ -138,10 +138,10 @@ function CourseDetail() {
 
   if (loading) {
     return (
-      <div className="p-8 mx-auto max-w-6xl flex justify-center items-center">
-        <div className="text-center">
-          <div className="animate-spin border-4 border-t-4 border-custom-blue border-solid rounded-full w-16 h-16 mx-auto mb-4"></div>
-          <p className="text-gray-700">Loading course details...</p>
+      <div className="p-8">
+        <div className="text-center items-center">
+          <div className="animate-spin border-4 border-t-4 border-custom-blue border-solid rounded-full w-16 h-16 mx-auto"></div>
+          <p className="text-custom-orange">Loading course details...</p>
         </div>
       </div>
     );
