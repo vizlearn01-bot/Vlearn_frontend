@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useUserContext } from '../Context/UserContext';
+import React, { useState, useEffect, useContext } from 'react';
+import UserContext from '../Context/UserContext';
 import axios from 'axios';
 import BASE_URL from '../config';
 import { Trophy, Clock, Calendar, BarChart, CheckCircle, XCircle } from 'lucide-react';
 
 function Results() {
-  const { token } = useUserContext();
+  const { token } = useContext(UserContext);
   const [attempts, setAttempts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

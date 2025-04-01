@@ -1,68 +1,80 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BASE_URL from '../config';
 import Swal from 'sweetalert2';
-import { Clock, CheckCircle, XCircle } from 'lucide-react';
-import { useUserContext } from '../Context/UserContext';
+import { Clock, CheckCircle2, XCircle, RotateCcw, ChevronRight } from 'lucide-react';
+import UserContext from '../Context/UserContext';
 
 function QuizAttempt() {
-  const { quizId } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { token } = useUserContext();
+  const { token } = useContext(UserContext);
   const [attempt, setAttempt] = useState(null);
-  const [questions, setQuestions] = useState([]);
+  const [quiz, setQuiz] = useState(null); // Changed from questions to quiz
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [selectedAnswerId, setSelectedAnswerId] = useState(null);
+  const [score, setScore] = useState(0);
+  const [showResult, setShowResult] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
+  const [isAnswered, setIsAnswered] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Start the quiz attempt
+  // Start the quiz attempt and fetch questions
   useEffect(() => {
     const startAttempt = async () => {
       try {
-        const response = await axios.post(
+        // Start new attempt
+        const attemptResponse = await axios.post(
           `${BASE_URL}/attempts/start/`,
-          { quiz_id: quizId },
+          { quiz_id: id },
           {
-            headers: { Authorization: `Bearer ${token.access}` },
+            headers: { 
+              Authorization: `Bearer ${token.access}`,
+              'Content-Type': 'application/json'
+            }
           }
         );
-        setAttempt(response.data);
         
-        // Fetch quiz questions
+        setAttempt(attemptResponse.data);
+        
+        // Fetch quiz with questions (same as Quiz component)
         const quizResponse = await axios.get(
-          `${BASE_URL}/quizzes/${quizId}/`,
+          `${BASE_URL}/quizzes/${id}/`,
           {
-            headers: { Authorization: `Bearer ${token.access}` },
+            headers: { 
+              Authorization: `Bearer ${token.access}` 
+            }
           }
         );
-        setQuestions(quizResponse.data.questions);
-        setTimeLeft(quizResponse.data.time_limit * 60); // Convert minutes to seconds
         
+        setQuiz(quizResponse.data);
+        setTimeLeft(quizResponse.data.time_limit * 60);
         setLoading(false);
+        
       } catch (err) {
-        setError(err.response?.data?.error || err.message);
+        console.error('Error:', err.response?.data || err.message);
+        setError(err.response?.data?.error || err.message || 'Failed to start quiz');
         setLoading(false);
       }
     };
 
     startAttempt();
-  }, [quizId, token]);
+  }, [id, token]);
 
-  // Timer countdown
+  // Timer countdown (similar to Quiz component)
   useEffect(() => {
     if (timeLeft === null) return;
 
     const timer = setInterval(() => {
-      setTimeLeft(prevTime => {
-        if (prevTime <= 1) {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
           clearInterval(timer);
-          handleSubmit(); // Auto-submit when time runs out
+          handleSubmit();
           return 0;
         }
-        return prevTime - 1;
+        return prev - 1;
       });
     }, 1000);
 
@@ -70,30 +82,41 @@ function QuizAttempt() {
   }, [timeLeft]);
 
   const handleAnswerSelect = (answerId) => {
-    setSelectedAnswer(answerId);
+    if (isAnswered || !quiz) return;
+
+    setSelectedAnswerId(answerId);
+    setIsAnswered(true);
+
+    const currentQuestion = quiz.questions[currentQuestionIndex];
+    const selectedAnswer = currentQuestion.answers.find(a => a.id === answerId);
+
+    if (selectedAnswer && selectedAnswer.is_correct) {
+      setScore(score + 1);
+    }
   };
 
   const handleNextQuestion = async () => {
-    if (!selectedAnswer) return;
+    if (!quiz || !selectedAnswerId) return;
 
     try {
-      // Save the current answer
+      // Save answer to backend
       await axios.post(
         `${BASE_URL}/answers/`,
         {
           attempt_id: attempt.id,
-          question_id: questions[currentQuestionIndex].id,
-          answer_id: selectedAnswer,
+          question_id: quiz.questions[currentQuestionIndex].id,
+          answer_id: selectedAnswerId,
         },
         {
           headers: { Authorization: `Bearer ${token.access}` },
         }
       );
 
-      // Move to next question or submit if last question
-      if (currentQuestionIndex < questions.length - 1) {
+      // Move to next question or finish
+      if (currentQuestionIndex < quiz.questions.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
-        setSelectedAnswer(null);
+        setSelectedAnswerId(null);
+        setIsAnswered(false);
       } else {
         handleSubmit();
       }
@@ -104,7 +127,6 @@ function QuizAttempt() {
 
   const handleSubmit = async () => {
     try {
-      // Submit the attempt
       const response = await axios.put(
         `${BASE_URL}/attempts/${attempt.id}/submit/`,
         {},
@@ -113,13 +135,12 @@ function QuizAttempt() {
         }
       );
 
-      // Show result
       Swal.fire({
         title: 'Quiz Submitted!',
         html: `
           <div class="text-center">
             <h3 class="text-2xl font-bold mb-4">Your Score: ${response.data.score.toFixed(1)}%</h3>
-            <p class="text-gray-600">You answered ${response.data.student_answers.filter(a => a.is_correct).length} out of ${questions.length} questions correctly</p>
+            <p class="text-gray-600">You answered ${score} out of ${quiz.questions.length} questions correctly</p>
           </div>
         `,
         icon: 'success',
@@ -135,103 +156,105 @@ function QuizAttempt() {
     }
   };
 
-  if (loading) return <div className="text-center py-20">Loading quiz...</div>;
-  if (error) return <div className="text-center py-20 text-red-500">Error: {error}</div>;
-  if (!attempt || !questions.length) return null;
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
 
-  const currentQuestion = questions[currentQuestionIndex];
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
+  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  if (error) return <div className="min-h-screen flex items-center justify-center text-red-500">Error: {error}</div>;
+  if (!quiz || !quiz.questions) return <div className="min-h-screen flex items-center justify-center">Quiz not found</div>;
+
+  if (showResult) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full">
+          <h2 className="text-3xl font-bold text-center mb-6 text-custom-orange">Quiz Complete!</h2>
+          <div className="text-center mb-8">
+            <p className="text-xl mb-2">Your Score:</p>
+            <p className="text-4xl font-bold text-custom-blue">{score} / {quiz.questions.length}</p>
+            <p className="mt-2">
+              ({Math.round((score / quiz.questions.length) * 100)}% correct)
+            </p>
+          </div>
+          <button
+            onClick={() => navigate('/dashboard/results')}
+            className="w-full py-3 px-6 bg-custom-blue text-white rounded-3xl hover:bg-custom-orange transition-colors flex items-center justify-center gap-2"
+          >
+            View Results
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const currentQuestion = quiz.questions[currentQuestionIndex];
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white rounded-3xl shadow-2xl p-8">
-        {/* Quiz header with timer */}
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold">{attempt.quiz.title}</h2>
-          <div className="flex items-center bg-red-50 text-red-600 px-4 py-2 rounded-full">
-            <Clock className="h-5 w-5 mr-2" />
-            <span className="font-medium">
-              {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
-            </span>
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-4xl w-full">
+        <div className="flex justify-between items-center mb-6">
+          <div className="text-sm font-medium text-gray-600">
+            Question {currentQuestionIndex + 1}/{quiz.questions.length}
+          </div>
+          <div className="flex items-center gap-2 text-custom-blue">
+            <Clock size={20} />
+            <span className="font-mono">{formatTime(timeLeft)}</span>
           </div>
         </div>
 
-        {/* Progress indicator */}
-        <div className="mb-6">
-          <div className="w-full bg-gray-200 rounded-full h-2.5">
-            <div
-              className="bg-custom-blue h-2.5 rounded-full"
-              style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
-            ></div>
-          </div>
-          <p className="text-right text-sm text-gray-500 mt-1">
-            Question {currentQuestionIndex + 1} of {questions.length}
-          </p>
-        </div>
-
-        {/* Current question */}
         <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-4">{currentQuestion.text}</h3>
-          
-          {currentQuestion.image && (
-            <div className="mb-6">
-              <img 
-                src={`${CLOUDINARY_BASE_URL}${currentQuestion.image}`} 
-                alt="Question illustration" 
-                className="max-h-64 mx-auto rounded-lg"
-              />
-            </div>
-          )}
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+            {currentQuestion.text}
+          </h2>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             {currentQuestion.answers.map((answer) => (
-              <div
+              <button
                 key={answer.id}
-                className={`p-4 border rounded-xl cursor-pointer transition-all ${
-                  selectedAnswer === answer.id
-                    ? 'border-custom-blue bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
                 onClick={() => handleAnswerSelect(answer.id)}
+                disabled={isAnswered}
+                className={`w-full p-4 text-left rounded-full transition-all ${selectedAnswerId === answer.id
+                  ? isAnswered
+                    ? answer.is_correct
+                      ? 'bg-green-100 border-green-500'
+                      : 'bg-red-100 border-red-600'
+                    : 'bg-indigo-100 border-indigo-500'
+                  : 'bg-gray-50 hover:bg-gray-100'
+                  } ${isAnswered && answer.is_correct
+                    ? 'bg-green-100 border-green-500'
+                    : ''
+                  } border-2 ${isAnswered ? 'cursor-not-allowed' : 'cursor-pointer'
+                  }`}
               >
-                <div className="flex items-center">
-                  {selectedAnswer === answer.id ? (
-                    <CheckCircle className="h-5 w-5 text-custom-blue mr-3" />
-                  ) : (
-                    <div className="h-5 w-5 rounded-full border-2 border-gray-300 mr-3"></div>
-                  )}
+                <div className="flex items-center justify-between">
                   <span>{answer.text}</span>
+                  {isAnswered && selectedAnswerId === answer.id && (
+                    answer.is_correct
+                      ? <CheckCircle2 className="text-green-500" size={20} />
+                      : <XCircle className="text-red-600" size={20} />
+                  )}
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
 
-        {/* Navigation buttons */}
-        <div className="flex justify-between">
-          {currentQuestionIndex > 0 && (
-            <button
-              className="bg-gray-200 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-300"
-              onClick={() => {
-                setCurrentQuestionIndex(currentQuestionIndex - 1);
-                setSelectedAnswer(null);
-              }}
-            >
-              Previous
-            </button>
-          )}
-          
+        <div className="flex justify-between items-center">
+          <div className="text-lg font-medium">
+            Score: {score}/{currentQuestionIndex + 1}
+          </div>
           <button
-            className={`ml-auto px-6 py-2 rounded-full ${
-              selectedAnswer
-                ? 'bg-custom-blue text-white hover:bg-blue-600'
-                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-            }`}
             onClick={handleNextQuestion}
-            disabled={!selectedAnswer}
+            disabled={!isAnswered}
+            className={`py-3 px-6 rounded-3xl flex items-center gap-2 ${isAnswered
+              ? 'bg-custom-blue text-white hover:bg-custom-orange'
+              : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+              } transition-colors`}
           >
-            {currentQuestionIndex < questions.length - 1 ? 'Next' : 'Submit'}
+            {currentQuestionIndex === quiz.questions.length - 1 ? 'Finish' : 'Next'}
+            <ChevronRight size={20} />
           </button>
         </div>
       </div>

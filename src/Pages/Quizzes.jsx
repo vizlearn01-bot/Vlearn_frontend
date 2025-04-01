@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Clock, Award, BarChart } from 'lucide-react';
 import axios from 'axios';
 import BASE_URL from '../config';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import UserContext from '../Context/UserContext';
 
 
 function Quizzes() {
 
   const navigate = useNavigate()
+  const {token} = useContext(UserContext)
   const [quizzes, setQuizzes] = useState([])
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,7 +18,12 @@ function Quizzes() {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/quizzes/`);
+        const response = await axios.get(`${BASE_URL}/quizzes/`, 
+          {
+            headers: { Authorization: `Bearer ${token.access}` },
+          }
+        );
+        
         setQuizzes(response.data);
       } catch (err) {
         setError(err.message);
