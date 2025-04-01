@@ -198,6 +198,42 @@ function User() {
             </div>
           )}
         </div>
+        {/* Quiz Results */}
+<div className="p-6 sm:p-8 border-b border-gray-200">
+  <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Quiz Results</h2>
+  {user.quiz_attempts && user.quiz_attempts.length > 0 ? (
+    <div className="space-y-4">
+      {user.quiz_attempts.slice(0, 3).map((attempt) => (
+        <div key={attempt.id} className="bg-gray-50 rounded-lg p-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center">
+              <BookOpen className="h-5 w-5 text-indigo-600 mr-2" />
+              <h3 className="font-medium text-gray-900">{attempt.quiz.title}</h3>
+            </div>
+            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+              attempt.score >= 70 ? 'bg-green-100 text-green-800' :
+              attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
+              'bg-red-100 text-red-800'
+            }`}>
+              {attempt.score}%
+            </span>
+          </div>
+          <div className="text-sm text-gray-500">
+            Completed on {new Date(attempt.end_time).toLocaleDateString()}
+          </div>
+        </div>
+      ))}
+      <button 
+        onClick={() => navigate('/dashboard/results')}
+        className="text-custom-blue text-sm font-medium hover:underline"
+      >
+        View all quiz results →
+      </button>
+    </div>
+  ) : (
+    <p className="text-gray-500">No quiz attempts yet.</p>
+  )}
+</div>
       </main>
     </div>
   );
