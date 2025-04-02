@@ -100,7 +100,7 @@ function QuizAttempt() {
 
     try {
       // Save answer to backend
-      await axios.post(
+      const response = await axios.post(
         `${BASE_URL}/answers/`,
         {
           attempt_id: attempt.id,
@@ -111,7 +111,6 @@ function QuizAttempt() {
           headers: { Authorization: `Bearer ${token.access}` },
         }
       );
-
       // Move to next question or finish
       if (currentQuestionIndex < quiz.questions.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -139,7 +138,7 @@ function QuizAttempt() {
         title: 'Quiz Submitted!',
         html: `
           <div class="text-center">
-            <h3 class="text-2xl font-bold mb-4">Your Score: ${response.data.score.toFixed(1)}%</h3>
+            <h3 class="text-2xl font-bold mb-4">Your Score: ${response.data.score}%</h3>
             <p class="text-gray-600">You answered ${score} out of ${quiz.questions.length} questions correctly</p>
           </div>
         `,
