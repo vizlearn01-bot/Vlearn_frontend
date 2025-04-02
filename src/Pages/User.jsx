@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { BookOpen, Trophy, Clock, Calendar, GraduationCap, BarChart, BookMarked, AlignCenterVertical as Certificate } from 'lucide-react';
+import { BookOpen, Trophy, Clock, Calendar, GraduationCap, BarChart, AlignCenterVertical as Certificate } from 'lucide-react';
 import BASE_URL from '../config';
 import axios from 'axios';
 import UserContext from '../Context/UserContext';
@@ -25,7 +25,7 @@ function User() {
         navigate('/login');
         return;
       }
-  
+
       try {
         const response = await axios.get(`${BASE_URL}/profile`, {
           headers: { Authorization: `Bearer ${token.access}` },
@@ -38,14 +38,14 @@ function User() {
         setLoading(false);
       }
     };
-  
+
     fetchUser();
   }, [token, navigate]);
-  
+
   useEffect(() => {
     const fetchAnalytics = async () => {
       if (!token?.access) return;
-  
+
       try {
         const response = await axios.get(`${BASE_URL}/video_interactions`, {
           headers: { Authorization: `Bearer ${token.access}` },
@@ -56,14 +56,14 @@ function User() {
         setError('Failed to fetch user analytics.');
       }
     };
-  
+
     fetchAnalytics();
   }, [token]);
 
   useEffect(() => {
     const fetchQuizAttempts = async () => {
       if (!token?.access) return;
-      
+
       try {
         const response = await axios.get(`${BASE_URL}/attempts/`, {
           headers: { Authorization: `Bearer ${token.access}` },
@@ -156,36 +156,37 @@ function User() {
           </div>
 
           {/* Quiz Results Section */}
-          <div className="p-6 sm:p-8 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Quiz Results</h2>
-            
-            {quizLoading ? (
-              <div className="text-center py-4">Loading quiz results...</div>
-            ) : quizError ? (
-              <div className="text-center py-4 text-red-500">Error: {quizError}</div>
-            ) : quizAttempts.length === 0 ? (
-              <div className="bg-gray-50 rounded-lg p-6 text-center">
-                <p className="text-gray-500">You haven't completed any quizzes yet.</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {quizAttempts.slice(0, 3).map((attempt) => (
+        </div>
+        <div className="p-6 sm:p-8 border-b border-gray-200 mt-10">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Quiz Results</h2>
+          {quizLoading ? (
+            <div className="text-center py-4">Loading quiz results...</div>
+          ) : quizError ? (
+            <div className="text-center py-4 text-red-500">Error: {quizError}</div>
+          ) : quizAttempts.length === 0 ? (
+            <div className="bg-gray-50 rounded-lg p-6 text-center">
+              <p className="text-gray-500">You haven't completed any quizzes yet.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {quizAttempts
+                .sort((a, b) => new Date(b.end_time) - new Date(a.end_time)) // Sort by most recent first
+                .slice(0, 3).map((attempt) => (
                   <div key={attempt.id} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
                     <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-2">
                       <div className="flex items-center">
                         <BookOpen className="h-5 w-5 text-indigo-600 mr-2" />
                         <h3 className="font-medium text-gray-900">{attempt.quiz.title}</h3>
                       </div>
-                      <div className={`mt-2 md:mt-0 inline-flex items-center px-3 py-1 rounded-full text-sm ${
-                        attempt.score >= 70 ? 'bg-green-100 text-green-800' : 
-                        attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' : 
-                        'bg-red-100 text-red-800'
-                      }`}>
+                      <div className={`mt-2 md:mt-0 inline-flex items-center px-3 py-1 rounded-full text-sm ${attempt.score >= 70 ? 'bg-green-100 text-green-800' :
+                          attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
+                        }`}>
                         <Trophy className="h-4 w-4 mr-1" />
                         {attempt.score}%
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600 mt-2">
                       <div className="flex items-center">
                         <Calendar className="h-4 w-4 mr-1" />
@@ -194,7 +195,7 @@ function User() {
                       <div className="flex items-center">
                         <Clock className="h-4 w-4 mr-1" />
                         <span>
-                        {Math.round((new Date(attempt.end_time) - new Date(attempt.start_time)) / 60000)} minutes
+                          {Math.round((new Date(attempt.end_time) - new Date(attempt.start_time)) / 60000)} minutes
                         </span>
                       </div>
                       <div className="flex items-center">
@@ -207,73 +208,15 @@ function User() {
                     </div>
                   </div>
                 ))}
-                
-                {quizAttempts.length > 3 && (
-                  <button 
-                    onClick={() => navigate('/dashboard/results')}
-                    className="text-custom-blue text-sm font-medium hover:underline mt-4"
-                  >
-                    View all quiz results →
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
 
-          {/* Current Courses */}
-          {user.analytics && (
-            <div className="p-6 sm:p-8 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Current Courses</h2>
-              <div className="space-y-4">
-                {user.currentCourses.map((course, index) => (
-                  <div key={index} className="bg-gray-50 rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center">
-                        <BookMarked className="h-5 w-5 text-indigo-600 mr-2" />
-                        <h3 className="font-medium text-gray-900">{user.analytics.video_url}</h3>
-                      </div>
-                      <span className="text-sm text-gray-500">
-                        Last accessed: {course.lastAccessed}
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-custom-orange h-2 rounded-full"
-                        style={{ width: `${course.progress}%` }}
-                      ></div>
-                    </div>
-                    <div className="mt-1 text-right text-sm text-gray-500">
-                      {course.progress}% Complete
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Achievements */}
-          {user.achievements && (
-            <div className="p-6 sm:p-8">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Achievements</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {user.achievements.map((achievement, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex items-center">
-                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-100 text-yellow-600">
-                        <Certificate className="h-5 w-5" />
-                      </div>
-                      <div className="ml-4">
-                        <h3 className="font-medium text-gray-900">{achievement.name}</h3>
-                        <p className="text-sm text-gray-500">{achievement.description}</p>
-                        <p className="text-xs text-gray-400 mt-1">
-                          <Calendar className="h-4 w-4 inline mr-1" />
-                          {achievement.date}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              {quizAttempts.length > 3 && (
+                <button
+                  onClick={() => navigate('/dashboard/results')}
+                  className="text-custom-blue text-sm font-medium hover:underline mt-4"
+                >
+                  View all quiz results →
+                </button>
+              )}
             </div>
           )}
         </div>

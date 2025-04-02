@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import {  Bell, Search } from 'lucide-react';
+import { Bell, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import LazyLoad from 'react-lazyload';
@@ -111,7 +111,7 @@ function Dashboard() {
         </header>
         {/* Courses Section */}
         <section className="mb-8 p-6 h-fit">
-          <h2 className="text-xl font-bold mb-4">Current Courses</h2>
+          <h2 className="text-xl font-bold mb-4">Available experiments</h2>
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
@@ -121,21 +121,43 @@ function Dashboard() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredCourses.map((course) => (
-                <Link to={`/coursedetails/${course.id}`} key={course.id}>
-                  <div className="bg-white rounded-3xl shadow-sm border overflow-hidden">
+                <div key={course.id} className="mb-6"> {/* Added margin-bottom for spacing */}
+                  {/* Clickable card area with hover effects */}
+                  <Link
+                    to={`/coursedetails/${course.id}`}
+                    className="group relative block rounded-3xl shadow-sm border overflow-hidden"
+                  >
                     <LazyLoad height={200} offset={100} once>
-                      <img
-                        src={course.image}
-                        alt={course.title}
-                        className="w-full h-56 object-cover"
-                        loading="lazy"
-                      />
+                      <div className="relative">
+                        {/* Course Image with Zoom Effect */}
+                        <img
+                          src={course.image}
+                          alt={course.title}
+                          className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                          loading="lazy"
+                        />
+
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="absolute bottom-0 left-0 right-0 p-6">
+                            <h3 className="text-xl font-bold text-white mb-2">
+                              {course.title}
+                            </h3>
+                            {/* Additional hover-only info */}
+                            <p className="text-gray-200 text-sm">
+                              {course.duration}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     </LazyLoad>
-                    <div className="p-6">
-                      <h3 className="text-lg font-semibold text-gray-800 text-center">{course.title}</h3>
-                    </div>
-                  </div>
-                </Link>
+                  </Link>
+
+                  {/* Visible title outside the card */}
+                  <h3 className="mt-3 font-semibold text-lg px-2 text-center">
+                    {course.title}
+                  </h3>
+                </div>
               ))}
             </div>
           )}

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import UserContext from '../Context/UserContext';
 import axios from 'axios';
 import BASE_URL from '../config';
-import { Trophy, Clock, Calendar, BarChart, CheckCircle, XCircle } from 'lucide-react';
+import { Trophy, Clock, Calendar, BarChart } from 'lucide-react';
 
 function Results() {
   const { token } = useContext(UserContext);
@@ -40,7 +40,9 @@ function Results() {
         </div>
       ) : (
         <div className="space-y-6">
-          {attempts.map((attempt) => (
+          {attempts
+              .sort((a, b) => new Date(b.end_time) - new Date(a.end_time))
+              .map((attempt) => (
             <div key={attempt.id} className="bg-white rounded-3xl shadow-2xl p-6">
               <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
                 <div>
@@ -86,35 +88,6 @@ function Results() {
                   </span>
                 </div>
               </div>
-              
-              {/* <div className="space-y-4">
-                <h3 className="font-medium text-gray-900">Question Breakdown:</h3>
-                {attempt.student_answers.map((answer, idx) => (
-                  <div key={idx} className="border-l-4 pl-4 ${
-                    answer.is_correct ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'
-                  } p-3 rounded-r-lg">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="font-medium">{answer.question.text}</p>
-                        <p className="text-sm text-gray-600 mt-1">
-                          Your answer: {answer.answer ? answer.answer.text : answer.text_answer}
-                        </p>
-                      </div>
-                      {answer.is_correct ? (
-                        <CheckCircle className="h-5 w-5 text-green-500" />
-                      ) : (
-                        <XCircle className="h-5 w-5 text-red-500" />
-                      )}
-                    </div>
-                    {!answer.is_correct && answer.question.explanation && (
-                      <div className="mt-2 text-sm bg-white p-2 rounded">
-                        <p className="font-medium">Explanation:</p>
-                        <p>{answer.question.explanation}</p>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div> */}
             </div>
           ))}
         </div>
