@@ -5,23 +5,24 @@ import axios from 'axios';
 import UserContext from '../Context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
-
 // Define your Cloudinary base URL
 const CLOUDINARY_BASE_URL = 'https://res.cloudinary.com/dfycvaiv7/';
 
-
 function User() {
-  const { user: contextUser, token } = useContext(UserContext); // Use contextUser to avoid conflict
-  const [user, setUser] = useState(null); // State to store fetched user data
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const { user: contextUser, token } = useContext(UserContext);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const [analytics, setAnalytics] = useState([])
+  const [analytics, setAnalytics] = useState([]);
+  const [quizAttempts, setQuizAttempts] = useState([]);
+  const [quizLoading, setQuizLoading] = useState(true);
+  const [quizError, setQuizError] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       if (!token?.access) {
-        navigate('/login'); // Redirect to login if no token is available
+        navigate('/login');
         return;
       }
   
@@ -30,7 +31,6 @@ function User() {
           headers: { Authorization: `Bearer ${token.access}` },
         });
         setUser(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);
         setError('Failed to fetch user data. Please try again.');
@@ -51,7 +51,6 @@ function User() {
           headers: { Authorization: `Bearer ${token.access}` },
         });
         setAnalytics(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error('Error fetching user analytics', error);
         setError('Failed to fetch user analytics.');
@@ -60,7 +59,26 @@ function User() {
   
     fetchAnalytics();
   }, [token]);
-  
+
+  useEffect(() => {
+    const fetchQuizAttempts = async () => {
+      if (!token?.access) return;
+      
+      try {
+        const response = await axios.get(`${BASE_URL}/attempts/`, {
+          headers: { Authorization: `Bearer ${token.access}` },
+        });
+        setQuizAttempts(response.data);
+      } catch (err) {
+        setQuizError(err.response?.data?.error || err.message);
+      } finally {
+        setQuizLoading(false);
+      }
+    };
+
+    fetchQuizAttempts();
+  }, [token]);
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
@@ -73,11 +91,8 @@ function User() {
     return <div className="min-h-screen flex items-center justify-center">No user data available.</div>;
   }
 
+  const avatarUrl = `${CLOUDINARY_BASE_URL}${user.profile.avatar}`;
 
-    // Construct the full image URL
-    const avatarUrl = `${CLOUDINARY_BASE_URL}${user.profile.avatar}`;
-
-    
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -101,7 +116,6 @@ function User() {
                 <div className="mt-2 flex items-center justify-center sm:justify-start">
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
                     <GraduationCap className="w-4 h-4 mr-1" />
-                    {/* {user.role} */}
                     Student
                   </span>
                 </div>
@@ -139,6 +153,71 @@ function User() {
               <p className="mt-2 text-3xl font-semibold text-gray-900">{analytics.watched_duration}</p>
               <p className="text-sm text-gray-500">Learning Hours</p>
             </div>
+          </div>
+
+          {/* Quiz Results Section */}
+          <div className="p-6 sm:p-8 border-b border-gray-200">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Quiz Results</h2>
+            
+            {quizLoading ? (
+              <div className="text-center py-4">Loading quiz results...</div>
+            ) : quizError ? (
+              <div className="text-center py-4 text-red-500">Error: {quizError}</div>
+            ) : quizAttempts.length === 0 ? (
+              <div className="bg-gray-50 rounded-lg p-6 text-center">
+                <p className="text-gray-500">You haven't completed any quizzes yet.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {quizAttempts.slice(0, 3).map((attempt) => (
+                  <div key={attempt.id} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-2">
+                      <div className="flex items-center">
+                        <BookOpen className="h-5 w-5 text-indigo-600 mr-2" />
+                        <h3 className="font-medium text-gray-900">{attempt.quiz.title}</h3>
+                      </div>
+                      <div className={`mt-2 md:mt-0 inline-flex items-center px-3 py-1 rounded-full text-sm ${
+                        attempt.score >= 70 ? 'bg-green-100 text-green-800' : 
+                        attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' : 
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        <Trophy className="h-4 w-4 mr-1" />
+                        {attempt.score}%
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600 mt-2">
+                      <div className="flex items-center">
+                        <Calendar className="h-4 w-4 mr-1" />
+                        <span>{new Date(attempt.end_time).toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Clock className="h-4 w-4 mr-1" />
+                        <span>
+                        {Math.round((new Date(attempt.end_time) - new Date(attempt.start_time)) / 60000)} minutes
+                        </span>
+                      </div>
+                      <div className="flex items-center">
+                        <BarChart className="h-4 w-4 mr-1" />
+                        <span>
+                          {attempt.student_answers.filter(a => a.is_correct).length} /{' '}
+                          {attempt.student_answers.length} correct
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                {quizAttempts.length > 3 && (
+                  <button 
+                    onClick={() => navigate('/dashboard/results')}
+                    className="text-custom-blue text-sm font-medium hover:underline mt-4"
+                  >
+                    View all quiz results →
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Current Courses */}
@@ -198,42 +277,6 @@ function User() {
             </div>
           )}
         </div>
-        {/* Quiz Results */}
-<div className="p-6 sm:p-8 border-b border-gray-200">
-  <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Quiz Results</h2>
-  {user.quiz_attempts && user.quiz_attempts.length > 0 ? (
-    <div className="space-y-4">
-      {user.quiz_attempts.slice(0, 3).map((attempt) => (
-        <div key={attempt.id} className="bg-gray-50 rounded-lg p-4">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center">
-              <BookOpen className="h-5 w-5 text-indigo-600 mr-2" />
-              <h3 className="font-medium text-gray-900">{attempt.quiz.title}</h3>
-            </div>
-            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-              attempt.score >= 70 ? 'bg-green-100 text-green-800' :
-              attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
-              'bg-red-100 text-red-800'
-            }`}>
-              {attempt.score}%
-            </span>
-          </div>
-          <div className="text-sm text-gray-500">
-            Completed on {new Date(attempt.end_time).toLocaleDateString()}
-          </div>
-        </div>
-      ))}
-      <button 
-        onClick={() => navigate('/dashboard/results')}
-        className="text-custom-blue text-sm font-medium hover:underline"
-      >
-        View all quiz results →
-      </button>
-    </div>
-  ) : (
-    <p className="text-gray-500">No quiz attempts yet.</p>
-  )}
-</div>
       </main>
     </div>
   );

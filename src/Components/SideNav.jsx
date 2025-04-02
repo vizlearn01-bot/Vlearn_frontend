@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, GraduationCap, BookOpen, User, LayoutDashboardIcon, ClipboardPen, FolderClosed, Home } from 'lucide-react';
+import { Menu, GraduationCap, BookOpen, User, LayoutDashboardIcon, ClipboardPen, FolderClosed, Home, ClipboardCheck } from 'lucide-react';
 import { useState, useContext } from 'react';
 import UserContext from '../Context/UserContext';
 import Swal from 'sweetalert2';
@@ -37,6 +37,7 @@ const SideNav = () => {
     { icon: User, text: "User profile", path: '/dashboard/user' },
     { icon: BookOpen, text: "My courses", path: '/dashboard/courses' },
     { icon: ClipboardPen, text: "Quizzes", path: '/dashboard/quizzes' },
+    { icon: ClipboardCheck, text: "Past quizzes", path: '/dashboard/results'},
     { icon: FolderClosed, text: "Resources", path: '/dashboard/resources' },
   ];
 

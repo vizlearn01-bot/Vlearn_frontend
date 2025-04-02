@@ -54,7 +54,7 @@ function Results() {
                     'bg-red-100 text-red-800'
                   }`}>
                     <Trophy className="h-4 w-4 mr-1" />
-                    Score: {attempt.score.toFixed(1)}%
+                    Score: {attempt.score}%
                   </div>
                 </div>
               </div>
@@ -87,7 +87,7 @@ function Results() {
                 </div>
               </div>
               
-              <div className="space-y-4">
+              {/* <div className="space-y-4">
                 <h3 className="font-medium text-gray-900">Question Breakdown:</h3>
                 {attempt.student_answers.map((answer, idx) => (
                   <div key={idx} className="border-l-4 pl-4 ${
@@ -114,7 +114,7 @@ function Results() {
                     )}
                   </div>
                 ))}
-              </div>
+              </div> */}
             </div>
           ))}
         </div>
