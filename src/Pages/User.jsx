@@ -69,6 +69,7 @@ function User() {
           headers: { Authorization: `Bearer ${token.access}` },
         });
         setQuizAttempts(response.data);
+        console.log(response.data)
       } catch (err) {
         setQuizError(err.response?.data?.error || err.message);
       } finally {
@@ -170,17 +171,19 @@ function User() {
           ) : (
             <div className="space-y-4">
               {quizAttempts
+                .filter(attempt => attempt.end_time)
                 .sort((a, b) => new Date(b.end_time) - new Date(a.end_time)) // Sort by most recent first
-                .slice(0, 3).map((attempt) => (
+                .slice(0, 3)
+                .map((attempt) => (
                   <div key={attempt.id} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
                     <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-2">
                       <div className="flex items-center">
                         <BookOpen className="h-5 w-5 text-indigo-600 mr-2" />
                         <h3 className="font-medium text-gray-900">{attempt.quiz.title}</h3>
                       </div>
-                      <div className={`mt-2 md:mt-0 inline-flex items-center px-3 py-1 rounded-full text-sm ${attempt.score >= 70 ? 'bg-green-100 text-green-800' :
-                          attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
+                      <div className={`mt-2 md:mt-0 inline-flex items-center px-3 py-1 rounded-full text-sm ${attempt.score >= 70 ? 'bg-green-200 text-green-800' :
+                        attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
                         }`}>
                         <Trophy className="h-4 w-4 mr-1" />
                         {attempt.score}%
@@ -195,7 +198,7 @@ function User() {
                       <div className="flex items-center">
                         <Clock className="h-4 w-4 mr-1" />
                         <span>
-                          {Math.round((new Date(attempt.end_time) - new Date(attempt.start_time)) / 60000)} minutes
+                          {Math.floor((new Date(attempt.end_time) - new Date(attempt.start_time)) / (1000 * 60))} minutes
                         </span>
                       </div>
                       <div className="flex items-center">
