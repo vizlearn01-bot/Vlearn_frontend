@@ -50,7 +50,7 @@ function QuizAttempt() {
         );
         
         setQuiz(quizResponse.data);
-        setTimeLeft(quizResponse.data.time_limit*60);
+        setTimeLeft(quizResponse.data.time_limit * 60);
         setLoading(false);
         
       } catch (err) {
@@ -63,7 +63,7 @@ function QuizAttempt() {
     startAttempt();
   }, [id, token]);
 
-  // Timer countdown 
+  // Timer countdown (similar to Quiz component)
   useEffect(() => {
     if (timeLeft === null) return;
 
@@ -100,7 +100,7 @@ function QuizAttempt() {
 
     try {
       // Save answer to backend
-      await axios.post(
+      const response = await axios.post(
         `${BASE_URL}/answers/`,
         {
           attempt_id: attempt.id,

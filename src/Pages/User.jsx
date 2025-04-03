@@ -197,7 +197,9 @@ function User() {
                       </div>
                       <div className="flex items-center">
                         <Clock className="h-4 w-4 mr-1" />
-                        <span>{attempt.duration_minutes ?? 'N/A'} minutes</span>
+                        <span>
+                          {Math.floor((new Date(attempt.end_time) - new Date(attempt.start_time)) / (1000 * 60))} minutes
+                        </span>
                       </div>
                       <div className="flex items-center">
                         <BarChart className="h-4 w-4 mr-1" />
