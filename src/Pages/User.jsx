@@ -18,6 +18,7 @@ function User() {
   const [quizAttempts, setQuizAttempts] = useState([]);
   const [quizLoading, setQuizLoading] = useState(true);
   const [quizError, setQuizError] = useState(null);
+  const [subscription, setSubscription] = useState(false)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -93,6 +94,11 @@ function User() {
 
   const avatarUrl = `${CLOUDINARY_BASE_URL}${user.profile.avatar}`;
 
+  const handleSubscription = (e) => {
+    e.preventDefault();
+    navigate("/subscription");
+  }
+  
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -106,7 +112,7 @@ function User() {
               <img
                 src={avatarUrl}
                 alt={user.username}
-                className="w-24 h-24 rounded-full border-4 object-cover border-white shadow-lg"
+                className="w-24 h-24 rounded-full border-2 object-cover border-custom-orange shadow-lg"
               />
               <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
                 <h1 className="text-2xl font-bold text-gray-900">{user.username}</h1>
@@ -119,6 +125,10 @@ function User() {
                     Student
                   </span>
                 </div>
+                {subscription ? 
+                (<button className='bg-custom-orange mt-4 py-2 px-4 rounded-3xl text-white'>Active subscription</button>
+                ) : (<button className='bg-custom-orange mt-4 py-2 px-4 rounded-3xl text-white' onClick={handleSubscription}>Renew subscription</button>
+                )}
               </div>
             </div>
           </div>
@@ -179,8 +189,8 @@ function User() {
                         <h3 className="font-medium text-gray-900">{attempt.quiz.title}</h3>
                       </div>
                       <div className={`mt-2 md:mt-0 inline-flex items-center px-3 py-1 rounded-full text-sm ${attempt.score >= 70 ? 'bg-green-100 text-green-800' :
-                          attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
+                        attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
                         }`}>
                         <Trophy className="h-4 w-4 mr-1" />
                         {attempt.score}%

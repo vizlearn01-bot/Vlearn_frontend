@@ -15,6 +15,7 @@ import DashboardOutlet from './Pages/DashboardOutlet';
 // import Quiz from './Pages/Quiz';
 import QuizAttempt from './Pages/QuizAttempt';
 import Results from './Pages/Results';
+import SubscriptionPlan from './Components/SubscriptionPlan';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Signup />} />
+            <Route path='/subscription' element={<SubscriptionPlan/>}/>
             <Route path="/dashboard" element={<DashboardOutlet />}>
               <Route path='home' element={<Dashboard />} />
               <Route path="user" element={<User />} />
