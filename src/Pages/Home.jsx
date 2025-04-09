@@ -62,7 +62,6 @@ function Home() {
       ...formData,
       [name]: value,
     });
-    console.log(e.target.value)
   };
 
 
@@ -70,7 +69,7 @@ function Home() {
     e.preventDefault();
 
     emailjs
-      .sendForm('Demo_booking', 'template_9hq8xvb', form.current, 'gjyESRJ1hLiyb6BrV')
+      .sendForm('Demo_booking', 'template_9hq8xvb', form.current, 'cKnA1NtA8E441cRRU')
       .then(
         () => {
           successAlert();
@@ -225,7 +224,6 @@ function Home() {
           )}
         </div>
       </section>
-
       <section className='h-fit py-10 bg-slate-200'>
         <div className="container mx-auto px-6 mb-8">
           <h2 className="text-4xl font-bold text-center mb-8">Why Vlearn?</h2>

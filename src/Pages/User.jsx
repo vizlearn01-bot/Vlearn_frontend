@@ -19,6 +19,7 @@ function User() {
   const [quizLoading, setQuizLoading] = useState(true);
   const [quizError, setQuizError] = useState(null);
   const [subscription, setSubscription] = useState(false)
+  const [subscriptionLoading, setSubscriptionLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -28,15 +29,23 @@ function User() {
       }
 
       try {
-        const response = await axios.get(`${BASE_URL}/profile`, {
-          headers: { Authorization: `Bearer ${token.access}` },
-        });
-        setUser(response.data);
+        const [profileResponse, subscriptionResponse] = await Promise.all([
+          axios.get(`${BASE_URL}/profile`, {
+            headers: { Authorization: `Bearer ${token.access}` },
+          }),
+          axios.get(`${BASE_URL}/subscriptions`, {
+            headers: { Authorization: `Bearer ${token.access}` },
+          })
+        ]);
+        
+        setUser(profileResponse.data);
+        setSubscription(subscriptionResponse.data.is_active);
       } catch (error) {
         console.error('Error fetching user data:', error);
         setError('Failed to fetch user data. Please try again.');
       } finally {
         setLoading(false);
+        setSubscriptionLoading(false);
       }
     };
 

@@ -133,7 +133,7 @@ const SubscriptionPlan = () => {
     if (hasActiveSubscription) {
         return (
             <div className="min-h-screen bg-gray-50 py-10 px-2 sm:px-4 lg:px-6 flex items-center justify-center">
-                <div className="bg-white p-8 rounded-3xl shadow-md max-w-md w-full text-center">
+                <div className="bg-white p-8 rounded-3xl shadow-2xl max-w-md w-full text-center">
                     <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
                         <svg
                             className="h-6 w-6 text-green-600"
@@ -416,7 +416,7 @@ const SubscriptionPlan = () => {
             )}
 
             {/* Why Choose VizLearn section */}
-            <div className="mt-8 bg-blue-50 rounded-3xl shadow-2xl mb-10 p-4 items-center">
+            <div className="mt-8 bg-blue-50 rounded-3xl shadow-2xl  p-8 items-center">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Why Choose VizLearn?</h2>
                 <p className="text-gray-600 mb-6 text-center max-w-4xl mx-auto">
                     Our subscription plans are designed to provide flexible learning options for every type of student.
