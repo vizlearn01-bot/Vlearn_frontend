@@ -143,7 +143,7 @@ function User() {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 sm:p-8 border-b border-gray-200">
+          {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 sm:p-8 border-b border-gray-200">
             <div className="text-center">
               <div className="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600 mx-auto">
                 <BookOpen className="h-6 w-6" />
@@ -172,7 +172,7 @@ function User() {
               <p className="mt-2 text-3xl font-semibold text-gray-900">{analytics.watched_duration}</p>
               <p className="text-sm text-gray-500">Learning Hours</p>
             </div>
-          </div>
+          </div> */}
 
           {/* Quiz Results Section */}
         </div>
