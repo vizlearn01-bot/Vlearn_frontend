@@ -5,7 +5,7 @@ import BASE_URL from '../config';
 import UserContext from '../Context/UserContext';
 
 const SubscriptionPlan = () => {
-    const {token} = useContext(UserContext)
+    const { token } = useContext(UserContext)
     const [selectedPlan, setSelectedPlan] = useState(null);
     const [showPaymentPopup, setShowPaymentPopup] = useState(false);
     const [mpesaNumber, setMpesaNumber] = useState('');
@@ -27,11 +27,12 @@ const SubscriptionPlan = () => {
                     })
                 ]);
 
-                // Transform plans data to match frontend structure
+                // Transform plans data
                 const transformedPlans = plansResponse.data.map(plan => ({
                     id: plan.id,
                     name: plan.name,
-                    price: `KSh ${plan.price}`,
+                    price: parseInt(plan.price), // Ensure price is stored as integer
+                    displayPrice: `KSh ${plan.price.toLocaleString()}`, // Formatted for display
                     duration: plan.duration_days === 30 ? 'month' :
                         plan.duration_days === 365 ? 'year' :
                             `${plan.duration_days} days`,
@@ -49,7 +50,7 @@ const SubscriptionPlan = () => {
         };
 
         fetchData();
-    }, []);
+    }, [token]);
 
     // Handle plan selection
     const handleSelectPlan = (plan) => {
@@ -62,6 +63,20 @@ const SubscriptionPlan = () => {
         setError(null);
     };
 
+      // Format phone number to string (254XXXXXXXXX)
+      const formatMpesaNumber = (phoneNumber) => {
+        // Remove all non-digit characters
+        const digitsOnly = phoneNumber.replace(/\D/g, '');
+      
+        // Convert to string in 254 format
+        if (digitsOnly.startsWith('254')) {
+            return digitsOnly;
+        } else if (digitsOnly.startsWith('0')) {
+            return `254${digitsOnly.substring(1)}`;
+        }
+        return `254${digitsOnly}`;
+    };
+
     // Handle payment submission
     const handlePaymentSubmit = async (e) => {
         e.preventDefault();
@@ -69,14 +84,12 @@ const SubscriptionPlan = () => {
         setError(null);
 
         try {
-            // Format phone number if needed
-            const formattedMpesaNumber = mpesaNumber.startsWith('+') ?
-                mpesaNumber :
-                `+254${mpesaNumber.replace(/^0/, '')}`;
-
-            await axios.post(`${BASE_URL}/subscriptions/`, {
-                plan_id: selectedPlan.id,
-                mpesa_number: formattedMpesaNumber
+            const formattedPhone = formatMpesaNumber(mpesaNumber);
+            
+            await axios.post(`${BASE_URL}/mpesa/pay/`, {
+                phone: formattedPhone, // Sent as string (254XXXXXXXXX)
+                amount: selectedPlan.price, // Sent as integer
+                plan_id: selectedPlan.id
             }, {
                 headers: { Authorization: `Bearer ${token.access}` },
             });
@@ -98,6 +111,8 @@ const SubscriptionPlan = () => {
             console.error('Payment Error:', err);
         }
     };
+
+
 
     // Loading state
     if (isLoading) {
@@ -196,7 +211,7 @@ const SubscriptionPlan = () => {
 
                             <div className="mt-4 flex items-baseline text-gray-900">
                                 <span className="text-4xl font-extrabold tracking-tight">
-                                    {plan.price}
+                                    {plan.displayPrice}
                                 </span>
                                 <span className="ml-1 text-xl font-semibold">
                                     /{plan.duration}
@@ -360,7 +375,7 @@ const SubscriptionPlan = () => {
                                                 >
                                                     {isProcessing
                                                         ? 'Processing...'
-                                                        : `Pay ${selectedPlan?.price}`}
+                                                        : `Pay ${selectedPlan?.displayPrice}`}
                                                 </button>
                                             </div>
                                         </form>
