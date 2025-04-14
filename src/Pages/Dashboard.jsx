@@ -92,9 +92,11 @@ function Dashboard() {
 
             {/* User Info */}
             {user ? (
-              <div className="flex items-center space-x-4">
+              <Link to='/dashboard/user'>
+                <div className="flex items-center space-x-4">
                 <span className="font-medium text-gray-700">Hi, {user.username}</span>
               </div>
+              </Link>
             ) : (
               <Link to='/login'>
                 <p className="text-gray-600 hover:pointer-cursor">Please log in</p>
