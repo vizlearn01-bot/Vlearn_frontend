@@ -1,6 +1,8 @@
-import React from 'react';
-import { BookOpen, Clock, Star } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { FileText, ExternalLink, Clock, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import BASE_URL from '../config';
 
 const courses = [
   {
@@ -9,6 +11,8 @@ const courses = [
     description: "Covers calculus, linear algebra, and differential equations",
     progress: 65,
     image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800",
+    duration: "8 weeks",
+    rating: 4.8
   },
   {
     id: 2,
@@ -16,6 +20,8 @@ const courses = [
     description: "Learn mechanics, thermodynamics, and wave motion",
     progress: 30,
     image: "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?auto=format&fit=crop&q=80&w=800",
+    duration: "6 weeks",
+    rating: 4.5
   },
   {
     id: 3,
@@ -23,67 +29,159 @@ const courses = [
     description: "Hands-on experiments and chemical reactions",
     progress: 85,
     image: "https://images.unsplash.com/photo-1532634993-15f421e42ec0?auto=format&fit=crop&q=80&w=800",
+    duration: "10 weeks",
+    rating: 4.9
   }
 ];
 
-export default function Courses() {
+function Courses() {
+  const [resources, setResources] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch resources from backend
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/files/`);
+        setResources(response.data);
+      } catch (error) {
+        console.error('Error fetching resources:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchResources();
+  }, []);
+
+  const handlePreview = (fileUrl) => {
+    window.open(fileUrl, '_blank');
+  };
+
   return (
-    <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">My Courses</h1>
-        <Link to="/dashboard/home">
-        <button className="bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange">
-          Browse All Courses
-        </button></Link>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.map((course) => (
-          <div key={course.id} className="bg-white rounded-3xl shadow-md overflow-hidden">
-            <img src={course.image} alt={course.title} className="w-full h-48 object-cover" />
-            <div className="p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">{course.title}</h3>
-              <p className="text-gray-600 mb-4">{course.description}</p>
-              
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center text-gray-500">
-                  <Clock className="h-5 w-5 mr-2" />
-                  <span>8 weeks</span>
-                </div>
-                <div className="flex items-center text-yellow-500">
-                  <Star className="h-5 w-5 mr-1" fill="currentColor" />
-                  <span>4.8</span>
-                </div>
-              </div>
-
-              <div className="relative pt-1">
-                <div className="flex mb-2 items-center justify-between">
-                  <div>
-                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-3xl text-custom-blue bg-gray-200">
-                      Progress
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-semibold inline-block text-custom-blue">
-                      {course.progress}%
-                    </span>
-                  </div>
-                </div>
-                <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
-                  <div
-                    style={{ width: `${course.progress}%` }}
-                    className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-custom-blue"
-                  ></div>
-                </div>
-              </div>
-
-              <button className="w-full bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange">
-                Continue Learning
-              </button>
-            </div>
+    <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl">
+      {/* Resources Section */}
+      <section className="mb-12">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+          <h2 className="text-2xl font-bold text-gray-900">Concept Maps and Diagrams</h2>
+          <div className="w-full sm:w-auto flex justify-end">
+            <input
+              type="search"
+              placeholder="Search resources..."
+              className="px-4 py-2 border border-gray-300 rounded-md w-full sm:w-64"
+            />
           </div>
-        ))}
-      </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          {loading ? (
+            <div className="p-8 text-center">Loading resources...</div>
+          ) : resources.length === 0 ? (
+            <div className="p-8 text-center text-gray-500">No resources available</div>
+          ) : (
+            <ul className="divide-y divide-gray-200">
+              {resources.map((resource) => (
+                <li key={resource.id} className="p-4 hover:bg-gray-50 transition-colors">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex items-start sm:items-center gap-4 w-full sm:w-auto">
+                      <div className="bg-blue-100 p-3 rounded-lg">
+                        <FileText className="h-6 w-6 text-custom-blue" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg font-medium text-gray-900 truncate">{resource.name}</h3>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-sm text-gray-500">
+                          <span>{resource.category || 'Uncategorized'}</span>
+                          <span>•</span>
+                          <span>{resource.file_type?.toUpperCase() || 'PDF'}</span>
+                          {resource.size && (
+                            <>
+                              <span>•</span>
+                              <span>{(resource.size / (1024 * 1024)).toFixed(1)} MB</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4 w-full sm:w-auto justify-end">
+                      {resource.downloads && (
+                        <span className="text-sm text-gray-500 whitespace-nowrap">
+                          {resource.downloads.toLocaleString()} downloads
+                        </span>
+                      )}
+                      <button
+                        onClick={() => handlePreview(resource.file_url)}
+                        className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-custom-blue hover:bg-custom-orange transition-colors whitespace-nowrap"
+                      >
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        View PDF
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
+
+      {/* Courses Section */}
+      <section>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+          <h2 className="text-2xl font-bold text-gray-900">My Courses</h2>
+          <Link
+            to="/dashboard/home"
+            className="bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange transition-colors whitespace-nowrap text-center"
+          >
+            Browse All Courses
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {courses.map((course) => (
+            <div key={course.id} className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow">
+              <img
+                src={course.image}
+                alt={course.title}
+                className="w-full h-48 object-cover"
+                loading="lazy"
+              />
+              <div className="p-5">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">{course.title}</h3>
+                <p className="text-gray-600 mb-4 line-clamp-2">{course.description}</p>
+
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center text-gray-500 text-sm">
+                    <Clock className="h-4 w-4 mr-2" />
+                    <span>{course.duration}</span>
+                  </div>
+                  <div className="flex items-center text-yellow-500 text-sm">
+                    <Star className="h-4 w-4 mr-1" fill="currentColor" />
+                    <span>{course.rating}</span>
+                  </div>
+                </div>
+
+                <div className="mb-4">
+                  <div className="flex justify-between text-xs text-gray-500 mb-1">
+                    <span>Progress</span>
+                    <span>{course.progress}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-custom-blue h-2 rounded-full"
+                      style={{ width: `${course.progress}%` }}
+                    ></div>
+                  </div>
+                </div>
+
+                <button className="w-full bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange transition-colors">
+                  Continue Learning
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
+
+export default Courses;
