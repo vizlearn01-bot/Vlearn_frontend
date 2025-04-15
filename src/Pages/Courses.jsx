@@ -44,6 +44,7 @@ function Courses() {
       try {
         const response = await axios.get(`${BASE_URL}/files/`);
         setResources(response.data);
+        console.log(response.data)
       } catch (error) {
         console.error('Error fetching resources:', error);
       } finally {
@@ -63,16 +64,16 @@ function Courses() {
       <section className="mb-12">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <h2 className="text-2xl font-bold text-gray-900">Concept Maps and Diagrams</h2>
-          <div className="w-full sm:w-auto flex justify-end">
+          {/* <div className="w-full sm:w-auto flex justify-end">
             <input
               type="search"
               placeholder="Search resources..."
-              className="px-4 py-2 border border-gray-300 rounded-md w-full sm:w-64"
+              className="px-4 py-2 border border-gray-300 rounded-3xl w-full sm:w-64"
             />
-          </div>
+          </div> */}
         </div>
 
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
           {loading ? (
             <div className="p-8 text-center">Loading resources...</div>
           ) : resources.length === 0 ? (
@@ -83,14 +84,15 @@ function Courses() {
                 <li key={resource.id} className="p-4 hover:bg-gray-50 transition-colors">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-start sm:items-center gap-4 w-full sm:w-auto">
-                      <div className="bg-blue-100 p-3 rounded-lg">
+                      <div className="bg-blue-100 p-3 rounded-3xl">
                         <FileText className="h-6 w-6 text-custom-blue" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-medium text-gray-900 truncate">{resource.name}</h3>
-                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-sm text-gray-500">
-                          <span>{resource.category || 'Uncategorized'}</span>
-                          <span>•</span>
+                        <h3 className="text-lg font-medium text-custom-orange truncate">{resource.name}</h3>
+                        <p className='text-sm  leading-normal text-black max-w-4xl'>{resource.description}</p>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-sm text-custom-blue">
+                          {/* <span>{resource.category || 'Uncategorized'}</span> */}
+                          {/* <span>•</span> */}
                           <span>{resource.file_type?.toUpperCase() || 'PDF'}</span>
                           {resource.size && (
                             <>
@@ -109,7 +111,7 @@ function Courses() {
                       )}
                       <button
                         onClick={() => handlePreview(resource.file_url)}
-                        className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-custom-blue hover:bg-custom-orange transition-colors whitespace-nowrap"
+                        className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-3xl text-white bg-custom-blue hover:bg-custom-orange transition-colors whitespace-nowrap"
                       >
                         <ExternalLink className="h-4 w-4 mr-2" />
                         View PDF
@@ -124,7 +126,7 @@ function Courses() {
       </section>
 
       {/* Courses Section */}
-      <section>
+      {/* <section>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <h2 className="text-2xl font-bold text-gray-900">My Courses</h2>
           <Link
@@ -179,7 +181,7 @@ function Courses() {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }
