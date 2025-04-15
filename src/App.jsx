@@ -8,7 +8,7 @@ import Signup from './Components/Signup';
 import CourseDetail from './Pages/CourseDetail';
 import { UserProvider } from './Context/UserContext';
 import User from './Pages/User';
-import Courses from './Pages/Courses';
+import Resources from './Pages/Resources';
 import Quizzes from './Pages/Quizzes';
 import DashboardOutlet from './Pages/DashboardOutlet';
 // import Quiz from './Pages/Quiz';
@@ -31,7 +31,7 @@ function App() {
             <Route path="/dashboard" element={<DashboardOutlet />}>
               <Route path='home' element={<Dashboard />} />
               <Route path="user" element={<User />} />
-              <Route path="courses" element={<Courses />} />
+              <Route path="resources" element={<Resources />} />
               <Route path="quizzes" element={<Quizzes />} />
               <Route path="simulations" element={<Simulations />} />
               <Route path="quiz/:id" element={<QuizAttempt />} />
