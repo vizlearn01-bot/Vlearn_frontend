@@ -1,39 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FileText, Download, ExternalLink, Thermometer, ArrowRight } from 'lucide-react';
-
-const resources = [
-  {
-    id: 1,
-    title: "Mathematics Formula Sheet",
-    type: "PDF",
-    size: "2.4 MB",
-    category: "Mathematics",
-    downloads: 1234,
-  },
-  {
-    id: 2,
-    title: "Physics Lab Manual",
-    type: "PDF",
-    size: "5.1 MB",
-    category: "Physics",
-    downloads: 987,
-  },
-  {
-    id: 3,
-    title: "Periodic Table Interactive",
-    type: "Web Resource",
-    category: "Chemistry",
-    external: true,
-  },
-  {
-    id: 4,
-    title: "STEM Career Guide",
-    type: "PDF",
-    size: "1.8 MB",
-    category: "Career",
-    downloads: 2156,
-  },
-];
+import axios from 'axios';
+import BASE_URL from '../config';
 
 // Define Particle as a JavaScript object type
 const Particle = {
@@ -45,13 +13,31 @@ const Particle = {
 };
 
 export default function Resources() {
-  const [temperature, setTemperature] = useState(273); // Kelvin
+  const [temperature, setTemperature] = useState(273);
   const [particles, setParticles] = useState([]);
   const [containerWidth, setContainerWidth] = useState(200);
+  const [resources, setResources] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Calculate volume based on temperature (Charles's Law: V ∝ T)
+  // Fetch resources from backend
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/files/`);
+        setResources(response.data);
+      } catch (error) {
+        console.error('Error fetching resources:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchResources();
+  }, []);
+
+  // Calculate volume based on temperature
   const calculateVolume = useCallback(() => {
-    return (temperature / 273) * 200; // Base width at 273K is 200px
+    return (temperature / 273) * 200;
   }, [temperature]);
 
   // Initialize particles
@@ -70,7 +56,7 @@ export default function Resources() {
   useEffect(() => {
     const interval = setInterval(() => {
       setParticles((prevParticles) => {
-        const speed = Math.sqrt(temperature / 273); // Particle speed increases with temperature
+        const speed = Math.sqrt(temperature / 273);
 
         return prevParticles.map((particle) => {
           let newX = particle.x + particle.dx * speed;
@@ -78,7 +64,6 @@ export default function Resources() {
           let newDx = particle.dx;
           let newDy = particle.dy;
 
-          // Bounce off walls
           if (newX <= 0 || newX >= containerWidth) {
             newDx = -newDx;
             newX = newX <= 0 ? 0 : containerWidth;
@@ -97,7 +82,7 @@ export default function Resources() {
           };
         });
       });
-    }, 16); // ~60fps
+    }, 16);
 
     return () => clearInterval(interval);
   }, [temperature, containerWidth]);
@@ -106,6 +91,11 @@ export default function Resources() {
   useEffect(() => {
     setContainerWidth(calculateVolume());
   }, [temperature, calculateVolume]);
+
+  // Handle PDF preview
+  const handlePreview = (fileUrl) => {
+    window.open(fileUrl, '_blank');
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -126,6 +116,8 @@ export default function Resources() {
           </select>
         </div>
       </div>
+
+      {/* Charles's Law Demonstration */}
       <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-8">
         <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-2xl">
           <h1 className="text-3xl font-bold text-center mb-6">Charles's Law Demonstration</h1>
@@ -190,52 +182,56 @@ export default function Resources() {
           </div>
         </div>
       </div>
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+
+      {/* Resources List */}
+      <div className="bg-white rounded-lg shadow-md overflow-hidden mt-8">
         <div className="divide-y divide-gray-200">
-          {resources.map((resource) => (
-            <div key={resource.id} className="p-6 hover:bg-gray-50">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <FileText className="h-8 w-8 text-blue-500" />
-                  <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900">{resource.title}</h3>
-                    <div className="flex items-center mt-1">
-                      <span className="text-sm text-gray-500">{resource.category}</span>
-                      <span className="mx-2 text-gray-300">•</span>
-                      <span className="text-sm text-gray-500">{resource.type}</span>
-                      {resource.size && (
-                        <>
-                          <span className="mx-2 text-gray-300">•</span>
-                          <span className="text-sm text-gray-500">{resource.size}</span>
-                        </>
-                      )}
+          {loading ? (
+            <div className="p-6 text-center">Loading resources...</div>
+          ) : resources.length === 0 ? (
+            <div className="p-6 text-center">No resources available</div>
+          ) : (
+            resources.map((resource) => (
+              <div key={resource.id} className="p-6 hover:bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FileText className="h-8 w-8 text-blue-500" />
+                    <div className="ml-4">
+                      <h3 className="text-lg font-medium text-gray-900">{resource.name}</h3>
+                      <div className="flex items-center mt-1">
+                        <span className="text-sm text-gray-500">{resource.category || 'Uncategorized'}</span>
+                        <span className="mx-2 text-gray-300">•</span>
+                        <span className="text-sm text-gray-500">{resource.file_type?.toUpperCase() || 'PDF'}</span>
+                        {resource.size && (
+                          <>
+                            <span className="mx-2 text-gray-300">•</span>
+                            <span className="text-sm text-gray-500">
+                              {(resource.size / (1024 * 1024)).toFixed(1)} MB
+                            </span>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center space-x-4">
-                  {resource.downloads && (
-                    <div className="text-sm text-gray-500">
-                      {resource.downloads.toLocaleString()} downloads
-                    </div>
-                  )}
-                  <button className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-orange-500">
-                    {resource.external ? (
-                      <>
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        Visit Resource
-                      </>
-                    ) : (
-                      <>
-                        <Download className="h-4 w-4 mr-2" />
-                        Download
-                      </>
+                  <div className="flex items-center space-x-4">
+                    {resource.downloads && (
+                      <div className="text-sm text-gray-500">
+                        {resource.downloads.toLocaleString()} downloads
+                      </div>
                     )}
-                  </button>
+                    <button 
+                      onClick={() => handlePreview(resource.file_url)}
+                      className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600"
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      View PDF
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>
