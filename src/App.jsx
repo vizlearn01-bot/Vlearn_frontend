@@ -10,12 +10,12 @@ import { UserProvider } from './Context/UserContext';
 import User from './Pages/User';
 import Courses from './Pages/Courses';
 import Quizzes from './Pages/Quizzes';
-import Resources from './Pages/Resources';
 import DashboardOutlet from './Pages/DashboardOutlet';
 // import Quiz from './Pages/Quiz';
 import QuizAttempt from './Pages/QuizAttempt';
 import Results from './Pages/Results';
 import SubscriptionPlan from './Components/SubscriptionPlan';
+import Simulations from './Pages/Simulations';
 
 function App() {
   return (
@@ -33,7 +33,7 @@ function App() {
               <Route path="user" element={<User />} />
               <Route path="courses" element={<Courses />} />
               <Route path="quizzes" element={<Quizzes />} />
-              <Route path="resources" element={<Resources />} />
+              <Route path="simulations" element={<Simulations />} />
               <Route path="quiz/:id" element={<QuizAttempt />} />
               <Route path="results" element={<Results />} />
               <Route index element={<Dashboard />} />

@@ -10,7 +10,7 @@ const Particle = {
   dy: Number,
 };
 
-export default function Resources() {
+function Simulations() {
   const [temperature, setTemperature] = useState(273);
   const [particles, setParticles] = useState([]);
   const [containerWidth, setContainerWidth] = useState(200);
@@ -164,3 +164,5 @@ export default function Resources() {
     </div>
   );
 }
+
+export default Simulations

@@ -38,7 +38,7 @@ const SideNav = () => {
     { icon: BookOpen, text: "My courses", path: '/dashboard/courses' },
     { icon: ClipboardPen, text: "Quizzes", path: '/dashboard/quizzes' },
     {icon:ClipboardCheck, text: "Past Quizzes", path:'/dashboard/results'},
-    { icon: FolderClosed, text: "Resources", path: '/dashboard/resources' },
+    { icon: FolderClosed, text: "Simulations", path: '/dashboard/simulations' },
   ];
 
   return (
