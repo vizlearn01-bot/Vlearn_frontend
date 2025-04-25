@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Bell, Search } from 'lucide-react';
+import { Bell, Search, Bookmark, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import LazyLoad from 'react-lazyload';
@@ -160,16 +160,21 @@ function Dashboard() {
                         />
 
                         {/* Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <div className="absolute bottom-0 left-0 right-0 p-6">
-                            <h3 className="text-xl font-bold text-white mb-2">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                          <div className="absolute bottom-0 left-0 right-0 p-6 space-y-2">
+                            <h3 className="text-xl font-bold text-white line-clamp-2">
                               {course.title}
                             </h3>
-                            {/* Additional hover-only info */}
-                            <p className="text-gray-200 text-sm">
-                              {course.duration}
-                            </p>
-                            <p className='text-gray-200 text-sm'>{course.category}</p>
+                            <div className="flex gap-4 text-gray-200 text-sm">
+                              <div className="flex items-center gap-1">
+                                <Clock className="w-4 h-4" />
+                                <span>{course.duration}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Bookmark className="w-4 h-4" />
+                                <span>{course.category}</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
