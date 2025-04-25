@@ -15,6 +15,7 @@ function Dashboard() {
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState(null);
   const { user, token } = useContext(UserContext); // Consume UserContext
+  const [activeCategory, setActiveCategory] = useState('all');
 
 
   // Fetch courses on component mount
@@ -111,9 +112,24 @@ function Dashboard() {
             </div>
           )}
         </header>
+
         {/* Courses Section */}
         <section className="mb-8 p-6 h-fit">
           <h2 className="text-xl font-bold mb-4">Available experiments</h2>
+          <div className="flex flex-wrap my-4 gap-2">
+              {['all', 'Form 3', 'Form 4'].map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === category
+                    ? 'bg-custom-orange text-white'
+                    : 'bg-custom-blue text-white hover:bg-custom-orange'
+                    }`}
+                >
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </button>
+              ))}
+            </div>
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
