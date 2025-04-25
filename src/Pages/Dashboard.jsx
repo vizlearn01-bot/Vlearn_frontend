@@ -7,6 +7,7 @@ import debounce from 'lodash.debounce';
 import UserContext from '../Context/UserContext';
 import BASE_URL from '../config';
 import SideNav from '../Components/SideNav';
+import { filter } from 'lodash';
 
 function Dashboard() {
   const [searchItem, setSearchItem] = useState('');
@@ -66,6 +67,7 @@ function Dashboard() {
     return course.category?.toLowerCase() === activeCategory.toLowerCase();
   });
 
+  console.log(filteredCategory)
   return (
     <div className="flex">
       <SideNav />

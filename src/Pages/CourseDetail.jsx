@@ -39,6 +39,7 @@ function CourseDetail() {
         // Find the quiz for this course (by matching quiz.video to course.id)
         const courseQuiz = response.data.find(q => q.video === parseInt(id));
         setQuiz(courseQuiz); // Set the single quiz object or null
+        console.log(response.data)
       } catch (err) {
         console.error("Error fetching quizzes:", err);
       }
