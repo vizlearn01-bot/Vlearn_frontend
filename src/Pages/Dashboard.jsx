@@ -15,7 +15,7 @@ function Dashboard() {
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState(null);
   const { user, token } = useContext(UserContext); // Consume UserContext
-  const [activeCategory, setActiveCategory] = useState('all');
+  const [activeCategory, setActiveCategory] = useState('All');
 
 
   // Fetch courses on component mount
@@ -61,7 +61,10 @@ function Dashboard() {
     }
   }, 300);
 
-
+  const filteredCategory = filteredCourses.filter(course => {
+    if (activeCategory === 'All') return true;
+    return course.category?.toLowerCase() === activeCategory.toLowerCase();
+  });
 
   return (
     <div className="flex">
@@ -95,8 +98,8 @@ function Dashboard() {
             {user ? (
               <Link to='/dashboard/user'>
                 <div className="flex items-center space-x-4">
-                <span className="font-medium text-gray-700">Hi, {user.username}</span>
-              </div>
+                  <span className="font-medium text-gray-700">Hi, {user.username}</span>
+                </div>
               </Link>
             ) : (
               <Link to='/login'>
@@ -117,19 +120,20 @@ function Dashboard() {
         <section className="mb-8 p-6 h-fit">
           <h2 className="text-xl font-bold mb-4">Available experiments</h2>
           <div className="flex flex-wrap my-4 gap-2">
-              {['all', 'Form 3', 'Form 4'].map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === category
-                    ? 'bg-custom-orange text-white'
-                    : 'bg-custom-blue text-white hover:bg-custom-orange'
-                    }`}
-                >
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
-                </button>
-              ))}
-            </div>
+            {['All', 'Form 3', 'Form 4'].map((category) => (
+              <button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === category
+                  ? 'bg-custom-orange text-white'
+                  : 'bg-custom-blue text-white hover:bg-custom-orange'
+                  }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
@@ -138,7 +142,7 @@ function Dashboard() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredCourses.map((course) => (
+              {filteredCategory.map((course) => (
                 <div key={course.id} className="mb-6"> {/* Added margin-bottom for spacing */}
                   {/* Clickable card area with hover effects */}
                   <Link
@@ -165,6 +169,7 @@ function Dashboard() {
                             <p className="text-gray-200 text-sm">
                               {course.duration}
                             </p>
+                            <p className='text-gray-200 text-sm'>{course.category}</p>
                           </div>
                         </div>
                       </div>
