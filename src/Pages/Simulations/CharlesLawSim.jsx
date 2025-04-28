@@ -64,8 +64,8 @@ const CharlesLawSim = () => {
   }, [temperature, calculateVolume]);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-8">
-      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-2xl">
+    <div className="min-fit bg-gray-100 flex flex-col items-center justify-center p-8">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl">
         <h1 className="text-3xl font-bold text-center mb-6">Charles's Law Demonstration</h1>
         <p className="text-gray-600 text-center mb-8">
           V ∝ T (Volume is proportional to Temperature at constant pressure)
@@ -73,7 +73,7 @@ const CharlesLawSim = () => {
 
         <div className="flex items-center justify-center gap-8 mb-8">
           <div className="flex items-center">
-            <Thermometer className="w-6 h-6 text-red-500 mr-2" />
+            <Thermometer className="w-6 h-6 text-custom-orange mr-2" />
             <span className="text-lg font-semibold">{temperature}K</span>
           </div>
           <ArrowRight className="w-6 h-6 text-gray-400" />
@@ -84,13 +84,13 @@ const CharlesLawSim = () => {
 
         <div className="flex flex-col items-center gap-4">
           <div
-            className="border-2 border-blue-500 rounded-lg h-[200px] relative transition-all duration-300"
+            className="border-2 border-custom-blue rounded-lg h-[200px] relative transition-all duration-300"
             style={{ width: `${containerWidth}px` }}
           >
             {particles.map((particle) => (
               <div
                 key={particle.id}
-                className="absolute w-2 h-2 bg-blue-500 rounded-full"
+                className="absolute w-2 h-2 bg-custom-blue rounded-full"
                 style={{
                   left: `${particle.x}px`,
                   top: `${particle.y}px`,
