@@ -4,6 +4,7 @@ const simulationComponents = {
   freefall: lazy(() => import('./Simulations/FreefallSim')),
   chemical: lazy(() => import('./Simulations/ChemicalSim')),
   circuit: lazy(() => import('./Simulations/CircuitSim')),
+  charleslaw: lazy(() => import('./Simulations/CharlesLawSim')),
   // pendulum: lazy(() => import('./PendulumSim')),
   optics: lazy(() => import('./Simulations/OpticsSim')),
   // waves: lazy(() => import('./WavesSim')),
