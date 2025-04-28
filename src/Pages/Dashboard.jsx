@@ -102,18 +102,27 @@ function Dashboard() {
                   <span className="font-medium text-gray-700">Hi, {user.username}</span>
                 </div>
               </Link>
-            ) : (
-              <Link to='/login'>
-                <p className="text-gray-600 hover:pointer-cursor">Please log in</p>
-              </Link>
-            )}
+            ) : null}
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="absolute top-16 left-1/2 transform -translate-x-1/2">
-              <p className="text-red-500 bg-red-100 px-4 py-2 rounded-lg text-sm">{error}</p>
-            </div>
+           <div className="fixed inset-0 flex items-center justify-center bg-gray-100/80 z-10">
+           <div className="bg-white p-6 rounded-3xl shadow-2xl text-center max-w-md mx-4">
+             <p className="text-red-500 font-medium text-lg mb-4">
+               Login Required
+             </p>
+             <p className="text-gray-600">
+               Please log in to access the simulations.
+             </p>
+             <Link 
+               to="/login" 
+               className="mt-4 inline-block bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange transition"
+             >
+               Go to Login
+             </Link>
+           </div>
+         </div>
           )}
         </header>
 

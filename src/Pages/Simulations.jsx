@@ -1,12 +1,13 @@
 import { lazy, Suspense, useState, useContext } from 'react';
 import UserContext from '../Context/UserContext';
-
+import { Link } from 'react-router-dom';
 
 const simulationComponents = {
   freefall: lazy(() => import('./Simulations/FreefallSim')),
   chemical: lazy(() => import('./Simulations/ChemicalSim')),
   circuit: lazy(() => import('./Simulations/CircuitSim')),
   charleslaw: lazy(() => import('./Simulations/CharlesLawSim')),
+  reactionrate: lazy(() => import('./Simulations/ReactionRatesim')),
   // pendulum: lazy(() => import('./PendulumSim')),
   optics: lazy(() => import('./Simulations/OpticsSim')),
   // waves: lazy(() => import('./WavesSim')),
@@ -16,7 +17,7 @@ const simulationComponents = {
 
 export default function Simulations() {
   const [currentSimulation, setCurrentSimulation] = useState(null);
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   const renderSimulation = () => {
     const SelectedSimulation = simulationComponents[currentSimulation];
@@ -33,33 +34,49 @@ export default function Simulations() {
 
   return (
     <>
+      <div className=" mx-auto pt-6 pl-2">
+        <h1 className="text-3xl font-bold mb-2">Experiment Simulations</h1>
+      </div>
       {
         user ? (
           <>
-            <div className=" mx-auto p-6">
-              <h1 className="text-3xl font-bold mb-6">Physics Simulations</h1>
+            <div className="flex flex-wrap gap-2 mb-4 pl-2">
+              {Object.keys(simulationComponents).map((simKey) => (
+                <button
+                  key={simKey}
+                  onClick={() => setCurrentSimulation(simKey)}
+                  className={`px-4 py-2 rounded-3xl transition-colors ${currentSimulation === simKey
+                    ? 'bg-custom-orange text-white'
+                    : 'bg-custom-blue text-white hover:bg-custom-orange'
+                    }`}
+                >
+                  {simKey.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
+                </button>
+              ))}
+            </div>
 
-              <div className="flex flex-wrap gap-3 mb-8">
-                {Object.keys(simulationComponents).map((simKey) => (
-                  <button
-                    key={simKey}
-                    onClick={() => setCurrentSimulation(simKey)}
-                    className={`px-4 py-2 rounded-3xl transition-colors ${currentSimulation === simKey
-                        ? 'bg-custom-orange text-white'
-                        : 'bg-custom-blue text-white hover:bg-custom-orange'
-                      }`}
-                  >
-                    {simKey.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
-                  </button>
-                ))}
-              </div>
-
-              <div className="bg-white rounded-lg shadow p-4 min-h-[400px]">
-                {renderSimulation()}
-              </div>
+            <div className="bg-white rounded-lg shadow p-4 min-h-fit">
+              {renderSimulation()}
             </div>
           </>
-        ) : null
+        ) : (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-100/80 z-10">
+            <div className="bg-white p-6 rounded-3xl shadow-2xl text-center max-w-md mx-4">
+              <p className="text-red-500 font-medium text-lg mb-4">
+                Login Required
+              </p>
+              <p className="text-gray-600">
+                Please log in to access the simulations.
+              </p>
+              <Link 
+                to="/login" 
+                className="mt-4 inline-block bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange transition"
+              >
+                Go to Login
+              </Link>
+            </div>
+          </div>
+        )
       }
     </>
 
