@@ -67,7 +67,6 @@ function Dashboard() {
     return course.category?.toLowerCase() === activeCategory.toLowerCase();
   });
 
-  console.log(filteredCategory)
   return (
     <div className="flex">
       <SideNav />
@@ -120,21 +119,25 @@ function Dashboard() {
 
         {/* Courses Section */}
         <section className="mb-8 p-6 h-fit">
-          <h2 className="text-xl font-bold mb-4">Available experiments</h2>
-          <div className="flex flex-wrap my-4 gap-2">
-            {['All', 'Form 3', 'Form 4'].map((category) => (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === category
-                  ? 'bg-custom-orange text-white'
-                  : 'bg-custom-blue text-white hover:bg-custom-orange'
-                  }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
+          {user ? (
+            <>
+              <h2 className="text-xl font-bold mb-4">Available experiments</h2>
+              <div className="flex flex-wrap my-4 gap-2">
+                {['All', 'Form 3', 'Form 4'].map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setActiveCategory(category)}
+                    className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === category
+                      ? 'bg-custom-orange text-white'
+                      : 'bg-custom-blue text-white hover:bg-custom-orange'
+                      }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div></>
+
+          ) : null}
 
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
