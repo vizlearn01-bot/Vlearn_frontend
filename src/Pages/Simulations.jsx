@@ -3,11 +3,13 @@ import UserContext from '../Context/UserContext';
 import { Link } from 'react-router-dom';
 
 const simulationComponents = {
+  charles_law: lazy(() => import('./Simulations/CharlesLawSim')),
+  reaction_rate: lazy(() => import('./Simulations/ReactionRatesim')),
+  electrolysis: lazy(() => import('./Simulations/ElectrolysisSim')),
   freefall: lazy(() => import('./Simulations/FreefallSim')),
   chemical: lazy(() => import('./Simulations/ChemicalSim')),
   circuit: lazy(() => import('./Simulations/CircuitSim')),
-  charleslaw: lazy(() => import('./Simulations/CharlesLawSim')),
-  reactionrate: lazy(() => import('./Simulations/ReactionRatesim')),
+
   // pendulum: lazy(() => import('./PendulumSim')),
   optics: lazy(() => import('./Simulations/OpticsSim')),
   // waves: lazy(() => import('./WavesSim')),
@@ -35,7 +37,7 @@ export default function Simulations() {
   return (
     <>
       <div className=" mx-auto pt-6 pl-2">
-        <h1 className="text-3xl font-bold mb-2">Experiment Simulations</h1>
+        <h1 className="text-3xl font-bold mb-6">Experiment Simulations</h1>
       </div>
       {
         user ? (
@@ -50,12 +52,12 @@ export default function Simulations() {
                     : 'bg-custom-blue text-white hover:bg-custom-orange'
                     }`}
                 >
-                  {simKey.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
+                  {simKey.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase())}
                 </button>
               ))}
             </div>
 
-            <div className="bg-white rounded-lg shadow p-4 min-h-fit">
+            <div className="bg-white p-4 ">
               {renderSimulation()}
             </div>
           </>
@@ -68,8 +70,8 @@ export default function Simulations() {
               <p className="text-gray-600">
                 Please log in to access the simulations.
               </p>
-              <Link 
-                to="/login" 
+              <Link
+                to="/login"
                 className="mt-4 inline-block bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange transition"
               >
                 Go to Login

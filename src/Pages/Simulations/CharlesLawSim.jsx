@@ -64,8 +64,8 @@ const CharlesLawSim = () => {
   }, [temperature, calculateVolume]);
 
   return (
-    <div className="min-fit bg-gray-100 flex flex-col items-center justify-center p-8">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl">
+    <div className="flex flex-col items-center justify-center p-8">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-3xl">
         <h1 className="text-3xl font-bold text-center mb-6">Charles's Law Demonstration</h1>
         <p className="text-gray-600 text-center mb-8">
           V ∝ T (Volume is proportional to Temperature at constant pressure)
