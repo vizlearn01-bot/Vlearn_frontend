@@ -20,41 +20,37 @@ function QuizAttempt() {
   const [isAnswered, setIsAnswered] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [timeSpent, setTimeSpent] = useState(0); // Track time in seconds
+  const [quizStartTime, setQuizStartTime] = useState(null);
 
   // Start the quiz attempt and fetch questions
   useEffect(() => {
     const startAttempt = async () => {
       try {
-        // Start new attempt
+        // Record start time immediately
+        setQuizStartTime(Date.now());
+
+        // Start new attempt (no need for backend to track time)
         const attemptResponse = await axios.post(
           `${BASE_URL}/attempts/start/`,
           { quiz_id: id },
-          {
-            headers: { 
-              Authorization: `Bearer ${token.access}`,
-              'Content-Type': 'application/json'
-            }
-          }
+          { headers: { Authorization: `Bearer ${token.access}` } }
         );
-        
+
         setAttempt(attemptResponse.data);
-        
-        // Fetch quiz with questions (same as Quiz component)
+
+        // Fetch quiz data
         const quizResponse = await axios.get(
           `${BASE_URL}/quizzes/${id}/`,
-          {
-            headers: { 
-              Authorization: `Bearer ${token.access}` 
-            }
-          }
+          { headers: { Authorization: `Bearer ${token.access}` } }
         );
-        
+
         setQuiz(quizResponse.data);
         setTimeLeft(quizResponse.data.time_limit * 60);
         setLoading(false);
-        
+
       } catch (err) {
-        console.error('Error:', err.response?.data || err.message);
+        console.error('Error:', err);
         setError(err.response?.data?.error || err.message || 'Failed to start quiz');
         setLoading(false);
       }
@@ -65,7 +61,7 @@ function QuizAttempt() {
 
   // Timer countdown (similar to Quiz component)
   useEffect(() => {
-    if (timeLeft === null) return;
+    if (timeLeft === null || showResult) return;
 
     const timer = setInterval(() => {
       setTimeLeft(prev => {
@@ -76,10 +72,13 @@ function QuizAttempt() {
         }
         return prev - 1;
       });
+
+      // Update time spent (in seconds)
+      setTimeSpent(prev => prev + 1);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft]);
+  }, [timeLeft, showResult]);
 
   const handleAnswerSelect = (answerId) => {
     if (isAnswered || !quiz) return;
@@ -126,19 +125,39 @@ function QuizAttempt() {
 
   const handleSubmit = async () => {
     try {
+      // First save the current answer if not already saved
+      if (selectedAnswerId && !isAnswered) {
+        await axios.post(
+          `${BASE_URL}/answers/`,
+          {
+            attempt_id: attempt.id,
+            question_id: quiz.questions[currentQuestionIndex].id,
+            answer_id: selectedAnswerId,
+          },
+          { headers: { Authorization: `Bearer ${token.access}` } }
+        );
+      }
+  
+      // Calculate percentage correctly
+      const percentageScore = quiz.questions.length > 0 
+        ? (score / quiz.questions.length) * 100 
+        : 0;
+  
+      // Submit attempt with duration and properly calculated score
       const response = await axios.put(
         `${BASE_URL}/attempts/${attempt.id}/submit/`,
-        {},
         {
-          headers: { Authorization: `Bearer ${token.access}` },
-        }
+          duration: timeSpent,
+          score: percentageScore,  // Send calculated percentage
+        },
+        { headers: { Authorization: `Bearer ${token.access}` } }
       );
-
+  
       Swal.fire({
         title: 'Quiz Submitted!',
         html: `
           <div class="text-center">
-            <h3 class="text-2xl font-bold mb-4">Your Score: ${response.data.score}%</h3>
+            <h3 class="text-2xl font-bold mb-4">Your Score: ${percentageScore.toFixed(1)}%</h3>
             <p class="text-gray-600">You answered ${score} out of ${quiz.questions.length} questions correctly</p>
           </div>
         `,
@@ -150,6 +169,8 @@ function QuizAttempt() {
       }).then(() => {
         navigate('/dashboard/results');
       });
+      
+      setShowResult(true);
     } catch (err) {
       setError(err.response?.data?.error || err.message);
     }
