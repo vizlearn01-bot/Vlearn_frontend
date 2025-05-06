@@ -22,13 +22,14 @@ function CourseDetail() {
       try {
         const response = await axios.get(`${BASE_URL}/courses/${id}`);
         setCourse(response.data); // Set the course details
+        console.log(response.data)
+
         setLoading(false); // Set loading to false when data is fetched
       } catch (error) {
         console.error("Error fetching course details:", error);
         setLoading(false); // Set loading to false in case of an error
       }
     };
-
     fetchCourseDetails();
   }, [id]);
 
@@ -47,95 +48,7 @@ function CourseDetail() {
     fetchQuizzes();
   }, [id]);
 
-  // Extract YouTube video ID from the URL
-  const extractVideoID = (url) => {
-    const regex = /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([^&]+)|youtu\.be\/([^&]+)/;
-    const match = url.match(regex);
-    return match ? match[1] || match[2] : null;
-  };
 
-  // Extract the video ID if available
-  const videoID = course?.video_link ? extractVideoID(course.video_link) : null;
-
-  // Load the YouTube IFrame API script
-  useEffect(() => {
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    // Initialize the player after the script is loaded
-    window.onYouTubeIframeAPIReady = () => {
-      new window.YT.Player('ytplayer', {
-        videoId: videoID,
-        events: {
-          onReady: onPlayerReady,
-          onStateChange: onPlayerStateChange,
-        },
-      });
-    };
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [videoID]);
-
-  const onPlayerReady = (event) => {
-    console.log('Player is ready');
-  };
-
-  const onPlayerStateChange = (event) => {
-    if (event.data === window.YT.PlayerState.PLAYING) {
-      console.log('Video started playing');
-      startTracking();
-    } else if (event.data === window.YT.PlayerState.PAUSED) {
-      console.log('Video paused');
-      stopTracking();
-      sendAnalytics(false); // Video paused but not completed
-    } else if (event.data === window.YT.PlayerState.ENDED) {
-      console.log('Video ended');
-      stopTracking();
-      sendAnalytics(true); // Video completed
-    }
-  };
-
-  const startTracking = () => {
-    intervalRef.current = setInterval(() => {
-      setWatchedDuration((prev) => prev + 1); // Increment watched duration every second
-    }, 1000);
-  };
-
-  const stopTracking = () => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-  };
-
-  const sendAnalytics = (isCompleted) => {
-    if (!course || !course.video_link) {
-      console.error("Video URL is missing. Cannot send analytics.");
-      return;
-    }
-
-    const payload = {
-      video_url: course.video_link,
-      watched_duration: watchedDuration,
-      is_completed: isCompleted,
-      user: user?.id,  // Ensure the user ID is included
-    };
-
-    axios
-      .post(`${BASE_URL}/video_interactions/`, payload, {
-        headers: {
-          Authorization: `Bearer ${token?.access}`,
-        },
-      })
-      .then((response) => {
-        console.log("Analytics sent:", response.data);
-        setWatchedDuration(0);
-      })
-      .catch((error) => {
-        console.error("Error sending analytics:", error);
-      });
-  };
 
   if (loading) {
     return (
@@ -223,22 +136,25 @@ function CourseDetail() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left Column: Video and Course Details */}
               <div className="col-span-1 lg:col-span-2">
-                {/* Video Player */}
-                <div className="rounded-3xl shadow-2xl overflow-hidden">
-                  {videoID ? (
-                    <div className="aspect-video w-full ">
-                      <div id="ytplayer" className="w-full h-full rounded-t-xl"></div>
-                    </div>
+                <div className="rounded-3xl shadow-2xl overflow-hidden h-1/3">
+                  {course?.video ? (
+                    <video
+                      controls
+                      className="w-full h-full rounded-t-xl"
+                      src={course.video}
+                      poster={course.image} // Optional: show image before video plays
+                    >
+                      Your browser does not support the video tag.
+                    </video>
                   ) : (
-                    course?.image && (
-                      <img
-                        src={course.image}
-                        alt={course.title}
-                        className="w-full h-64 object-cover rounded-t-xl"
-                      />
-                    )
+                    <img
+                      src={course.image}
+                      alt={course.title}
+                      className="w-full h-full object-cover rounded-t-xl"
+                    />
                   )}
                 </div>
+
 
                 {/* Course Details */}
                 <div className="rounded-3xl shadow-2xl p-6 mt-8">
