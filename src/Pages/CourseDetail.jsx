@@ -137,7 +137,15 @@ function CourseDetail() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left Column: Video and Course Details */}
               <div className="col-span-1 lg:col-span-2">
-              <ReactPlayer url={course.playback_url} controls width="100%" height="300px" />
+                  <div className="w-full h-2/3">
+                    <ReactPlayer
+                      url={course.playback_url}
+                      controls
+                      width="100%"
+                      height="100%"
+                      className="rounded-t-xl"
+                    />
+                </div>
                 {/* Course Details */}
                 <div className="rounded-3xl shadow-2xl p-6 mt-8">
                   <h2 className="text-2xl font-bold text-slate-900">{course.title}</h2>
