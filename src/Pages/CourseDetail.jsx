@@ -5,6 +5,7 @@ import BASE_URL from "../config";
 import { GraduationCap, User, Clock, BookOpen, BarChart2, Award } from "lucide-react";
 import UserContext from "../Context/UserContext";
 import Swal from "sweetalert2";
+import ReactPlayer from "react-player";
 
 function CourseDetail() {
   const { id } = useParams(); // Get the id from the URL
@@ -136,26 +137,7 @@ function CourseDetail() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left Column: Video and Course Details */}
               <div className="col-span-1 lg:col-span-2">
-                <div className="rounded-3xl shadow-2xl overflow-hidden h-1/3">
-                  {course?.video ? (
-                    <video
-                      controls
-                      className="w-full h-full rounded-t-xl"
-                      src={course.video}
-                      poster={course.image} // Optional: show image before video plays
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <img
-                      src={course.image}
-                      alt={course.title}
-                      className="w-full h-full object-cover rounded-t-xl"
-                    />
-                  )}
-                </div>
-
-
+              <ReactPlayer url={course.playback_url} controls width="100%" height="300px" />
                 {/* Course Details */}
                 <div className="rounded-3xl shadow-2xl p-6 mt-8">
                   <h2 className="text-2xl font-bold text-slate-900">{course.title}</h2>

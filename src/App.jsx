@@ -16,7 +16,6 @@ import QuizAttempt from './Pages/QuizAttempt';
 import Results from './Pages/Results';
 import SubscriptionPlan from './Components/SubscriptionPlan';
 import Simulations from './Pages/Simulations';
-import VideoUploadForm from './Pages/VideoUploadForm';
 
 function App() {
   return (
@@ -29,7 +28,6 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Signup />} />
             <Route path='/subscription' element={<SubscriptionPlan/>}/>
-            <Route path='/video' element={<VideoUploadForm/>}/>
             
             <Route path="/dashboard" element={<DashboardOutlet />}>
               <Route path='home' element={<Dashboard />} />
