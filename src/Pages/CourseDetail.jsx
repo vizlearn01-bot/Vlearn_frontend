@@ -23,16 +23,17 @@ function CourseDetail() {
       try {
         const response = await axios.get(`${BASE_URL}/courses/${id}`);
         setCourse(response.data); // Set the course details
-        console.log(response.data)
-
+        console.log(response.data); // Log the whole response
+        console.log(response.data.playback_url); // Correctly log playback_url
         setLoading(false); // Set loading to false when data is fetched
       } catch (error) {
         console.error("Error fetching course details:", error);
         setLoading(false); // Set loading to false in case of an error
-      }
+      } 
     };
     fetchCourseDetails();
   }, [id]);
+  
 
   useEffect(() => {
     const fetchQuizzes = async () => {
@@ -137,14 +138,29 @@ function CourseDetail() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left Column: Video and Course Details */}
               <div className="col-span-1 lg:col-span-2">
-                  <div className="w-full h-2/3">
+                <div className="w-full h-2/3">
+                <div>
+                  {/* Use ReactPlayer to play the fetched playback_url */}
+                  {course?.playback_url ? (
                     <ReactPlayer
                       url={course.playback_url}
                       controls
                       width="100%"
-                      height="100%"
-                      className="rounded-t-xl"
+                      height="auto"
+                      playing
+                      config={{
+                        file: {
+                          attributes: {
+                            crossOrigin: "anonymous",
+                          },
+                        },
+                      }}
                     />
+                  ) : (
+                    <p>Loading video...</p>
+                  )}
+                </div>
+
                 </div>
                 {/* Course Details */}
                 <div className="rounded-3xl shadow-2xl p-6 mt-8">
@@ -211,11 +227,11 @@ function CourseDetail() {
                     </div>
                     <div>
                       <p className="text-sm text-slate-500">Category</p>
-                      <p className="text-lg font-semibold text-slate-900">Chemistry{course.category}</p>
+                      <p className="text-lg font-semibold text-slate-900">{course.category}</p>
                     </div>
                     <div>
                       <p className="text-sm text-slate-500">Level</p>
-                      <p className="text-lg font-semibold text-slate-900">Grade: 12{course.level}</p>
+                      <p className="text-lg font-semibold text-slate-900">Grade {course.level}</p>
                     </div>
                     <div>
                       <p className="text-sm text-slate-500">Last Updated</p>
@@ -234,7 +250,7 @@ function CourseDetail() {
                     <div>
                       <div className="flex justify-between items-center mb-2">
                         <p className="text-slate-900 font-medium">{course.title}</p>
-                        <span className="text-sm text-slate-500 ">{course.duration}%</span>
+                        <span className="text-sm text-slate-500 ">{course.duration}</span>
                       </div>
                       <div className="w-full bg-slate-200 rounded-full h-2">
                         <div className="bg-custom-orange h-2 rounded-full mt-2"></div>

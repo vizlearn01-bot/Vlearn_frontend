@@ -28,7 +28,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Signup />} />
             <Route path='/subscription' element={<SubscriptionPlan/>}/>
-            
+
             <Route path="/dashboard" element={<DashboardOutlet />}>
               <Route path='home' element={<Dashboard />} />
               <Route path="user" element={<User />} />
