@@ -24,7 +24,6 @@ function CourseDetail() {
         const response = await axios.get(`${BASE_URL}/courses/${id}`);
         setCourse(response.data); // Set the course details
         console.log(response.data); // Log the whole response
-        console.log(response.data.playback_url); // Correctly log playback_url
         setLoading(false); // Set loading to false when data is fetched
       } catch (error) {
         console.error("Error fetching course details:", error);

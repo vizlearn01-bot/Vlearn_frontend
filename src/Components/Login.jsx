@@ -4,7 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import BASE_URL from "../config";
 import UserContext from "../Context/UserContext";
-import {Lock, User} from "lucide-react"
+import { Lock, User } from "lucide-react";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -27,9 +27,8 @@ function Login() {
       const response = await axios.post(`${BASE_URL}/login/`, formData);
 
       if (response.status === 200) {
-        const token = response.data; // Extract token and user data
-        login(token); // Store in context
-
+        const token = response.data;
+        login(token);
 
         Swal.fire({
           title: "Success",
@@ -53,40 +52,48 @@ function Login() {
     }
   };
 
-
-
   return (
     <>
-      <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full bg-custom-bg bg-center bg-cover bg-opacity-50">
-        <div className="relative sm:max-w-lg w-full">
+      <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full bg-custom-bg bg-center bg-cover">
+        {/* Gradient black tint overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 to-black/30 z-0"></div>
+
+        <div className="relative sm:max-w-lg w-full z-10">
+          {/* Decorative cards */}
           <div className="card bg-custom-blue shadow-2xl w-full h-full rounded-3xl absolute transform -rotate-6"></div>
           <div className="card bg-custom-orange shadow-2xl w-full h-full rounded-3xl absolute transform rotate-6"></div>
-          <div className="relative w-full rounded-3xl px-6 py-4 bg-gray-100 shadow-md">
-            <label
-              htmlFor="login"
-              className="block mt-3 text-xl text-gray-700 text-center font-semibold"
-            >
-              Login
-            </label>
+
+          {/* Login Card */}
+          <div className="relative w-full rounded-3xl px-6 py-6 bg-gray-100 shadow-md">
+            {/* Branding */}
+            <div className="flex flex-col items-center justify-center z-10">
+              <img src="/images/vlearn_logo.png" alt="Logo" className="h-56 w-auto" />
+            </div>
+
+            {/* Welcome text */}
+            <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">Welcome Back 👋</h2>
+            <p className="text-gray-600 text-sm text-center mb-4">Login to access your personalized dashboard</p>
 
             {error && <p className="text-red-500 text-center mt-2">{error}</p>}
 
-            <form onSubmit={handleLogin} className="mt-10">
+            <form onSubmit={handleLogin} className="mt-6">
+              {/* Username */}
               <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <input
                   type="text"
                   name="username"
                   placeholder="Username"
                   value={formData.username}
                   onChange={handleInputChange}
-                  className="mt-1 block w-full py-2 px-4 pl-10 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 mb-6"
+                  className="mt-1 block w-full py-2 px-4 pl-10 border-none bg-gray-100 h-11 rounded-3xl shadow-2xl hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 mb-4"
                   required
                 />
               </div>
 
+              {/* Password */}
               <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <input
                   type="password"
                   name="password"
@@ -98,7 +105,15 @@ function Login() {
                 />
               </div>
 
-              <div className="mt-7">
+              {/* Forgot password */}
+              {/* <div className="flex justify-end mt-2">
+                <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">
+                  Forgot password?
+                </Link>
+              </div> */}
+
+              {/* Login button */}
+              <div className="mt-6">
                 <button
                   type="submit"
                   className="bg-blue-500 w-fit py-2 px-5 flex justify-center mx-auto rounded-3xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
@@ -107,15 +122,15 @@ function Login() {
                 </button>
               </div>
 
-              <div className="mt-7 text-sm">
-                <div className="flex justify-center">
-                  <label className="mr-2">Don&apos;t have an account?</label>
-                  <Link to="/register">
-                    <span className="text-black transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105">
-                      Create an account
-                    </span>
-                  </Link>
-                </div>
+              {/* Sign up link */}
+              <div className="mt-6 text-sm text-center">
+                <span className="mr-1">Don&apos;t have an account?</span>
+                <Link
+                  to="/register"
+                  className="text-blue-600 hover:underline transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
+                >
+                  Create an account
+                </Link>
               </div>
             </form>
           </div>

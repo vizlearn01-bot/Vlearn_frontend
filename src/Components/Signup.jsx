@@ -74,15 +74,22 @@ function Signup() {
   return (
     <>
       <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 w-full bg-custom-bg bg-center bg-cover">
+      <div className="absolute inset-0 bg-gradient-to-br from-black/60 to-black/30 z-0"></div>
 
 
         <div className="relative sm:max-w-lg w-full md:mx-auto">
           <div className="card bg-custom-blue shadow-2xl w-full h-full rounded-3xl absolute transform -rotate-6"></div>
           <div className="card bg-custom-orange shadow-2xl w-full h-full rounded-3xl absolute transform rotate-6"></div>
           <div className="relative w-full rounded-3xl px-6 py-4 bg-gray-100 shadow-md">
-            <label htmlFor="signup" className="block mt-3 text-xl text-gray-700 text-center font-semibold">
+               {/* Branding */}
+               <div className="flex flex-col items-center justify-center z-10">
+              <img src="/images/vlearn_logo.png" alt="Logo" className="h-32 w-auto" />
+            </div>
+            <label htmlFor="signup" className="block mb-3 text-xl text-gray-700 text-center font-semibold">
               Sign up
             </label>
+            <p className="text-gray-600 text-sm text-center mb-4">Begin your science journey today</p>
+
 
             {error && <p className="text-red-500 text-center mt-2">{error}</p>}
 
@@ -172,7 +179,9 @@ function Signup() {
             <ArrowRight className="h-5 w-5" />
           </button>
           <p className="text-center text-sm">
-            Already have an account? <Link to="/login" className="text-custom-green">Sign in</Link>
+            Already have an account? <Link to="/login" 
+                  className="text-blue-600 hover:underline transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
+                  >Sign in</Link>
           </p>
         </form>
           </div>

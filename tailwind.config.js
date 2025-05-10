@@ -31,7 +31,7 @@ export default {
         extrabold: 800,
       },
       backgroundImage: {
-        'custom-bg': 'url("https://www.thoughtco.com/thmb/6MsMmUK27akFhb8i89kj95J5iko=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-545286316-433dd345105e4c6ebe4cdd8d2317fdaa.jpg")'
+        'custom-bg': 'url("https://d1ymz67w5raq8g.cloudfront.net/Pictures/1024x536/P/web/e/f/n/classicchemexp_958361.jpg")'
       },
     },
   },
