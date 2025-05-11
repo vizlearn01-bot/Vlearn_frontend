@@ -26,20 +26,21 @@ const SubscriptionPlan = () => {
                         headers: { Authorization: `Bearer ${token.access}` },
                     })
                 ]);
-
                 // Transform plans data
                 const transformedPlans = plansResponse.data.map(plan => ({
                     id: plan.id,
                     name: plan.name,
                     price: parseInt(plan.price), // Ensure price is stored as integer
                     displayPrice: `KSh ${plan.price.toLocaleString()}`, // Formatted for display
-                    duration: plan.duration_days === 30 ? 'month' :
-                        plan.duration_days === 365 ? 'year' :
-                            `${plan.duration_days} days`,
+                    duration: plan.duration_days === 1 ? 'day' :
+                        plan.duration_days === 30 ? 'month' :
+                            plan.duration_days === 365 ? 'year' :
+                                `${plan.duration_days} days`,
                     features: plan.features,
                     popular: plan.is_popular
                 }));
                 setPlans(transformedPlans);
+                console.log(transformedPlans)
                 setHasActiveSubscription(subscriptionResponse.data.is_active);
             } catch (err) {
                 setError(err.response?.data?.error || 'Failed to load data');
@@ -51,7 +52,6 @@ const SubscriptionPlan = () => {
 
         fetchData();
     }, [token]);
-
     // Handle plan selection
     const handleSelectPlan = (plan) => {
         if (hasActiveSubscription) {
@@ -63,11 +63,11 @@ const SubscriptionPlan = () => {
         setError(null);
     };
 
-      // Format phone number to string (254XXXXXXXXX)
-      const formatMpesaNumber = (phoneNumber) => {
+    // Format phone number to string (254XXXXXXXXX)
+    const formatMpesaNumber = (phoneNumber) => {
         // Remove all non-digit characters
         const digitsOnly = phoneNumber.replace(/\D/g, '');
-      
+
         // Convert to string in 254 format
         if (digitsOnly.startsWith('254')) {
             return digitsOnly;
@@ -85,7 +85,7 @@ const SubscriptionPlan = () => {
 
         try {
             const formattedPhone = formatMpesaNumber(mpesaNumber);
-            
+
             await axios.post(`${BASE_URL}/mpesa/pay/`, {
                 phone: formattedPhone, // Sent as string (254XXXXXXXXX)
                 amount: selectedPlan.price, // Sent as integer
