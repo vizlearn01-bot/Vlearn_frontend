@@ -132,7 +132,7 @@ function Dashboard() {
             <>
               <h2 className="text-xl font-bold mb-4">Available experiments</h2>
               <div className="flex flex-wrap my-4 gap-2">
-                {['All', 'Form 3', 'Form 4'].map((category) => (
+                {['All', 'Term 1', 'Term 2'].map((category) => (
                   <button
                     key={category}
                     onClick={() => setActiveCategory(category)}

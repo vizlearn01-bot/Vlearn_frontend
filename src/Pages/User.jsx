@@ -191,12 +191,13 @@ function User() {
               {quizAttempts
                 .sort((a, b) => new Date(b.end_time) - new Date(a.end_time)) // Sort by most recent first
                 .slice(0, 3).map((attempt) => (
-                  <div key={attempt.id} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
+                  <div key={attempt.id} className="bg-gray-200 rounded-3xl p-4 hover:bg-gray-300 transition-colors hover:cursor-pointer">
                     <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-2">
                       <div className="flex items-center">
                         <BookOpen className="h-5 w-5 text-indigo-600 mr-2" />
                         <h3 className="font-medium text-gray-900">{attempt.quiz.title}</h3>
                       </div>
+                     
                       <div className={`mt-2 md:mt-0 inline-flex items-center px-3 py-1 rounded-full text-sm ${attempt.score >= 70 ? 'bg-green-100 text-green-800' :
                         attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
                           'bg-red-100 text-red-800'
@@ -204,10 +205,13 @@ function User() {
                         <Trophy className="h-4 w-4 mr-1" />
                         {attempt.score}%
                       </div>
+                      
                     </div>
-
+                    <div className='flex items-center'>                       
+                         <p className=" text-sm text-gray-900">{attempt.quiz.description}</p>
+                      </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600 mt-2">
-                      <div className="flex items-center">
+                      {/* <div className="flex items-center">
                         <Calendar className="h-4 w-4 mr-1" />
                         <span>{new Date(attempt.end_time).toLocaleDateString()}</span>
                       </div>
@@ -216,7 +220,7 @@ function User() {
                         <span>
                           {Math.round((new Date(attempt.end_time) - new Date(attempt.start_time)) / 60000)} minutes
                         </span>
-                      </div>
+                      </div> */}
                       <div className="flex items-center">
                         <BarChart className="h-4 w-4 mr-1" />
                         <span>

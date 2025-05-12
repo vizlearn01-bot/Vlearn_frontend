@@ -29,6 +29,7 @@ function QuizAttempt() {
       try {
         // Record start time immediately
         setQuizStartTime(Date.now());
+        
 
         // Start new attempt (no need for backend to track time)
         const attemptResponse = await axios.post(
