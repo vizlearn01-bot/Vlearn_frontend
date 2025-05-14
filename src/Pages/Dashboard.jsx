@@ -62,7 +62,8 @@ function Dashboard() {
     }
   }, 300);
 
-  const filteredCategory = filteredCourses.filter(course => {
+  const filteredCategory = filteredCourses
+  .filter(course => {
     if (activeCategory === 'All') return true;
     return course.category?.toLowerCase() === activeCategory.toLowerCase();
   });
@@ -73,7 +74,7 @@ function Dashboard() {
       {/* Main Content */}
       <main className="w-full">
         {/* Search Bar */}
-        <header className="flex items-center justify-between p-4 bg-white shadow-2xl top-0">
+        <header className="flex items-start justify-normal p-4 md:gap-96 bg-white shadow-2xl top-0 fixed w-full z-10">
           {/* Search Bar */}
           <div className="relative w-full md:w-1/3">
             <div className="flex items-center border border-custom-blue rounded-3xl overflow-hidden">
@@ -88,8 +89,8 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* User Info and Logout */}
-          <div className="flex items-center space-x-6">
+          {/* User Info*/}
+          <div className="flex items-center space-x-6 md:ml-72">
             {/* Notification Bell */}
             <button className="p-2 hover:bg-custom-blue hover:text-white rounded-3xl transition-colors duration-200">
               <Bell className="h-6 w-6 text-gray-600 hover:text-white" />
@@ -113,7 +114,7 @@ function Dashboard() {
                Login Required
              </p>
              <p className="text-gray-600">
-               Please log in to access the simulations.
+               Please log in to access the experiments.
              </p>
              <Link 
                to="/login" 
@@ -127,7 +128,7 @@ function Dashboard() {
         </header>
 
         {/* Courses Section */}
-        <section className="mb-8 p-6 h-fit">
+        <section className="mb-8 p-6 pt-24 h-fit">
           {user ? (
             <>
               <h2 className="text-xl font-bold mb-4">Available experiments</h2>
@@ -156,8 +157,10 @@ function Dashboard() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredCategory.map((course) => (
-                <div key={course.id} className="mb-6"> {/* Added margin-bottom for spacing */}
+              {filteredCategory
+              .sort((a,b) => a.title.localeCompare(b.title))
+              .map((course) => (
+                <div key={course.id} className="mb-6"> 
                   {/* Clickable card area with hover effects */}
                   <Link
                     to={`/coursedetails/${course.id}`}
