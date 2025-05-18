@@ -145,7 +145,7 @@ function CourseDetail() {
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="col-span-1 lg:col-span-2">
-              <div className="w-full h-2/3">
+              <div className="w-full md:h-2/3">
                 {course?.playback_url ? (
                   <ReactPlayer
                     url={course.playback_url}
@@ -165,7 +165,7 @@ function CourseDetail() {
                   <p>Loading video...</p>
                 )}
               </div>
-              <div className="rounded-3xl shadow-2xl px-8 py-4 my-6">
+              <div className="rounded-3xl shadow-2xl px-8 py-4 md:my-6 my-2">
                 <h2 className="text-2xl font-bold text-slate-900">{course.title}</h2>
                 <p className="text-slate-600 mt-2 mb-4">{course.description}</p>
                 <p className="text-slate-500 mt-4">
