@@ -210,7 +210,7 @@ function Home() {
                     alt={item.title}
                     className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer z-0">
                     <div className="absolute bottom-0 left-0 right-0 p-6">
                       <h3 className="text-xl font-bold text-white mb-2">
                         {item.title}

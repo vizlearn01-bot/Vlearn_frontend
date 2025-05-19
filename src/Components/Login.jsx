@@ -4,7 +4,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import BASE_URL from "../config";
 import UserContext from "../Context/UserContext";
-import { Lock, User } from "lucide-react";
+import { Lock, User, Loader } from "lucide-react";
+
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ function Login() {
   const [error, setError] = useState(null);
   const { login } = useContext(UserContext);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +24,7 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Start spinner
 
     try {
       const response = await axios.post(`${BASE_URL}/login/`, formData);
@@ -49,8 +52,12 @@ function Login() {
         icon: "error",
         confirmButtonText: "OK",
       });
+    } finally {
+      setIsLoading(false); // Stop spinner
     }
   };
+
+
 
   return (
     <>
@@ -116,12 +123,17 @@ function Login() {
               <div className="mt-6">
                 <button
                   type="submit"
-                  className="bg-blue-500 w-fit py-2 px-5 flex justify-center mx-auto rounded-3xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
+                  disabled={isLoading}
+                  className={`bg-blue-500 w-fit py-2 px-5 flex justify-center mx-auto rounded-3xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out transform ${isLoading ? "cursor-not-allowed" : "hover:-translate-x hover:scale-105"
+                    }`}
                 >
-                  Login
+                  {isLoading ? (
+                    <Loader className="h-5 w-5 animate-spin" />
+                  ) : (
+                    "Login"
+                  )}
                 </button>
               </div>
-
               {/* Sign up link */}
               <div className="mt-6 text-sm text-center">
                 <span className="mr-1">Don&apos;t have an account?</span>
