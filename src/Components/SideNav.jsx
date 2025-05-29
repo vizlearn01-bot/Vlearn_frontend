@@ -3,7 +3,7 @@ import {
   Menu, GraduationCap, User, ClipboardPen, FolderClosed,
   Home, ClipboardCheck, Cpu, X
 } from 'lucide-react';
-import { useState, useContext, useEffect, useRef } from 'react';
+import { useState, useContext } from 'react';
 import UserContext from '../Context/UserContext';
 import Swal from 'sweetalert2';
 
@@ -11,7 +11,6 @@ const SideNav = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { logout } = useContext(UserContext);
   const navigate = useNavigate();
-  const sidebarRef = useRef();
 
   const handleLogout = () => {
     Swal.fire({
@@ -45,18 +44,6 @@ const SideNav = () => {
     { icon: Cpu, text: "Simulations", path: '/dashboard/simulations' },
   ];
 
-  // Close sidebar on outside click (mobile only)
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (isSidebarOpen && sidebarRef.current && !sidebarRef.current.contains(e.target)) {
-        setIsSidebarOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isSidebarOpen]);
-
   return (
     <>
       {/* Mobile toggle button */}
@@ -67,17 +54,8 @@ const SideNav = () => {
         {isSidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
       </button>
 
-      {/* Overlay for mobile */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-30 z-10 md:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
-
       {/* Sidebar */}
       <aside
-        ref={sidebarRef}
         className={`fixed left-0 top-0 z-20 h-screen w-64 bg-white border-r p-4 transition-transform duration-300 flex flex-col justify-between
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
       >
