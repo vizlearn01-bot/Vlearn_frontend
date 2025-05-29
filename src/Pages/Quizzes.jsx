@@ -23,7 +23,7 @@ function Quizzes() {
             headers: { Authorization: `Bearer ${token.access}` },
           }
         );
-        
+        console.log(response.data)
         setQuizzes(response.data);
       } catch (err) {
         setError(err.message);
