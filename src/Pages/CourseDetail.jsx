@@ -6,6 +6,7 @@ import { GraduationCap, User } from "lucide-react";
 import UserContext from "../Context/UserContext";
 import Swal from "sweetalert2";
 import ReactPlayer from "react-player";
+import { ArrowLeft } from "lucide-react";
 
 function CourseDetail() {
   const { id } = useParams();
@@ -175,6 +176,12 @@ function CourseDetail() {
             </div>
 
             <div className="col-span-1">
+              <div className="mb-8 flex justify-center">
+                <Link to="/dashboard" className="flex items-center text-custom-blue hover:text-custom-orange hover:cursor-pointer transition-colors">
+                  <ArrowLeft className="h-5 w-5 mr-2" />
+                  <span className="text-sm font-medium">Back to main dashboard</span>
+                </Link>
+              </div>
               <div className="bg-white rounded-3xl shadow-2xl p-6 mb-8">
                 <h2 className="text-2xl font-bold text-slate-900 mb-6">About the experiment</h2>
                 <div className="space-y-4">
@@ -212,9 +219,8 @@ function CourseDetail() {
                         popup: 'rounded-3xl shadow-2xl p-10'
                       }
                     })}
-                    className={`bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange w-fit mx-auto flex mt-4 ${
-                      !quiz ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
+                    className={`bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange w-fit mx-auto flex mt-4 ${!quiz ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
                     disabled={!quiz}
                   >
                     Attempt quiz
