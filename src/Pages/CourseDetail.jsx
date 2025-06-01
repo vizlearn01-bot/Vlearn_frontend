@@ -7,6 +7,7 @@ import UserContext from "../Context/UserContext";
 import Swal from "sweetalert2";
 import ReactPlayer from "react-player";
 import { ArrowLeft } from "lucide-react";
+import Breadcrumb from "../Components/Breadcrumb";
 
 function CourseDetail() {
   const { id } = useParams();
@@ -176,6 +177,7 @@ function CourseDetail() {
             </div>
 
             <div className="col-span-1">
+              <Breadcrumb/>
               <div className="mb-8 flex justify-center">
                 <Link to="/dashboard" className="flex items-center text-custom-blue hover:text-custom-orange hover:cursor-pointer transition-colors">
                   <ArrowLeft className="h-5 w-5 mr-2" />
