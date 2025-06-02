@@ -124,111 +124,127 @@ function CourseDetail() {
   }
 
   return (
-    <div className="mx-auto flex flex-col">
-      <nav className="fixed w-full flex flex-col md:flex-row items-center justify-between p-2 shadow-2xl bg-white">
-        <div className="items-center gap-2 hidden md:flex p-4">
-          <GraduationCap className="h-10 w-10 text-custom-blue" />
-          <Link to="/dashboard">
-            <h1 className="text-3xl font-bold text-gray-800">VizLearn</h1>
+    <div className="mx-auto flex flex-col min-h-screen">
+      {/* Header/Navigation */}
+      <nav className="sticky top-0 z-50 w-full flex flex-col md:flex-row items-center justify-between p-2 shadow-2xl bg-white">
+        <div className="flex items-center gap-2 p-2 md:p-4">
+          <GraduationCap className="h-8 w-8 md:h-10 md:w-10 text-custom-blue" />
+          <Link to="/dashboard" className="hidden md:block">
+            <h1 className="text-xl md:text-3xl font-bold text-gray-800">VizLearn</h1>
           </Link>
         </div>
-        <div className="flex flex-col md:flex-row items-center text-center mt-2 md:mt-0">
-          <div>
-            <h1 className="text-3xl font-bold text-custom-blue">{course?.title}</h1>
-            <p className="mt-1 text-slate-600">Course subtitle: {course?.subtitle}</p>
-          </div>
+        
+        <div className="flex flex-col items-center text-center px-2 py-1 md:py-0">
+          <h1 className="text-xl md:text-3xl font-bold text-custom-blue line-clamp-1">{course?.title}</h1>
+          <p className="text-xs md:text-base text-slate-600 line-clamp-1">Course subtitle: {course?.subtitle}</p>
         </div>
-        <div className="items-center text-slate-700 mt-6 md:mt-0 hidden md:flex mr-4 p-4">
-          <User className="h-5 w-5 mr-" />
-          {user ? (<span>{user.username}</span>) : (<User />)}
+        
+        <div className="hidden md:flex items-center text-slate-700 mr-4 p-2 md:p-4">
+          <User className="h-5 w-5 mr-1" />
+          {user ? (<span className="text-sm md:text-base">{user.username}</span>) : (<User />)}
         </div>
       </nav>
-      <div className="mt-28">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="col-span-1 lg:col-span-2">
-              <div className="w-full md:h-2/3">
-                {course?.playback_url ? (
-                  <ReactPlayer
-                    url={course.playback_url}
-                    controls
-                    width="100%"
-                    height="auto"
-                    playing
-                    config={{
-                      file: {
-                        attributes: {
-                          crossOrigin: "anonymous",
-                        },
+
+      {/* Main Content */}
+      <div className="mt-6 md:mt-8 px-2 sm:px-4 md:px-6 lg:px-8">
+        <div className="mb-6">
+          <Breadcrumb />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+          {/* Left Column - Video and Description */}
+          <div className="col-span-1 lg:col-span-2 space-y-4 md:space-y-6">
+            {/* Video Player */}
+            <div className="w-full aspect-video bg-black rounded-xl overflow-hidden">
+              {course?.playback_url ? (
+                <ReactPlayer
+                  url={course.playback_url}
+                  controls
+                  width="100%"
+                  height="100%"
+                  playing
+                  config={{
+                    file: {
+                      attributes: {
+                        crossOrigin: "anonymous",
                       },
-                    }}
-                  />
-                ) : (
-                  <p>Loading video...</p>
-                )}
-              </div>
-              <div className="rounded-3xl shadow-2xl px-8 py-4 md:my-6 my-2">
-                <h2 className="text-2xl font-bold text-slate-900">{course.title}</h2>
-                <p className="text-slate-600 mt-2 mb-4">{course.description}</p>
-                <p className="text-slate-500 mt-4">
-                  Duration: <span className="font-semibold">{course.duration}</span>
-                </p>
+                    },
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-white">
+                  Loading video...
+                </div>
+              )}
+            </div>
+
+            {/* Course Details */}
+            <div className="rounded-xl md:rounded-2xl shadow-lg md:shadow-xl px-4 py-3 md:px-8 md:py-4">
+              <h2 className="text-xl md:text-2xl font-bold text-slate-900">{course.title}</h2>
+              <p className="text-sm md:text-base text-slate-600 mt-2 mb-3 md:mb-4">{course.description}</p>
+              <p className="text-xs md:text-sm text-slate-500">
+                Duration: <span className="font-semibold">{course.duration}</span>
+              </p>
+            </div>
+          </div>
+
+          {/* Right Column - Sidebar */}
+          <div className="col-span-1 space-y-4 md:space-y-6">
+            {/* Back Button - Mobile only */}
+            <div className="flex justify-start">
+              <Link to="/dashboard" className="flex items-center text-custom-blue hover:text-custom-orange transition-colors">
+                <ArrowLeft className="h-5 w-5 mr-2" />
+                <span className="text-sm font-medium">Back to dashboard</span>
+              </Link>
+            </div>
+
+            {/* Course Info */}
+            <div className="bg-white rounded-xl md:rounded-2xl shadow-lg md:shadow-xl p-4 md:p-6">
+              <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-4 md:mb-6">About the experiment</h2>
+              <div className="space-y-3 md:space-y-4">
+                <div>
+                  <p className="text-xs md:text-sm text-slate-500">Instructor</p>
+                  <p className="text-base md:text-lg font-semibold text-slate-900">{course.instructor}</p>
+                </div>
+                <div>
+                  <p className="text-xs md:text-sm text-slate-500">Category</p>
+                  <p className="text-base md:text-lg font-semibold text-slate-900">{course.category}</p>
+                </div>
+                <div>
+                  <p className="text-xs md:text-sm text-slate-500">Last Updated</p>
+                  <p className="text-base md:text-lg font-semibold text-slate-900">
+                    {new Date().toLocaleDateString()} {course.lastUpdated}
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="col-span-1">
-              <Breadcrumb/>
-              <div className="mb-8 flex justify-center">
-                <Link to="/dashboard" className="flex items-center text-custom-blue hover:text-custom-orange hover:cursor-pointer transition-colors">
-                  <ArrowLeft className="h-5 w-5 mr-2" />
-                  <span className="text-sm font-medium">Back to main dashboard</span>
-                </Link>
-              </div>
-              <div className="bg-white rounded-3xl shadow-2xl p-6 mb-8">
-                <h2 className="text-2xl font-bold text-slate-900 mb-6">About the experiment</h2>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm text-slate-500">Instructor</p>
-                    <p className="text-lg font-semibold text-slate-900">{course.instructor}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-slate-500">Category</p>
-                    <p className="text-lg font-semibold text-slate-900">{course.category}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-slate-500">Last Updated</p>
-                    <p className="text-lg font-semibold text-slate-900">
-                      {new Date().toLocaleDateString()} {course.lastUpdated}
-                    </p>
-                  </div>
+            {/* Quiz Section */}
+            <div className="backdrop-blur-lg bg-white/80 rounded-xl md:rounded-2xl shadow-lg md:shadow-xl p-4 md:p-6 text-center">
+              <h3 className="text-custom-blue text-lg md:text-xl">Test your understanding</h3>
+              {quizLoading ? (
+                <div className="text-center py-3 md:py-4">
+                  <div className="animate-spin border-4 border-t-4 border-custom-blue border-solid rounded-full w-8 h-8 mx-auto"></div>
+                  <p className="text-custom-blue mt-2 text-sm md:text-base">Checking for quiz...</p>
                 </div>
-              </div>
-
-              <div className="backdrop-blur-2xl mt-10 items-center text-center p-8 rounded-3xl w-fit mx-auto shadow-2xl">
-                <h3 className="text-custom-blue text-xl">Test your understanding</h3>
-                {quizLoading ? (
-                  <div className="text-center py-4">
-                    <div className="animate-spin border-4 border-t-4 border-custom-blue border-solid rounded-full w-8 h-8 mx-auto"></div>
-                    <p className="text-custom-blue mt-2">Checking for quiz...</p>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => quiz ? countDownAlert(quiz.id) : Swal.fire({
-                      title: "No Quiz Available",
-                      text: "This course doesn't have a quiz yet.",
-                      icon: "info",
-                      customClass: {
-                        popup: 'rounded-3xl shadow-2xl p-10'
-                      }
-                    })}
-                    className={`bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange w-fit mx-auto flex mt-4 ${!quiz ? 'opacity-50 cursor-not-allowed' : ''
-                      }`}
-                    disabled={!quiz}
-                  >
-                    Attempt quiz
-                  </button>
-                )}
-              </div>
+              ) : (
+                <button
+                  onClick={() => quiz ? countDownAlert(quiz.id) : Swal.fire({
+                    title: "No Quiz Available",
+                    text: "This course doesn't have a quiz yet.",
+                    icon: "info",
+                    customClass: {
+                      popup: 'rounded-3xl shadow-2xl p-10'
+                    }
+                  })}
+                  className={`bg-custom-blue text-white px-4 py-2 rounded-xl md:rounded-2xl hover:bg-custom-orange w-fit max-w-xs mx-auto flex items-center justify-center mt-3 md:mt-4 ${
+                    !quiz ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                  disabled={!quiz}
+                >
+                  Attempt quiz
+                </button>
+              )}
             </div>
           </div>
         </div>

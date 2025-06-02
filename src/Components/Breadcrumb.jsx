@@ -1,33 +1,54 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import BASE_URL from '../config';
 
 const Breadcrumb = () => {
-  const location = useLocation();
+  const breadcrumbs = [
+    { name: 'Home', path: '/' },
+    { name: 'Dashboard', path: '/dashboard' },
+  ];
 
-  const pathnames = location.pathname.split('/').filter((x) => x);
+  const { id } = useParams();
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!id) return; // no course id in path
+
+    const fetchCourseDetails = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${BASE_URL}/courses/${id}/`);
+        setCourse(response.data);
+      } catch (error) {
+        console.error("Error fetching course details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourseDetails();
+  }, [id]);
 
   return (
     <nav className="text-sm text-gray-600 mb-4">
       <ol className="flex space-x-2">
-        <li>
-          <Link to="/" className="hover:underline">Home</Link>
-        </li>
-        {pathnames.map((value, index) => {
-          const to = `/${pathnames.slice(0, index + 1).join('/')}`;
-          const isLast = index === pathnames.length - 1;
+        {breadcrumbs.map((crumb, index) => (
+          <li key={crumb.path} className="flex items-center space-x-2">
+            {index > 0 && <span className="mx-1">/</span>}
+            <Link to={crumb.path} className="hover:underline">
+              {crumb.name}
+            </Link>
+          </li>
+        ))}
 
-          return (
-            <li key={to} className="flex items-center space-x-2">
-              <span className="mx-1">/</span>
-              {isLast ? (
-                <span className="text-gray-800 font-medium capitalize">{value}</span>
-              ) : (
-                <Link to={to} className="hover:underline capitalize">
-                  {value}
-                </Link>
-              )}
-            </li>
-          );
-        })}
+        {/* Show course title only if loaded */}
+        {!loading && course && (
+          <>
+            <span className="mx-1">/</span>
+            <li className="text-gray-800 font-medium">{course.title}</li>
+          </>
+        )}
       </ol>
     </nav>
   );
