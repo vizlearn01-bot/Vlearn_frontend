@@ -133,12 +133,12 @@ function CourseDetail() {
             <h1 className="text-xl md:text-3xl font-bold text-gray-800">VizLearn</h1>
           </Link>
         </div>
-        
+
         <div className="flex flex-col items-center text-center px-2 py-1 md:py-0">
           <h1 className="text-xl md:text-3xl font-bold text-custom-blue line-clamp-1">{course?.title}</h1>
           <p className="text-xs md:text-base text-slate-600 line-clamp-1">Course subtitle: {course?.subtitle}</p>
         </div>
-        
+
         <div className="hidden md:flex items-center text-slate-700 mr-4 p-2 md:p-4">
           <User className="h-5 w-5 mr-1" />
           {user ? (<span className="text-sm md:text-base">{user.username}</span>) : (<User />)}
@@ -147,8 +147,14 @@ function CourseDetail() {
 
       {/* Main Content */}
       <div className="mt-6 md:mt-8 px-2 sm:px-4 md:px-6 lg:px-8">
-        <div className="mb-6">
+        <div className="mb-6 flex justify-between">
           <Breadcrumb />
+          <div className="flex justify-start">
+            <Link to="/dashboard" className="flex items-center text-custom-blue hover:text-custom-orange transition-colors hover:cursor-pointer">
+              <ArrowLeft className="h-5 w-5 mr-2" />
+              <span className="text-sm font-medium">Back to dashboard</span>
+            </Link>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
@@ -190,13 +196,7 @@ function CourseDetail() {
 
           {/* Right Column - Sidebar */}
           <div className="col-span-1 space-y-4 md:space-y-6">
-            {/* Back Button - Mobile only */}
-            <div className="flex justify-start">
-              <Link to="/dashboard" className="flex items-center text-custom-blue hover:text-custom-orange transition-colors">
-                <ArrowLeft className="h-5 w-5 mr-2" />
-                <span className="text-sm font-medium">Back to dashboard</span>
-              </Link>
-            </div>
+
 
             {/* Course Info */}
             <div className="bg-white rounded-xl md:rounded-2xl shadow-lg md:shadow-xl p-4 md:p-6">
@@ -237,9 +237,8 @@ function CourseDetail() {
                       popup: 'rounded-3xl shadow-2xl p-10'
                     }
                   })}
-                  className={`bg-custom-blue text-white px-4 py-2 rounded-xl md:rounded-2xl hover:bg-custom-orange w-fit max-w-xs mx-auto flex items-center justify-center mt-3 md:mt-4 ${
-                    !quiz ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
+                  className={`bg-custom-blue text-white px-4 py-2 rounded-xl md:rounded-2xl hover:bg-custom-orange w-fit max-w-xs mx-auto flex items-center justify-center mt-3 md:mt-4 ${!quiz ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
                   disabled={!quiz}
                 >
                   Attempt quiz

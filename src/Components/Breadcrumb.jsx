@@ -35,7 +35,7 @@ const Breadcrumb = () => {
       <ol className="flex space-x-2">
         {breadcrumbs.map((crumb, index) => (
           <li key={crumb.path} className="flex items-center space-x-2">
-            {index > 0 && <span className="mx-1">/</span>}
+            {index > 0 && <span className="mx-1">{'>'}</span>}
             <Link to={crumb.path} className="hover:underline">
               {crumb.name}
             </Link>
@@ -45,8 +45,8 @@ const Breadcrumb = () => {
         {/* Show course title only if loaded */}
         {!loading && course && (
           <>
-            <span className="mx-1">/</span>
-            <li className="text-gray-800 font-medium">{course.title}</li>
+            <span className="mx-1"> {'>'} </span>
+            <li className="text-black font-medium">{course.title}</li>
           </>
         )}
       </ol>
