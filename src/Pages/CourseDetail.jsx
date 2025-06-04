@@ -24,6 +24,7 @@ function CourseDetail() {
       try {
         const response = await axios.get(`${BASE_URL}/courses/${id}/`);
         setCourse(response.data);
+        console.log(response.data)
         setLoading(false);
       } catch (error) {
         console.error("Error fetching course details:", error);
@@ -211,9 +212,9 @@ function CourseDetail() {
                   <p className="text-base md:text-lg font-semibold text-slate-900">{course.category}</p>
                 </div>
                 <div>
-                  <p className="text-xs md:text-sm text-slate-500">Last Updated</p>
+                  <p className="text-xs md:text-sm text-slate-500">Uploaded on</p>
                   <p className="text-base md:text-lg font-semibold text-slate-900">
-                    {new Date().toLocaleDateString()} {course.lastUpdated}
+                    {course.created_at} 
                   </p>
                 </div>
               </div>
