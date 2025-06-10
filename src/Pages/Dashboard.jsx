@@ -67,7 +67,7 @@ function Dashboard() {
     if (activeCategory === 'All') return true;
     return course.category?.toLowerCase() === activeCategory.toLowerCase();
   });
-
+console.log(user)
   return (
     <div className="flex">
       <SideNav />

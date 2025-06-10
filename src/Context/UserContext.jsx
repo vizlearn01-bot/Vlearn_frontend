@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import BASE_URL from "../config";
-import { useNavigate } from "react-router-dom";
 
 const UserContext = createContext();
 
@@ -16,7 +15,7 @@ export const UserProvider = ({ children }) => {
       return null;
     }
   });
-
+//fetch user on token change
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (!token?.access) return;

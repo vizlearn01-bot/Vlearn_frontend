@@ -48,9 +48,6 @@ function Signup() {
     }
   };
 
-
-
-
   const successAlert = () => {
     Swal.fire({
       title: "Success",

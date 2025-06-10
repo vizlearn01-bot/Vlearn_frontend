@@ -16,6 +16,7 @@ import QuizAttempt from './Pages/QuizAttempt';
 import Results from './Pages/Results';
 import SubscriptionPlan from './Components/SubscriptionPlan';
 import Simulations from './Pages/Simulations';
+import AdminDashboard from './Pages/AdminDashboard'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Signup />} />
             <Route path='/subscription' element={<SubscriptionPlan/>}/>
+            <Route path='/admindashboard' element={<AdminDashboard/>}/>
 
             <Route path="/dashboard" element={<DashboardOutlet />}>
               <Route path='home' element={<Dashboard />} />

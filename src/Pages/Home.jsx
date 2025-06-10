@@ -27,7 +27,6 @@ function Home() {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(URL);
-        console.log(response.data);
         // setCategories(response.data);
       } catch (error) {
         console.error(error);
@@ -143,7 +142,7 @@ function Home() {
       <section className="flex min-h-fit bg-slate-200 font-poppins">
         <div className="container mx-auto px-6 pb-24 mt-40">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8 animate-fade-in">
+            <div className="space-y-8 animate-fade-in max-w-xl">
               <h1 className="text-5xl md:text-6xl font-bold  md:leading-snug leading-normal">
                 Discover the Joy of <span className="text-custom-blue">Scientific Learning</span>
               </h1>
