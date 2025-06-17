@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from "react-router";
 import SideNav from '../Components/SideNav';
 
 function DashboardOutlet() {
@@ -6,6 +6,7 @@ function DashboardOutlet() {
     <div className="flex">
       <SideNav />
       {/* Main Content */}
+      
       <main className="md:ml-64 w-full">
         <Outlet /> {/* This will render the matched child route */}
       </main>

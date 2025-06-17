@@ -1,4 +1,4 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import BASE_URL from "../config";
@@ -13,7 +13,7 @@ function CourseDetail() {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { user } = useContext(UserContext);
+  const { user, token } = useContext(UserContext); // Consume UserContext
   const [quiz, setQuiz] = useState(null);
   const [quizLoading, setQuizLoading] = useState(true);
   const navigate = useNavigate();
@@ -22,7 +22,12 @@ function CourseDetail() {
   useEffect(() => {
     const fetchCourseDetails = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/courses/${id}/`);
+        const response = await axios.get(`${BASE_URL}/courses/${id}/`, {
+          headers: {
+            Authorization: `Bearer ${token?.access}`, // Use the token from context
+          },
+        });
+
         setCourse(response.data);
         console.log(response.data)
         setLoading(false);
@@ -187,10 +192,10 @@ function CourseDetail() {
 
             {/* Course Details */}
             <div className="rounded-xl md:rounded-2xl shadow-lg md:shadow-xl px-4 py-3 md:px-8 md:py-4">
-              <h2 className="text-xl md:text-2xl font-bold text-slate-900">{course.title}</h2>
-              <p className="text-sm md:text-base text-slate-600 mt-2 mb-3 md:mb-4">{course.description}</p>
+              <h2 className="text-xl md:text-2xl font-bold text-slate-900">{course?.title}</h2>
+              <p className="text-sm md:text-base text-slate-600 mt-2 mb-3 md:mb-4">{course?.description}</p>
               <p className="text-xs md:text-sm text-slate-500">
-                Duration: <span className="font-semibold">{course.duration}</span>
+                Duration: <span className="font-semibold">{course?.duration}</span>
               </p>
             </div>
           </div>
@@ -205,16 +210,16 @@ function CourseDetail() {
               <div className="space-y-3 md:space-y-4">
                 <div>
                   <p className="text-xs md:text-sm text-slate-500">Instructor</p>
-                  <p className="text-base md:text-lg font-semibold text-slate-900">{course.instructor}</p>
+                  <p className="text-base md:text-lg font-semibold text-slate-900">{course?.instructor}</p>
                 </div>
                 <div>
                   <p className="text-xs md:text-sm text-slate-500">Category</p>
-                  <p className="text-base md:text-lg font-semibold text-slate-900">{course.category}</p>
+                  <p className="text-base md:text-lg font-semibold text-slate-900">{course?.category}</p>
                 </div>
                 <div>
                   <p className="text-xs md:text-sm text-slate-500">Uploaded on</p>
                   <p className="text-base md:text-lg font-semibold text-slate-900">
-                    {course.created_at} 
+                    {course?.created_at}
                   </p>
                 </div>
               </div>

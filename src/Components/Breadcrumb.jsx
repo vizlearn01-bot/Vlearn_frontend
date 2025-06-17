@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from "react-router";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import BASE_URL from '../config';
@@ -46,7 +46,7 @@ const Breadcrumb = () => {
         {!loading && course && (
           <>
             <span className="mx-1"> {'>'} </span>
-            <li className="text-black font-medium">{course.title}</li>
+            <li className="text-black font-medium">{course?.title}</li>
           </>
         )}
       </ol>

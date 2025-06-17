@@ -3,7 +3,7 @@ import { BookOpen, Trophy, Clock, Calendar, GraduationCap, BarChart, AlignCenter
 import BASE_URL from '../config';
 import axios from 'axios';
 import UserContext from '../Context/UserContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router";
 
 // Define your Cloudinary base URL
 const CLOUDINARY_BASE_URL = 'https://res.cloudinary.com/dfycvaiv7/';
@@ -105,7 +105,7 @@ function User() {
 
   const handleSubscription = (e) => {
     e.preventDefault();
-    navigate("/subscription");
+    navigate("/billing-and-payments");
   }
   
   return (
@@ -118,11 +118,11 @@ function User() {
           {/* Profile Header */}
           <div className="p-6 sm:p-8 border-b border-gray-200">
             <div className="flex flex-col sm:flex-row items-center">
-              <img
+              {/* <img
                 src={avatarUrl}
                 alt={user.username}
                 className="w-24 h-24 rounded-full border-2 object-cover border-custom-orange shadow-lg"
-              />
+              /> */}
               <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
                 <h1 className="text-2xl font-bold text-gray-900">{user.username}</h1>
                 <p className="text-gray-500">{user.email}</p>

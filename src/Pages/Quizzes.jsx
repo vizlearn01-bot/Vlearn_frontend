@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Clock, Award, BarChart } from 'lucide-react';
 import axios from 'axios';
 import BASE_URL from '../config';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router";
 import Swal from 'sweetalert2';
 import UserContext from '../Context/UserContext';
 

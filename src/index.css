@@ -1,10 +1,198 @@
 /* src/index.css */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
 
-body {
-  @apply font-poppins;
-  /* @apply text-custom-blue */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800&display=swap'); 
+
+
+
+/* @plugin '@tailwindcss/typography'; */
+/* @plugin '@tailwindcss/forms'; */
+/* @plugin '@tailwindcss/aspect-ratio';  */
+
+@theme {
+
+    --color-primary-main: #6016a2;
+
+    --color-primary-palette-50: #faf4ff;
+    --color-primary-palette-100: #f3e6ff;
+    --color-primary-palette-200: #e8d2ff;
+    --color-primary-palette-300: #d6afff;
+    --color-primary-palette-400: #bd7cff;
+    --color-primary-palette-500: #a44aff;
+    --color-primary-palette-600: #9027f6;
+    --color-primary-palette-700: #7b17d9;
+    --color-primary-palette-800: #6016a2;
+    --color-primary-palette-900: #57158e;
+    --color-primary-palette-950: #3a016a;
+
+    --color-on-primary: #ffffff;
+    --color-primary-container: #f0dbff;
+    --color-on-primary-container: #280d42;
+    --color-secondary-main: #fc6423;
+
+    --color-secondary-palette-50: #fff5ed;
+    --color-secondary-palette-100: #ffe8d4;
+    --color-secondary-palette-200: #ffcea9;
+    --color-secondary-palette-300: #ffaa72;
+    --color-secondary-palette-400: #fd7d3a;
+    --color-secondary-palette-500: #fc6423;
+    --color-secondary-palette-600: #ed3e09;
+    --color-secondary-palette-700: #c42c0a;
+    --color-secondary-palette-800: #9c2410;
+    --color-secondary-palette-900: #7d2011;
+    --color-secondary-palette-950: #440d06;
+
+    --color-on-secondary: #ffffff;
+    --color-secondary-container: #ffdbcf;
+    --color-on-secondary-container: #380d00;
+    --color-tertiary-main: #1e6b86;
+
+    --color-tertiary-palette-50: #eefbfd;
+    --color-tertiary-palette-100: #d4f4f9;
+    --color-tertiary-palette-200: #afe8f2;
+    --color-tertiary-palette-300: #78d6e8;
+    --color-tertiary-palette-400: #39bbd7;
+    --color-tertiary-palette-500: #1e9ebc;
+    --color-tertiary-palette-600: #1b7f9f;
+    --color-tertiary-palette-700: #1e6b86;
+    --color-tertiary-palette-800: #20556a;
+    --color-tertiary-palette-900: #1f475a;
+    --color-tertiary-palette-950: #0f2e3d;
+
+    --color-on-tertiary: #ffffff;
+    --color-tertiary-container: #bde9ff;
+    --color-on-tertiary-container: #001f2a;
+    --color-info-main: #2c638b;
+
+    --color-info-palette-50: #f4f7fb;
+    --color-info-palette-100: #e7f0f7;
+    --color-info-palette-200: #cadeed;
+    --color-info-palette-300: #9bc3de;
+    --color-info-palette-400: #65a4cb;
+    --color-info-palette-500: #4288b5;
+    --color-info-palette-600: #2c638b;
+    --color-info-palette-700: #28577c;
+    --color-info-palette-800: #254b67;
+    --color-info-palette-900: #234057;
+    --color-info-palette-950: #17293a;
+
+    --color-on-info: #ffffff;
+    --color-info-container: #cce5ff;
+    --color-on-info-container: #001d31;
+    --color-success-main: #3f6836;
+
+    --color-success-palette-50: #f6f9f4;
+    --color-success-palette-100: #e8f3e5;
+    --color-success-palette-200: #d1e6cc;
+    --color-success-palette-300: #acd2a3;
+    --color-success-palette-400: #80b573;
+    --color-success-palette-500: #5d9750;
+    --color-success-palette-600: #497c3d;
+    --color-success-palette-700: #3f6836;
+    --color-success-palette-800: #324f2c;
+    --color-success-palette-900: #2a4126;
+    --color-success-palette-950: #132310;
+
+    --color-on-success: #ffffff;
+    --color-success-container: #c0efb0;
+    --color-on-success-container: #002200;
+    --color-warning-main: #725c0c;
+
+    --color-warning-palette-50: #faffe7;
+    --color-warning-palette-100: #eeffc0;
+    --color-warning-palette-200: #e2ff83;
+    --color-warning-palette-300: #daff3c;
+    --color-warning-palette-400: #ddff08;
+    --color-warning-palette-500: #e7f700;
+    --color-warning-palette-600: #d6d000;
+    --color-warning-palette-700: #aa9900;
+    --color-warning-palette-800: #8c7607;
+    --color-warning-palette-900: #725c0c;
+    --color-warning-palette-950: #453503;
+
+    --color-on-warning: #ffffff;
+    --color-warning-container: #ffe086;
+    --color-on-warning-container: #231b00;
+    --color-error-main: #ac290c;
+
+    --color-error-palette-50: #fff6ec;
+    --color-error-palette-100: #ffead3;
+    --color-error-palette-200: #ffd1a6;
+    --color-error-palette-300: #ffb06d;
+    --color-error-palette-400: #ff8332;
+    --color-error-palette-500: #ff600b;
+    --color-error-palette-600: #f54401;
+    --color-error-palette-700: #cb2f03;
+    --color-error-palette-800: #ac290c;
+    --color-error-palette-900: #81220d;
+    --color-error-palette-950: #460d04;
+
+    --color-on-error: #ffffff;
+    --color-error-container: #ffdad5;
+    --color-on-error-container: #3b0905;
+    --color-background: #fff7ff;
+    --color-on-background: #1e1a20;
+    --color-surface: #fbf8ff;
+    --color-on-surface: #1b1b21;
+    --color-surface-variant: #e7e0eb;
+    --color-on-surface-variant: #49454e;
+    --color-outline: #7a757f;
+    --color-outline-variant: #cac4cf;
+}
+
+
+@import "tailwindcss";
+
+@theme {
+  /* Custom Colors */
+  --color-custom-orange: #ff4900;
+  --color-custom-blue: #02a0bf;
+  --color-custom-white: #ffffff;
+
+  /* Font Family */
+  --font-family-poppins: Poppins, sans-serif;
+
+  /* Font Weights */
+  --font-weight-thin: 100;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Breakpoints (Screen sizes) */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* Background Images */
+  --background-image-custom-bg: url("https://d1ymz67w5raq8g.cloudfront.net/Pictures/1024x536/P/web/e/f/n/classicchemexp_958361.jpg");
+}
+
+/* Alternative approach using CSS custom properties in :root */
+:root {
+  --custom-orange: #ff4900;
+  --custom-blue: #02a0bf;
+  --custom-white: #ffffff;
+  --custom-bg-image: url("https://d1ymz67w5raq8g.cloudfront.net/Pictures/1024x536/P/web/e/f/n/classicchemexp_958361.jpg");
+}
+
+/* You can also use utility classes with the new theme variables */
+.bg-custom-orange {
+  background-color: var(--color-custom-orange);
+}
+
+.text-custom-blue {
+  color: var(--color-custom-blue);
+}
+
+.font-poppins {
+  font-family: var(--font-family-poppins);
+}
+
+.bg-custom-bg {
+  background-image: var(--background-image-custom-bg);
 }

@@ -4,7 +4,7 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router";
 import { Rocket, Brain, TestTube, ChevronRight, GraduationCap } from 'lucide-react';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import Swal from 'sweetalert2';

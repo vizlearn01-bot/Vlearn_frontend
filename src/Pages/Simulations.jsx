@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState, useContext } from 'react';
 import UserContext from '../Context/UserContext';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router";
 
 const simulationComponents = {
   charles_law: lazy(() => import('./Simulations/CharlesLawSim')),

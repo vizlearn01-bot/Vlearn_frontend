@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router";
 import {
   Menu, GraduationCap, User, ClipboardPen, FolderClosed,
   Home, ClipboardCheck, Cpu, X
@@ -56,7 +56,7 @@ const SideNav = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-20 h-screen w-64 bg-white border-r p-4 transition-transform duration-300 flex flex-col justify-between
+        className={`fixed left-0 top-0 z-20 h-screen w-64 bg-white border-r border-gray-3 00 p-4 transition-transform duration-300 flex flex-col justify-between
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
       >
         <div>
@@ -82,7 +82,7 @@ const SideNav = () => {
         </div>
 
         {/* Logout button at the bottom */}
-        <div className="mt-auto pt-4 border-t">
+        <div className="mt-auto pt-4 border-t border-gray-300">
           <button
             onClick={handleLogout}
             className="px-3 py-2 bg-red-600 w-full text-white rounded-3xl text-sm hover:bg-red-800 transition-colors duration-200"

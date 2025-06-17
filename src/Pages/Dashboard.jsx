@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { Bell, Search, Bookmark, Clock } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router";
 import axios from 'axios';
 import LazyLoad from 'react-lazyload';
 import debounce from 'lodash.debounce';
@@ -164,7 +164,7 @@ console.log(user)
                   {/* Clickable card area with hover effects */}
                   <Link
                     to={`/coursedetails/${course.id}`}
-                    className="group relative block rounded-3xl shadow-sm border overflow-hidden"
+                    className="group relative block rounded-3xl shadow-sm  overflow-hidden"
                   >
                     <LazyLoad height={200} offset={100} once>
                       <div className="relative">
