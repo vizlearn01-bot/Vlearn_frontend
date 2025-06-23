@@ -4,6 +4,8 @@ import BASE_URL from '../config';
 import axios from 'axios';
 import UserContext from '../Context/UserContext';
 import { useNavigate } from "react-router";
+import { useSubscriptionContext } from '../component-library/billing-and-payments/subscriptions/SubscriptionContextProvider';
+
 
 // Define your Cloudinary base URL
 const CLOUDINARY_BASE_URL = 'https://res.cloudinary.com/dfycvaiv7/';
@@ -37,7 +39,7 @@ function User() {
             headers: { Authorization: `Bearer ${token.access}` },
           })
         ]);
-        
+
         setUser(profileResponse.data);
         setSubscription(subscriptionResponse.data.is_active);
       } catch (error) {
@@ -107,7 +109,8 @@ function User() {
     e.preventDefault();
     navigate("/billing-and-payments");
   }
-  
+  const subscriptionContext = useSubscriptionContext();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -134,10 +137,19 @@ function User() {
                     Student
                   </span>
                 </div>
-                {subscription ? 
-                (<button className='bg-custom-orange mt-4 py-2 px-4 rounded-3xl text-white'>Active subscription</button>
-                ) : (<button className='bg-custom-orange mt-4 py-2 px-4 rounded-3xl text-white' onClick={handleSubscription}>Renew subscription</button>
+                {subscriptionContext?.activeSubscriptions?.length > 0 ? (
+                  <button className='bg-custom-orange mt-4 py-2 px-4 rounded-3xl text-white'>
+                    Active subscription
+                  </button>
+                ) : (
+                  <button
+                    className='bg-custom-orange mt-4 py-2 px-4 rounded-3xl text-white'
+                    onClick={handleSubscription}
+                  >
+                    Renew subscription
+                  </button>
                 )}
+
               </div>
             </div>
           </div>
@@ -197,7 +209,7 @@ function User() {
                         <BookOpen className="h-5 w-5 text-indigo-600 mr-2" />
                         <h3 className="font-medium text-gray-900">{attempt.quiz.title}</h3>
                       </div>
-                     
+
                       <div className={`mt-2 md:mt-0 inline-flex items-center px-3 py-1 rounded-full text-sm ${attempt.score >= 70 ? 'bg-green-100 text-green-800' :
                         attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
                           'bg-red-100 text-red-800'
@@ -205,11 +217,11 @@ function User() {
                         <Trophy className="h-4 w-4 mr-1" />
                         {attempt.score}%
                       </div>
-                      
+
                     </div>
-                    <div className='flex items-center'>                       
-                         <p className=" text-sm text-gray-900">{attempt.quiz.description}</p>
-                      </div>
+                    <div className='flex items-center'>
+                      <p className=" text-sm text-gray-900">{attempt.quiz.description}</p>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600 mt-2">
                       {/* <div className="flex items-center">
                         <Calendar className="h-4 w-4 mr-1" />

@@ -41,7 +41,7 @@ const CenteredDialog = ({
                         onClose();
                     }
                 }}
-                className={classNames("relative z-10")}
+                className={classNames("relative z-50")}
             >
                 <DialogBackdrop
                     transition

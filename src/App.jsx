@@ -1,5 +1,5 @@
 import '/src/index.css';
-import { BrowserRouter, createBrowserRouter, Route, RouterProvider, Routes } from "react-router";
+import { BrowserRouter, createBrowserRouter, Outlet, Route, RouterProvider, Routes } from "react-router";
 import Home from '../src/Pages/Home';
 import Dashboard from './Pages/Dashboard';
 import ContactUs from '../src/Pages/ContactUs';
@@ -18,6 +18,8 @@ import SubscriptionPlan from './Components/SubscriptionPlan';
 import Simulations from './Pages/Simulations';
 import AdminDashboard from './Pages/AdminDashboard'
 import BillingAndPaymentsRouter, { BillingAndPaymentsRoutes } from './component-library/account-management/routes/BillingAndPayments';
+import SubscriptionRestricted from './component-library/billing-and-payments/subscriptions/SubscriptionRestricted';
+import SubscriptionContextProvider from './component-library/billing-and-payments/subscriptions/SubscriptionContextProvider';
 
 
 function App() {
@@ -31,7 +33,11 @@ function App() {
       },
       {
         path: "home",
-        element: <Dashboard />
+
+        element:
+          <SubscriptionRestricted allowedSubscriptionPlans={["pro_plan"]}>
+            <Dashboard />
+          </SubscriptionRestricted>
       },
       {
         path: "user",
@@ -39,7 +45,10 @@ function App() {
       },
       {
         path: "resources",
-        element: <Resources />
+        element:
+          <SubscriptionRestricted allowedSubscriptionPlans={["pro_plan"]}>
+            <Resources />
+          </SubscriptionRestricted>
       },
       {
         path: "quizzes",
@@ -63,6 +72,9 @@ function App() {
   const Router = createBrowserRouter(
     [{
       path: "/",
+      element: <SubscriptionContextProvider>
+        <Outlet />
+      </SubscriptionContextProvider>,
       children: [
         {
           index: true,
@@ -86,7 +98,7 @@ function App() {
         },
         {
           path: "coursedetails/:id",
-          element: 
+          element:
             <CourseDetail />
         },
         dashboardRoutes,

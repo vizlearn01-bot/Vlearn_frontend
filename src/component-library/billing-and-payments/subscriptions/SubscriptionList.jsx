@@ -15,7 +15,6 @@ import UseLoaderData from "../../utils/UseLoaderData";
 import InvoiceDetails from "../billing/invoices/InvoiceDetails";
 import PaymentForm, { MakePaymentDialog } from "../payments/PaymentForm";
 import DropDownMenu from "../../dropdown-menus/DropDownMenu";
-import UserContext from "../../../Context/UserContext";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -156,7 +155,7 @@ const SubscriptionListItem = ({ subscription }) => {
                 {subscription.plan_name}
             </td>
             <td className="px-3 py-4 text-left">
-                {subscription.invoice_details.total_amount}
+                {subscription.invoice_details?.total_amount}
             </td>
             <td className="px-3 py-4 text-left">
                 <div className="flex items-center justify-start">
@@ -254,7 +253,6 @@ const SubscriptionList = () => {
             setAllowAdding(true);
         }
     }, [subscriptionList]);
-
     
     return (
         <Container className="flex flex-col space-y-4">

@@ -11,23 +11,15 @@ import UserContext from "../../../Context/UserContext";
 import DashboardOutlet from "../../../Pages/DashboardOutlet";
 
 export const BillingAndPaymentsRoutes = () => {
-//     const [userDetails, setUserDetails] = useState()
 
     const userContext = useContext(UserContext)
 
-//     useEffect(() =>{
-//         console.log(userContext);
-        
-        
-// },[userContext?.user])
-    
-//     console.log(userContext);
-    
+
     return {
         path: "billing-and-payments",
         element: (
             <ProtectedRoute>
-            <DashboardOutlet />
+                <DashboardOutlet />
             </ProtectedRoute>
         ),
         children: [
@@ -62,6 +54,17 @@ export const BillingAndPaymentsRoutes = () => {
                             return nonGetRequestTemplate(
                                 request,
                                 `${apiBaseUrl}/api/subscriptions/users/${userContext?.user?.id}/subscriptions/`,
+                                true
+                            );
+                        },
+                    },
+
+                    {
+                        path: "active",
+                        loader: async ({ request }) => {
+                            return getRequestTemplate(
+                                request,
+                                `${apiBaseUrl}/api/subscriptions/users/${userContext?.user?.id}/subscriptions/active/`,
                                 true
                             );
                         },
@@ -126,13 +129,13 @@ export const BillingAndPaymentsRoutes = () => {
                                         loader: async ({ request, params }) => {
                                             return getRequestTemplate(
                                                 request,
-                                                `${apiBaseUrl}/api/billing-and-payments/users/${userContext?.user?.id}/invoices/${params.invoiceNumber}/invoice-items/`
+                                                `${apiBaseUrl}/api/billing-and-payments/invoices/${params.invoiceNumber}/invoice-items/`
                                             );
                                         },
                                         action: async ({ request, params }) => {
                                             return nonGetRequestTemplate(
                                                 request,
-                                                `${apiBaseUrl}/api/billing-and-payments/users/${userContext?.user?.id}/invoices/${params.invoiceNumber}/invoice-items/`
+                                                `${apiBaseUrl}/api/billing-and-payments/invoices/${params.invoiceNumber}/invoice-items/`
                                             );
                                         },
                                     },
@@ -141,13 +144,13 @@ export const BillingAndPaymentsRoutes = () => {
                                         loader: async ({ request, params }) => {
                                             return getRequestTemplate(
                                                 request,
-                                                `${apiBaseUrl}/api/billing-and-payments/users/${userContext?.user?.id}/invoices/${params.invoiceNumber}/invoice-items/${params.invoiceItemId}/`
+                                                `${apiBaseUrl}/api/billing-and-payments/invoices/${params.invoiceNumber}/invoice-items/${params.invoiceItemId}/`
                                             );
                                         },
                                         action: async ({ request, params }) => {
                                             return nonGetRequestTemplate(
                                                 request,
-                                                `${apiBaseUrl}/api/billing-and-payments/users/${userContext?.user?.id}/invoices/${params.invoiceNumber}/invoice-items/${params.invoiceItemId}/`
+                                                `${apiBaseUrl}/api/billing-and-payments/invoices/${params.invoiceNumber}/invoice-items/${params.invoiceItemId}/`
                                             );
                                         },
                                     },
@@ -161,13 +164,13 @@ export const BillingAndPaymentsRoutes = () => {
                                         loader: async ({ request, params }) => {
                                             return getRequestTemplate(
                                                 request,
-                                                `${apiBaseUrl}/api/billing-and-payments/users/${userContext?.user?.id}/invoices/${params.invoiceNumber}/payment-transactions/`
+                                                `${apiBaseUrl}/api/billing-and-payments/invoices/${params.invoiceNumber}/payment-transactions/`
                                             );
                                         },
                                         action: async ({ request, params }) => {
                                             return nonGetRequestTemplate(
                                                 request,
-                                                `${apiBaseUrl}/api/billing-and-payments/users/${userContext?.user?.id}/invoices/${params.invoiceNumber}/payment-transactions/`
+                                                `${apiBaseUrl}/api/billing-and-payments/invoices/${params.invoiceNumber}/payment-transactions/`
                                             );
                                         },
                                     },
@@ -176,13 +179,13 @@ export const BillingAndPaymentsRoutes = () => {
                                         loader: async ({ request, params }) => {
                                             return getRequestTemplate(
                                                 request,
-                                                `${apiBaseUrl}/api/billing-and-payments/users/${userContext?.user?.id}/invoices/${params.invoiceNumber}/payment-transactions/${params.paymentTransactionId}/`
+                                                `${apiBaseUrl}/api/billing-and-payments/invoices/${params.invoiceNumber}/payment-transactions/${params.paymentTransactionId}/`
                                             );
                                         },
                                         action: async ({ request, params }) => {
                                             return nonGetRequestTemplate(
                                                 request,
-                                                `${apiBaseUrl}/api/billing-and-payments/users/${userContext?.user?.id}/invoices/${params.invoiceNumber}/payment-transactions/${params.paymentTransactionId}/`
+                                                `${apiBaseUrl}/api/billing-and-payments/invoices/${params.invoiceNumber}/payment-transactions/${params.paymentTransactionId}/`
                                             );
                                         },
                                     },
