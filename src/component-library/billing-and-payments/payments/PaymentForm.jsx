@@ -19,7 +19,7 @@ export const MakePaymentDialog = ({ component, invoiceDetails }) => {
             errors={errors}
             setErrors={setErrors}
             component={component}
-            actionUrl={`/settings/billing-and-payments/invoices/${invoiceDetails?.invoice_number}/payment-transactions/list`}
+            actionUrl={`/billing-and-payments/invoices/${invoiceDetails?.invoice_number}/payment-transactions/list`}
             formDataGroups={[paymentDetailsFormDataGroup]}
         >
             <PaymentForm

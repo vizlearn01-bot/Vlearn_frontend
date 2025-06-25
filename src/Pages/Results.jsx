@@ -17,6 +17,7 @@ function Results() {
           headers: { Authorization: `Bearer ${token.access}` },
         });
         setAttempts(response.data);
+        console.log(response.data)
         setLoading(false);
       } catch (err) {
         setError(err.response?.data?.error || err.message);
@@ -33,7 +34,7 @@ function Results() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Quiz Results</h1>
-      
+
       {attempts.length === 0 ? (
         <div className="bg-white rounded-3xl shadow-2xl p-8 text-center">
           <p className="text-gray-500">You haven't completed any quizzes yet.</p>
@@ -41,35 +42,34 @@ function Results() {
       ) : (
         <div className="space-y-6">
           {attempts
-              .sort((a, b) => new Date(b.end_time) - new Date(a.end_time))
-              .map((attempt) => (
-            <div key={attempt.id} className="bg-white rounded-3xl shadow-2xl p-6">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
-                <div>
-                  <h2 className="text-xl font-semibold">{attempt.quiz.title}</h2>
-                  <p className="text-gray-600 text-sm">{attempt.quiz.description}</p>
-                </div>
-                <div className="mt-4 md:mt-0">
-                  <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${
-                    attempt.score >= 70 ? 'bg-green-100 text-green-800' : 
-                    attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' : 
-                    'bg-red-100 text-red-800'
-                  }`}>
-                    <Trophy className="h-4 w-4 mr-1" />
-                    Score: {attempt.score}%
+            .sort((a, b) => new Date(b.end_time) - new Date(a.end_time))
+            .map((attempt) => (
+              <div key={attempt.id} className="bg-white rounded-3xl shadow-2xl p-6">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
+                  <div>
+                    <h2 className="text-xl font-semibold">{attempt.quiz.title}</h2>
+                    <p className="text-gray-600 text-sm">{attempt.quiz.description}</p>
+                  </div>
+                  <div className="mt-4 md:mt-0">
+                    <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${attempt.score >= 70 ? 'bg-green-100 text-green-800' :
+                        attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
+                      }`}>
+                      <Trophy className="h-4 w-4 mr-1" />
+                      Score: {attempt.score?.toFixed(1)}%
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                {/* <div className="flex items-center text-gray-600">
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  {/* <div className="flex items-center text-gray-600">
                   <Calendar className="h-5 w-5 mr-2" />
                   <span>
                     {new Date(attempt.start_time).toLocaleDateString()} at{' '}
                     {new Date(attempt.start_time).toLocaleTimeString()}
                   </span>
                 </div> */}
-                {/* <div className="flex items-center text-gray-600">
+                  {/* <div className="flex items-center text-gray-600">
                   <Clock className="h-5 w-5 mr-2" />
                   <span>
                     {attempt.end_time
@@ -80,16 +80,16 @@ function Results() {
                       : 'Not completed'}
                   </span>
                 </div> */}
-                <div className="flex items-center text-gray-600">
-                  <BarChart className="h-5 w-5 mr-2" />
-                  <span>
-                    {attempt.student_answers.filter(a => a.is_correct).length} /{' '}
-                    {attempt.student_answers.length} correct
-                  </span>
+                  <div className="flex items-center text-gray-600">
+                    <BarChart className="h-5 w-5 mr-2" />
+                    <span>
+                      {attempt.student_answers.filter(a => a.is_correct).length} /{' '}
+                      {attempt.student_answers.length} correct
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       )}
     </div>

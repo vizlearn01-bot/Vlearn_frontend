@@ -39,7 +39,7 @@ function User() {
             headers: { Authorization: `Bearer ${token.access}` },
           })
         ]);
-
+console.log(profileResponse.data)
         setUser(profileResponse.data);
         setSubscription(subscriptionResponse.data.is_active);
       } catch (error) {
@@ -127,7 +127,7 @@ function User() {
                 className="w-24 h-24 rounded-full border-2 object-cover border-custom-orange shadow-lg"
               /> */}
               <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
-                <h1 className="text-2xl font-bold text-gray-900">{user.username}</h1>
+                <h1 className="text-2xl font-bold">{user.username}</h1>
                 <p className="text-gray-500">{user.email}</p>
                 <p className="text-gray-500">{user.profile.phone_number}</p>
 

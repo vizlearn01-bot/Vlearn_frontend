@@ -35,7 +35,8 @@ function Quizzes() {
     fetchQuizzes();
   }, []);
 
-  if (loading) return <p>Loading quizzes...</p>;
+  if (loading) return <p
+  className='min-h-screen flex items-center justify-center'>Loading quizzes...</p>;
   if (error) return <p>Error: {error}</p>;
 
   const countDownAlert = (quizId) => {

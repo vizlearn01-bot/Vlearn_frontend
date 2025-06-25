@@ -14,7 +14,7 @@ const SubscriptionPlanList = ({ onSelect }) => {
     return (
         <div className="bg-white min-h-80">
             <UseFetcherData
-                url={"/settings/billing-and-payments/subscriptions/plans/list"}
+                url={"/billing-and-payments/subscriptions/plans/list"}
                 setData={(data) => {
                     setSubscriptionPlans(data.responseData.data);
                 }}

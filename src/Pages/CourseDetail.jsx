@@ -24,10 +24,9 @@ function CourseDetail() {
       try {
         const response = await axios.get(`${BASE_URL}/courses/${id}/`, {
           headers: {
-            Authorization: `Bearer ${token?.access}`, // Use the token from context
+            Authorization: `Bearer ${token.access}`, // Use the token from context
           },
         });
-
         setCourse(response.data);
         console.log(response.data)
         setLoading(false);
@@ -44,7 +43,11 @@ function CourseDetail() {
     const fetchQuizzes = async () => {
       setQuizLoading(true);
       try {
-        const response = await axios.get(`${BASE_URL}/quizzes/`);
+        const response = await axios.get(`${BASE_URL}/quizzes/`, {
+          headers: {
+            Authorization: `Bearer ${token?.access}`, // Use the token from context
+          },
+        });
         const courseQuiz = response.data.find(q => q.video === parseInt(id));
         setQuiz(courseQuiz || null);
       } catch (err) {

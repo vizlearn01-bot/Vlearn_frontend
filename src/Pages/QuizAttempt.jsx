@@ -246,7 +246,7 @@ function QuizAttempt() {
                   } ${isAnswered && answer.is_correct
                     ? 'bg-green-100 border-green-500'
                     : ''
-                  } border-2 ${isAnswered ? 'cursor-not-allowed' : 'cursor-pointer'
+                  } border border-gray-200 ${isAnswered ? 'cursor-not-allowed' : 'cursor-pointer'
                   }`}
               >
                 <div className="flex items-center justify-between">

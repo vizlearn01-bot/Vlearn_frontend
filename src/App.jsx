@@ -52,11 +52,17 @@ function App() {
       },
       {
         path: "quizzes",
-        element: <Quizzes />
+        element:
+          // <SubscriptionRestricted allowedSubscriptionPlans={["pro_plan"]}>
+            <Quizzes />
+          // </SubscriptionRestricted>
       },
       {
         path: "simulations",
-        element: <Simulations />
+        element:
+          <SubscriptionRestricted allowedSubscriptionPlans={["pro_plan"]}>
+            <Simulations />
+          </SubscriptionRestricted>
       },
       {
         path: "quiz/:id",

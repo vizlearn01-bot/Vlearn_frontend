@@ -56,7 +56,7 @@ const SideNav = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-20 h-screen w-64 bg-white border-r border-gray-3 00 p-4 transition-transform duration-300 flex flex-col justify-between
+        className={`fixed left-0 top-0 z-20 h-screen w-64 bg-white border-r border-gray-300 p-4 transition-transform duration-300 flex flex-col justify-between
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
       >
         <div>
