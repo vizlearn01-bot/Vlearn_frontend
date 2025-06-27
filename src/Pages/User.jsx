@@ -39,7 +39,7 @@ function User() {
             headers: { Authorization: `Bearer ${token.access}` },
           })
         ]);
-console.log(profileResponse.data)
+        console.log(profileResponse.data)
         setUser(profileResponse.data);
         setSubscription(subscriptionResponse.data.is_active);
       } catch (error) {
@@ -107,7 +107,7 @@ console.log(profileResponse.data)
 
   const handleSubscription = (e) => {
     e.preventDefault();
-    navigate("/billing-and-payments");
+    navigate("/subscription");
   }
   const subscriptionContext = useSubscriptionContext();
 
@@ -120,39 +120,47 @@ console.log(profileResponse.data)
         <div className="bg-white rounded-3xl shadow-2xl">
           {/* Profile Header */}
           <div className="p-6 sm:p-8 border-b border-gray-200">
-            <div className="flex flex-col sm:flex-row items-center">
-              {/* <img
-                src={avatarUrl}
-                alt={user.username}
-                className="w-24 h-24 rounded-full border-2 object-cover border-custom-orange shadow-lg"
-              /> */}
-              <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
-                <h1 className="text-2xl font-bold">{user.username}</h1>
-                <p className="text-gray-500">{user.email}</p>
-                <p className="text-gray-500">{user.profile.phone_number}</p>
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
+              {/* Left: Profile Info */}
+              <div className="flex flex-col sm:flex-row items-center sm:items-start">
+                <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
+                  <h1 className="text-2xl font-bold">{user.username}</h1>
+                  <p className="text-gray-500">{user.email}</p>
+                  <p className="text-gray-500">{user.profile.phone_number}</p>
 
-                <div className="mt-2 flex items-center justify-center sm:justify-start">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-                    <GraduationCap className="w-4 h-4 mr-1" />
-                    Student
-                  </span>
+                  <div className="mt-2 flex items-center justify-center sm:justify-start">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                      <GraduationCap className="w-4 h-4 mr-1" />
+                      Student
+                    </span>
+                  </div>
+
+                  {subscriptionContext?.activeSubscriptions?.length > 0 ? (
+                    <button className='bg-custom-orange mt-4 py-2 px-4 rounded-3xl text-white'>
+                      Active subscription
+                    </button>
+                  ) : (
+                    <button
+                      className='bg-custom-orange py-2 px-4 rounded-3xl text-white'
+                      onClick={handleSubscription}
+                    >
+                      Renew subscription
+                    </button>
+                  )}
                 </div>
-                {subscriptionContext?.activeSubscriptions?.length > 0 ? (
-                  <button className='bg-custom-orange mt-4 py-2 px-4 rounded-3xl text-white'>
-                    Active subscription
-                  </button>
-                ) : (
-                  <button
-                    className='bg-custom-orange mt-4 py-2 px-4 rounded-3xl text-white'
-                    onClick={handleSubscription}
-                  >
-                    Renew subscription
-                  </button>
-                )}
+              </div>
 
+              <div className="flex justify-center sm:justify-end">
+                <button
+                  onClick={() => navigate('/subscription')}
+                  className="sm:mt-16 inline-flex items-center gap-2 text-sm font-medium text-custom-blue hover:underline"
+                >
+                  View available plans →
+                </button>
               </div>
             </div>
           </div>
+
 
           {/* Stats Grid */}
           {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 sm:p-8 border-b border-gray-200">
@@ -188,6 +196,9 @@ console.log(profileResponse.data)
 
           {/* Quiz Results Section */}
         </div>
+
+
+
         <div className="p-6 sm:p-8 border-b border-gray-200 mt-10">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Quiz Results</h2>
           {quizLoading ? (
@@ -210,7 +221,7 @@ console.log(profileResponse.data)
                         <h3 className="font-medium text-gray-900">{attempt.quiz.title}</h3>
                       </div>
 
-                      <div className={`mt-2 md:mt-0 inline-flex items-center px-3 py-1 rounded-full text-sm ${attempt.score >= 70 ? 'bg-green-100 text-green-800' :
+                      <div className={`mt-2 md:mt-0 inline-flex items-center px-3 py-1 rounded-full w-fit text-sm ${attempt.score >= 70 ? 'bg-green-100 text-green-800' :
                         attempt.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
                           'bg-red-100 text-red-800'
                         }`}>
