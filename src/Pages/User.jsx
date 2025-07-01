@@ -39,7 +39,7 @@ function User() {
             headers: { Authorization: `Bearer ${token.access}` },
           })
         ]);
-        console.log(profileResponse.data)
+        // console.log(profileResponse.data)
         setUser(profileResponse.data);
         setSubscription(subscriptionResponse.data.is_active);
       } catch (error) {
