@@ -42,7 +42,7 @@ function QuizAttempt() {
 
         // Fetch quiz data
         const quizResponse = await axios.get(
-          `${BASE_URL}/quizzes/${id}/`,
+          `${BASE_URL}questions/quizzes/${id}/`,
           { headers: { Authorization: `Bearer ${token.access}` } }
         );
 

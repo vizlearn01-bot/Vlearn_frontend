@@ -13,7 +13,7 @@ function Results() {
   useEffect(() => {
     const fetchAttempts = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/attempts/`, {
+        const response = await axios.get(`${BASE_URL}/questions/attempts/`, {
           headers: { Authorization: `Bearer ${token.access}` },
         });
         setAttempts(response.data);

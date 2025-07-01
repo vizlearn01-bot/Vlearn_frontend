@@ -77,7 +77,7 @@ function User() {
       if (!token?.access) return;
 
       try {
-        const response = await axios.get(`${BASE_URL}/attempts/`, {
+        const response = await axios.get(`${BASE_URL}/questions/attempts/`, {
           headers: { Authorization: `Bearer ${token.access}` },
         });
         setQuizAttempts(response.data);
@@ -128,7 +128,7 @@ function User() {
                   <p className="text-gray-500">{user.email}</p>
                   <p className="text-gray-500">{user.profile.phone_number}</p>
 
-                  <div className="mt-2 flex items-center justify-center sm:justify-start">
+                  <div className="my-4 flex items-center justify-center sm:justify-start">
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
                       <GraduationCap className="w-4 h-4 mr-1" />
                       Student

@@ -18,7 +18,7 @@ function Quizzes() {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/quizzes/`, 
+        const response = await axios.get(`${BASE_URL}/questions/quizzes/`, 
           {
             headers: { Authorization: `Bearer ${token.access}` },
           }
