@@ -63,11 +63,15 @@ function Dashboard() {
   }, 300);
 
   const filteredCategory = filteredCourses
-  .filter(course => {
-    if (activeCategory === 'All') return true;
-    return course.category?.toLowerCase() === activeCategory.toLowerCase();
-  });
-console.log(user)
+    .filter(course => {
+      if (activeCategory === 'All') return true;
+      return course.category?.toLowerCase() === activeCategory.toLowerCase();
+    });
+
+// extracts and removes duplicates from the categories
+  const allCategories = courses.map(category => category.category)
+  const uniqueCategories = ["All", ...new Set(allCategories)]
+
   return (
     <div className="flex">
       <SideNav />
@@ -108,22 +112,22 @@ console.log(user)
 
           {/* Error Message */}
           {error && (
-           <div className="fixed inset-0 flex items-center justify-center bg-gray-100/80 z-10">
-           <div className="bg-white p-6 rounded-3xl shadow-2xl text-center max-w-md mx-4">
-             <p className="text-red-500 font-medium text-lg mb-4">
-               Login Required
-             </p>
-             <p className="text-gray-600">
-               Please log in to access the experiments.
-             </p>
-             <Link 
-               to="/login" 
-               className="mt-4 inline-block bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange transition"
-             >
-               Go to Login
-             </Link>
-           </div>
-         </div>
+            <div className="fixed inset-0 flex items-center justify-center bg-gray-100/80 z-10">
+              <div className="bg-white p-6 rounded-3xl shadow-2xl text-center max-w-md mx-4">
+                <p className="text-red-500 font-medium text-lg mb-4">
+                  Login Required
+                </p>
+                <p className="text-gray-600">
+                  Please log in to access the experiments.
+                </p>
+                <Link
+                  to="/login"
+                  className="mt-4 inline-block bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange transition"
+                >
+                  Go to Login
+                </Link>
+              </div>
+            </div>
           )}
         </header>
 
@@ -133,18 +137,20 @@ console.log(user)
             <>
               <h2 className="text-xl font-bold mb-4">Available experiments</h2>
               <div className="flex flex-wrap my-4 gap-2">
-                {['All', 'Term 1', 'Term 2'].map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setActiveCategory(category)}
-                    className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === category
-                      ? 'bg-custom-orange text-white'
-                      : 'bg-custom-blue text-white hover:bg-custom-orange'
-                      }`}
-                  >
-                    {category}
-                  </button>
-                ))}
+                {uniqueCategories
+                  .sort()
+                  .map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setActiveCategory(category)}
+                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === category
+                        ? 'bg-custom-orange text-white'
+                        : 'bg-custom-blue text-white hover:bg-custom-orange'
+                        }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
               </div></>
 
           ) : null}
@@ -158,52 +164,52 @@ console.log(user)
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredCategory
-              .sort((a,b) => a.title.localeCompare(b.title))
-              .map((course) => (
-                <div key={course.id} className="mb-6"> 
-                  {/* Clickable card area with hover effects */}
-                  <Link
-                    to={`/coursedetails/${course.id}`}
-                    className="group relative block rounded-3xl shadow-sm  overflow-hidden"
-                  >
-                    <LazyLoad height={200} offset={100} once>
-                      <div className="relative">
-                        {/* Course Image with Zoom Effect */}
-                        <img
-                          src={course.image}
-                          alt={course.title}
-                          className="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-500"
-                          loading="lazy"
-                        />
+                .sort((a, b) => a.title.localeCompare(b.title))
+                .map((course) => (
+                  <div key={course.id} className="mb-6">
+                    {/* Clickable card area with hover effects */}
+                    <Link
+                      to={`/coursedetails/${course.id}`}
+                      className="group relative block rounded-3xl shadow-sm  overflow-hidden"
+                    >
+                      <LazyLoad height={200} offset={100} once>
+                        <div className="relative">
+                          {/* Course Image with Zoom Effect */}
+                          <img
+                            src={course.image}
+                            alt={course.title}
+                            className="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                            loading="lazy"
+                          />
 
-                        {/* Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
-                          <div className="absolute bottom-0 left-0 right-0 p-6 space-y-2">
-                            <h3 className="text-xl font-bold text-white line-clamp-2">
-                              {course.title}
-                            </h3>
-                            <div className="flex gap-4 text-gray-200 text-sm">
-                              <div className="flex items-center gap-1">
-                                <Clock className="w-4 h-4" />
-                                <span>{course.duration}</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <Bookmark className="w-4 h-4" />
-                                <span>{course.category}</span>
+                          {/* Gradient Overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                            <div className="absolute bottom-0 left-0 right-0 p-6 space-y-2">
+                              <h3 className="text-xl font-bold text-white line-clamp-2">
+                                {course.title}
+                              </h3>
+                              <div className="flex gap-4 text-gray-200 text-sm">
+                                <div className="flex items-center gap-1">
+                                  <Clock className="w-4 h-4" />
+                                  <span>{course.duration}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <Bookmark className="w-4 h-4" />
+                                  <span>{course.category}</span>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </LazyLoad>
-                  </Link>
+                      </LazyLoad>
+                    </Link>
 
-                  {/* Visible title outside the card */}
-                  <h3 className="mt-3 font-semibold text-lg px-2 text-center">
-                    {course.title}
-                  </h3>
-                </div>
-              ))}
+                    {/* Visible title outside the card */}
+                    <h3 className="mt-3 font-semibold text-lg px-2 text-center">
+                      {course.title}
+                    </h3>
+                  </div>
+                ))}
             </div>
           )}
         </section>
