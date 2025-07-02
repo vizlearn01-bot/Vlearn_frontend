@@ -36,7 +36,7 @@ function Footer() {
               <h3 className="font-semibold mb-4">Contact</h3>
               <ul className="space-y-2 text-black">
                 <li>info@vizlearn.co</li>
-                <li>+254 712 345 678</li>
+                <li>+254 794 771 949</li>
               </ul>
             </div>
           </div>

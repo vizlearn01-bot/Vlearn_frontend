@@ -136,7 +136,7 @@ console.log(user)
           {user ? (
             <>
               <h2 className="text-xl font-bold mb-4">Available experiments</h2>
-              <div className="flex flex-wrap my-4 gap-2">
+              <div className="flex flex-wrap justify-center my-6 gap-4">
                 {uniqueCategories
                   .sort()
                   .map((category) => (

@@ -139,7 +139,7 @@ function Home() {
   return (
     <>
       <Navbar />
-      <section className="flex min-h-fit bg-slate-200 font-poppins">
+      <section className="flex min-h-screen bg-slate-200 font-poppins">
         <div className="container mx-auto px-6 pb-24 mt-40">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8 animate-fade-in max-w-xl">
