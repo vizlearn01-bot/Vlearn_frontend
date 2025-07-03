@@ -113,27 +113,39 @@ function Home() {
   const Categories = [
     {
       image:
-        "https://www.thoughtco.com/thmb/6MsMmUK27akFhb8i89kj95J5iko=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-545286316-433dd345105e4c6ebe4cdd8d2317fdaa.jpg",
-      title: "Gas laws",
+        "https://d1ymz67w5raq8g.cloudfront.net/Pictures/2000xAny/7/0/9/511709_bromineinaflask_shutterstock_683941438_536395.jpg", 
+        title: "Gas Laws",
       description: "This chapter explores the properties and behavior of gases. You'll learn how gas particles move, how pressure, volume, and temperature are related, and discover real-life applications like air in tyres and balloons.",
     },
     {
       image:
-        "https://marandahighschool.sc.ke/wp-content/uploads/2023/10/360_F_235711378_x8BsTR14c7Iu9myWbXVBk2DHf7dHsdgg.jpeg",
-      title: "Biology",
-      description: "Human anatomy",
+        "https://www.chemicals.co.uk/wp-content/uploads/2021/09/titration-experiment-scaled.jpg",
+      title: "The Mole",
+      description: "In this topic, you'll learn how the mole helps chemists count particles and relate them to mass. You'll also explore how to convert between mass and moles, determine chemical formulas, prepare molar solutions, and solve problems involving concentration, titration, and gas volumes.",
     },
     {
       image:
-        "https://t4.ftcdn.net/jpg/06/32/85/07/360_F_632850771_wxhuaCHM19y63i5zeYsZtEYTEU3LUbWc.jpg",
-      title: "Physics Lab",
-      description: "Forces and Motion",
+        "https://t4.ftcdn.net/jpg/05/47/17/37/360_F_547173780_Og9qycLncoXm2ZWcFjBdGlDKql67uTin.jpg",
+      title: "Organic Chemistry 1",
+      description: "This chapter introduces organic chemistry and focuses on hydrocarbons—compounds made of carbon and hydrogen. You'll learn to classify them, draw their structures, understand isomers, explore their properties, and see how they’re used and prepared.",
     },
     {
       image:
-        "https://astro.cornell.edu/sites/default/files/styles/pano/public/2022-11/CarinaNebulaWebb.jpg?h=42541cb7&itok=ROrFJymI",
-      title: "Astronomy Observation",
-      description: "Stars and Galaxies",
+        "https://assets.linde.com/-/media/celum-connect/2024/01/15/16/20/nitrogen_shutterstock_620270441_170628.png?impolicy=focal-point&cw=1200&ch=630&fx=1500&fy=1000&r=c580469973",
+      title: "Nitrogen and its compounds",
+      description: "Explore how nitrogen is obtained, its compounds like ammonia and nitric acid, and their properties, preparations, uses, and environmental impact. You'll also learn about nitrogen in fertilizers and related calculations.",
+    },
+    {
+      image:
+        "https://images.squarespace-cdn.com/content/v1/553e800ee4b04b98ae440e7b/1441099046122-MY4Y4H58H3JO0Z23NGPM/AdobeStock_60249891.jpg",
+      title: "Sulphur and its compounds",
+      description: "Learn about the sources, extraction, and uses of sulphur and its compounds. Explore how sulphuric acid is made, the properties of sulphur oxides, and the environmental effects of sulphur emissions.",
+    },
+    {
+      image:
+        "https://www.medigoapp.com/uploads/hydrochloric_acid_7_dc8263b24d.jpg",
+      title: "Chlorine and its compounds",
+      description: "This chapter explores the preparation, properties, and uses of chlorine and hydrogen chloride. You'll learn how solvents affect hydrogen chloride, how hydrochloric acid is made industrially, and the environmental impact of chlorine compounds."
     },
   ];
   return (
@@ -142,7 +154,7 @@ function Home() {
       <section className='relative h-fit bg-[url(images/Vlearn__bg.png)] bg-cover bg-fixed bg-no-repeat'>
         <div className="absolute inset-0 bg-white/70 md:bg-white/50 z-0"></div>
         <div className="relative z-10 space-y-8 animate-fade-in items-center text-center mx-auto pt-36 md:pt-48 px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mx-auto max-w-4xl">
+          <h1 className="text-4xl md:text-5xl font-bold mx-auto leading-snug max-w-4xl">
             Accessible Science Experiments for Every <span className='text-custom-blue'>Classroom</span> and <span className='text-custom-orange'>Learner</span>
           </h1>
           <p className="text-xl font-light max-w-3xl text-center leading-relaxed mx-auto">
@@ -162,45 +174,15 @@ function Home() {
         </div>
 
         <div className="hover:cursor-pointer mt-10 relative z-10">
-          <img
-            src="images/Vlearnbg.png"
-            alt="Vizlearn lms"
-            className="w-full md:w-4/6 h-fit mx-auto"
-          />
+          <Link to='/dashboard'>
+            <img
+              src="images/Vlearnbg.png"
+              alt="Vizlearn lms"
+              className="w-full md:w-4/6 h-fit mx-auto"
+            />
+          </Link>
         </div>
       </section>
-
-      {/* <section className="flex min-h-fit bg-slate-200 font-poppins ">
-        <div className="container mx-auto px-6 pb-24 mt-40 flex justify-center">
-            <div className="space-y-8 animate-fade-in max-w-xl">
-              <h1 className="text-5xl md:text-6xl font-bold  md:leading-snug leading-normal">
-                Discover the Joy of <span className="text-custom-blue">Scientific Learning</span>
-              </h1>
-              <p className="text-xl w-5/6">
-                Transform your classroom into an interactive laboratory. Engage students with hands-on experiments and comprehensive learning tools.
-              </p>
-              <div className="flex space-x-4">
-                <Link to="/dashboard">
-                  <button className="bg-custom-blue text-white px-8 py-3 rounded-full hover:bg-custom-orange transition-colors flex items-center">
-                    Start Learning <ChevronRight className="ml-2 h-5 w-5" />
-                  </button>
-                </Link>
-                <AnchorLink href='#demo'>
-                  <button className="border-2 border-custom-blue text-custom-blue px-8 py-3 rounded-full hover:bg-indigo-50 transition-colors hover:border-custom-orange">
-                    Book a demo
-                  </button>
-                </AnchorLink>
-              </div>
-            </div>
-            <div className="hover:cursor-pointer">
-              <img
-                src="images/Vlearn.png"
-                alt="Vizlearn lms"
-                className=""
-              />
-            </div>
-          </div>
-      </section> */}
       <section className="h-fit p-10 bg-white">
         <h2 className="text-4xl font-semibold mb-8 text-custom-blue text-center">
           Dive into our vast video library
@@ -239,11 +221,11 @@ function Home() {
                     className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer z-0">
-                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
                       <h3 className="text-xl font-bold text-white mb-2">
                         {item.title}
                       </h3>
-                      <p className="text-gray-200">{item.description}</p>
+                      <p className="text-gray-200 text-sm font-light">{item.description}</p>
                     </div>
                   </div>
                 </div>
