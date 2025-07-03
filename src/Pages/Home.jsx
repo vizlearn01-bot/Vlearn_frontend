@@ -151,13 +151,13 @@ function Home() {
   return (
     <>
       <Navbar />
-      <section className='relative h-fit bg-[url(images/Vlearn__bg.png)] bg-cover bg-fixed bg-no-repeat'>
-        <div className="absolute inset-0 bg-white/70 md:bg-white/50 z-0"></div>
+      <section className='relative h-fit bg-[url(images/Vlearn_bg1.png)] bg-cover bg-fixed bg-no-repeat'>
+        {/* <div className="absolute inset-0 bg-white/70 md:bg-white/50 z-0"></div> */}
         <div className="relative z-10 space-y-8 animate-fade-in items-center text-center mx-auto pt-36 md:pt-48 px-4">
           <h1 className="text-4xl md:text-5xl font-bold mx-auto leading-snug max-w-4xl">
             Accessible Science Experiments for Every <span className='text-custom-blue'>Classroom</span> and <span className='text-custom-orange'>Learner</span>
           </h1>
-          <p className="text-xl font-light max-w-3xl text-center leading-relaxed mx-auto">
+          <p className="text-lg md:text-xl font-light max-w-3xl text-center leading-relaxed mx-auto">
             Learn science through step-by-step, high-quality experiment videos—designed for classrooms, remote schools, and individual learners. No lab required—just watch, understand, and explore science anytime, anywhere.</p>
           <div className="flex justify-center gap-6 items-center">
             <Link to="/dashboard">
@@ -178,7 +178,7 @@ function Home() {
             <img
               src="images/Vlearnbg.png"
               alt="Vizlearn lms"
-              className="w-full md:w-4/6 h-fit mx-auto"
+              className="w-full md:w-4/6 h-full mx-auto"
             />
           </Link>
         </div>

@@ -3,14 +3,33 @@ import {
   Menu, GraduationCap, User, ClipboardPen, FolderClosed,
   Home, ClipboardCheck, Cpu, X
 } from 'lucide-react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react'; // 👈 Add useRef and useEffect
 import UserContext from '../Context/UserContext';
 import Swal from 'sweetalert2';
 
 const SideNav = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null); // 👈 Ref for sidebar
   const { logout } = useContext(UserContext);
   const navigate = useNavigate();
+
+  // 👇 useEffect to handle outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        window.innerWidth < 768 // Only on small screens
+      ) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
     Swal.fire({
@@ -56,6 +75,7 @@ const SideNav = () => {
 
       {/* Sidebar */}
       <aside
+        ref={sidebarRef} // 👈 Attach ref
         className={`fixed left-0 top-0 z-20 h-screen w-64 bg-white border-r border-gray-300 p-4 transition-transform duration-300 flex flex-col justify-between
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
       >
@@ -81,7 +101,7 @@ const SideNav = () => {
           </nav>
         </div>
 
-        {/* Logout button at the bottom */}
+        {/* Logout button */}
         <div className="mt-auto pt-4 border-t border-gray-300">
           <button
             onClick={handleLogout}
