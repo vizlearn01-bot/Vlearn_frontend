@@ -114,8 +114,8 @@ function Home() {
     {
       image:
         "https://www.thoughtco.com/thmb/6MsMmUK27akFhb8i89kj95J5iko=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-545286316-433dd345105e4c6ebe4cdd8d2317fdaa.jpg",
-      title: "Chemistry Experiment",
-      description: "Chemical Reactions",
+      title: "Gas laws",
+      description: "This chapter explores the properties and behavior of gases. You'll learn how gas particles move, how pressure, volume, and temperature are related, and discover real-life applications like air in tyres and balloons.",
     },
     {
       image:
@@ -139,9 +139,39 @@ function Home() {
   return (
     <>
       <Navbar />
-      <section className="flex min-h-fit bg-slate-200 font-poppins">
-        <div className="container mx-auto px-6 pb-24 mt-40">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+      <section className='relative h-fit bg-[url(images/Vlearn__bg.png)] bg-cover bg-fixed bg-no-repeat'>
+        <div className="absolute inset-0 bg-white/70 md:bg-white/50 z-0"></div>
+        <div className="relative z-10 space-y-8 animate-fade-in items-center text-center mx-auto pt-36 md:pt-48 px-4">
+          <h1 className="text-4xl md:text-5xl font-bold mx-auto max-w-4xl">
+            Accessible Science Experiments for Every <span className='text-custom-blue'>Classroom</span> and <span className='text-custom-orange'>Learner</span>
+          </h1>
+          <p className="text-xl font-light max-w-3xl text-center leading-relaxed mx-auto">
+            Learn science through step-by-step, high-quality experiment videos—designed for classrooms, remote schools, and individual learners. No lab required—just watch, understand, and explore science anytime, anywhere.</p>
+          <div className="flex justify-center gap-6 items-center">
+            <Link to="/dashboard">
+              <button className="bg-custom-blue text-white px-4 py-3 rounded-full hover:bg-custom-orange hover:cursor-pointer transition-colors flex items-center">
+                Start Learning <ChevronRight className="ml-2 h-5 w-5" />
+              </button>
+            </Link>
+            <AnchorLink href='#demo'>
+              <button className="border-1 text-custom-blue px-4 py-3 rounded-full hover:bg-white transition-colors hover:cursor-pointer hover:border-custom-orange">
+                Book a demo
+              </button>
+            </AnchorLink>
+          </div>
+        </div>
+
+        <div className="hover:cursor-pointer mt-10 relative z-10">
+          <img
+            src="images/Vlearnbg.png"
+            alt="Vizlearn lms"
+            className="w-full md:w-4/6 h-fit mx-auto"
+          />
+        </div>
+      </section>
+
+      {/* <section className="flex min-h-fit bg-slate-200 font-poppins ">
+        <div className="container mx-auto px-6 pb-24 mt-40 flex justify-center">
             <div className="space-y-8 animate-fade-in max-w-xl">
               <h1 className="text-5xl md:text-6xl font-bold  md:leading-snug leading-normal">
                 Discover the Joy of <span className="text-custom-blue">Scientific Learning</span>
@@ -164,14 +194,13 @@ function Home() {
             </div>
             <div className="hover:cursor-pointer">
               <img
-                src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80"
-                alt="Science Experiment"
-                className="rounded-3xl shadow-2xl"
+                src="images/Vlearn.png"
+                alt="Vizlearn lms"
+                className=""
               />
             </div>
           </div>
-        </div>
-      </section>
+      </section> */}
       <section className="h-fit p-10 bg-white">
         <h2 className="text-4xl font-semibold mb-8 text-custom-blue text-center">
           Dive into our vast video library
