@@ -113,8 +113,8 @@ function Home() {
   const Categories = [
     {
       image:
-        "https://d1ymz67w5raq8g.cloudfront.net/Pictures/2000xAny/7/0/9/511709_bromineinaflask_shutterstock_683941438_536395.jpg", 
-        title: "Gas Laws",
+        "https://d1ymz67w5raq8g.cloudfront.net/Pictures/2000xAny/7/0/9/511709_bromineinaflask_shutterstock_683941438_536395.jpg",
+      title: "Gas Laws",
       description: "This chapter explores the properties and behavior of gases. You'll learn how gas particles move, how pressure, volume, and temperature are related, and discover real-life applications like air in tyres and balloons.",
     },
     {
@@ -234,41 +234,40 @@ function Home() {
           )}
         </div>
       </section>
-      <section className='h-fit py-10 bg-slate-200'>
+      <section className='h-fit py-10'>
         <div className="container mx-auto px-6 mb-8">
-          <h2 className="text-4xl font-bold text-center mb-8">Why Vlearn?</h2>
+          <h2 className="text-4xl font-bold text-center mb-8 text-custom-orange">Learning made simple</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 text-center gap-6">
 
             {/* Feature 1 */}
-            <div className="p-4 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
+            <div className="p-4 rounded-3xl bg-white hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
               <div className="mb-4 flex justify-center items-center">
                 <Brain className="h-12 w-12 text-custom-blue" />
               </div>
-              <h3 className="text-xl font-semibold mb-4 ">Interactive Learning</h3>
-              <p className="text-gray-600">Engage with interactive 3D models and simulations</p>
+              <h3 className="text-xl font-semibold mb-4 ">Accessible, Anytime Learning</h3>
+              <p className="text-gray-600 font-light text-sm">Give every learner the opportunity to explore science through high-quality experiment videos—no lab required. Whether at school or home, students can access curriculum-aligned experiments whenever they need them. </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="p-4 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
+            <div className="p-4 rounded-3xl bg-white  hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
               <div className="mb-4 flex justify-center items-center">
                 <TestTube className="h-12 w-12 text-custom-blue" />
               </div>
-              <h3 className="text-xl font-semibold mb-4">Virtual Labs</h3>
-              <p className="text-gray-600">Access state-of-the-art virtual laboratory experiences</p>
+              <h3 className="text-xl font-semibold mb-4">See Every Step, Safely</h3>
+              <p className="text-gray-600 font-light text-sm">Visualize complex experiments through clear, guided videos that eliminate risks while enhancing understanding. Learners get front-row views without exposure to harmful chemicals or unsafe conditions.</p>
             </div>
 
             {/* Feature 3 */}
-            <div className="p-4 rounded-3xl bg-white shadow-lg hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
+            <div className="p-4 rounded-3xl bg-white  hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
               <div className="mb-4 flex justify-center items-center">
                 <Rocket className="h-12 w-12 text-custom-blue" />
               </div>
-              <h3 className="text-xl font-semibold mb-4">Progress Tracking</h3>
-              <p className="text-gray-600">Monitor student progress with detailed analytics</p>
+              <h3 className="text-xl font-semibold mb-4">Watch, Pause, Repeat</h3>
+              <p className="text-gray-600 font-light text-sm">Unlike live demos, students can revisit any experiment as many times as needed. This supports different learning speeds, strengthens retention, and builds confidence in scientific concepts.</p>
             </div>
 
           </div>
         </div>
-
       </section>
       <section className="bg-custom-blue py-20">
         <div className="container mx-auto px-6 " id="demo" >
@@ -353,7 +352,6 @@ function Home() {
           </form>
         </div>
       </section>
-
       <Footer />
     </>
   );
