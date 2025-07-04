@@ -17,10 +17,24 @@ function Dashboard() {
   const [error, setError] = useState(null);
   const { user, token } = useContext(UserContext); // Consume UserContext
   const [activeCategory, setActiveCategory] = useState('All');
+  const [videoCount, setVideoCount] =  useState(0)
 
 
   // Fetch courses on component mount
   useEffect(() => {
+     const fetchVideoCount = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/video-count`);
+        console.log(response.data)
+        setVideoCount(response.data)
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchVideoCount();
+    
     const fetchCourses = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/experiment_videos`, {
@@ -45,7 +59,8 @@ function Dashboard() {
       setError('Please log in to access courses.');
       setIsLoading(false);
     }
-  }, [token]);
+  }, [token]
+);
 
   // Debounced search input handler
   const handleInputChange = debounce((e) => {
@@ -135,7 +150,7 @@ console.log(user)
         <section className="mb-8 p-6 pt-24 h-fit">
           {user ? (
             <>
-              <h2 className="text-xl font-bold mb-4">Available experiments</h2>
+              <h2 className="text-xl font-bold mb-4 text-center">Available experiments</h2>
               <div className="flex flex-wrap justify-center my-6 gap-4">
                 {uniqueCategories
                   .sort()
