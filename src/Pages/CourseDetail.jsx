@@ -28,7 +28,6 @@ function CourseDetail() {
           },
         });
         setCourse(response.data);
-        console.log(response.data)
         setLoading(false);
       } catch (error) {
         console.error("Error fetching course details:", error);

@@ -9,6 +9,7 @@ import { Rocket, Brain, TestTube, ChevronRight, GraduationCap } from 'lucide-rea
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import Swal from 'sweetalert2';
 import emailjs from '@emailjs/browser';
+import BASE_URL from '../config';
 
 function Home() {
   // const [categories, setCategories] = useState([]);
@@ -19,22 +20,23 @@ function Home() {
     school: '',
     date: '',
   })
-
+  const [videoCount, setVideoCount] = useState(0)
   const form = useRef()
 
   // Fetching data on the categories from the JSON file
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchVideoCount = async () => {
       try {
-        const response = await axios.get(URL);
-        // setCategories(response.data);
+        const response = await axios.get(`${BASE_URL}/video-count`);
+        console.log(response.data)
+        setVideoCount(response.data)
       } catch (error) {
         console.error(error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchCategories();
+    fetchVideoCount();
   }, []);
 
   const responsive = {
@@ -236,9 +238,9 @@ function Home() {
       </section>
       <section className='h-fit py-10'>
         <div className="container mx-auto px-6 mb-8">
-          <h2 className="text-4xl font-bold text-center mb-8 text-custom-orange">Learning made simple</h2>
+          <h2 className="text-4xl font-bold text-center mb-4 text-custom-orange">Learning made simple</h2>
+          <h3 className='text-center text-xl mb-10'> Get exclusive access to our repository of<span className='italic font-bold text-custom-orange'> {videoCount.count} </span> science experiment videos and enjoy...</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 text-center gap-6">
-
             {/* Feature 1 */}
             <div className="p-4 rounded-3xl bg-white hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
               <div className="mb-4 flex justify-center items-center">
@@ -348,6 +350,7 @@ function Home() {
             >
               Get Started Now
               <GraduationCap className="ml-2 h-5 w-5" />
+
             </button>
           </form>
         </div>
