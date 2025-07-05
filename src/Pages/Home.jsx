@@ -5,7 +5,7 @@ import 'react-multi-carousel/lib/styles.css';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import { Link } from "react-router";
-import { Rocket, Brain, TestTube, ChevronRight, GraduationCap } from 'lucide-react';
+import { Repeat,ShieldCheck, Presentation, ChevronRight, GraduationCap, PresentationIcon } from 'lucide-react';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import Swal from 'sweetalert2';
 import emailjs from '@emailjs/browser';
@@ -244,16 +244,15 @@ function Home() {
             {/* Feature 1 */}
             <div className="p-4 rounded-3xl bg-white hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
               <div className="mb-4 flex justify-center items-center">
-                <Brain className="h-12 w-12 text-custom-blue" />
+                <Presentation strokeWidth={1} className="h-16 w-16 text-custom-blue" />
               </div>
               <h3 className="text-xl font-semibold mb-4 ">Accessible, Anytime Learning</h3>
               <p className="text-gray-600 font-light text-sm">Give every learner the opportunity to explore science through high-quality experiment videos—no lab required. Whether at school or home, students can access curriculum-aligned experiments whenever they need them. </p>
             </div>
-
             {/* Feature 2 */}
             <div className="p-4 rounded-3xl bg-white  hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
               <div className="mb-4 flex justify-center items-center">
-                <TestTube className="h-12 w-12 text-custom-blue" />
+                <ShieldCheck strokeWidth={1} className="h-16 w-16 text-custom-blue" />
               </div>
               <h3 className="text-xl font-semibold mb-4">See Every Step, Safely</h3>
               <p className="text-gray-600 font-light text-sm">Visualize complex experiments through clear, guided videos that eliminate risks while enhancing understanding. Learners get front-row views without exposure to harmful chemicals or unsafe conditions.</p>
@@ -262,7 +261,7 @@ function Home() {
             {/* Feature 3 */}
             <div className="p-4 rounded-3xl bg-white  hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
               <div className="mb-4 flex justify-center items-center">
-                <Rocket className="h-12 w-12 text-custom-blue" />
+                <Repeat strokeWidth={1} className="h-16 w-16 text-custom-blue" />
               </div>
               <h3 className="text-xl font-semibold mb-4">Watch, Pause, Repeat</h3>
               <p className="text-gray-600 font-light text-sm">Unlike live demos, students can revisit any experiment as many times as needed. This supports different learning speeds, strengthens retention, and builds confidence in scientific concepts.</p>
