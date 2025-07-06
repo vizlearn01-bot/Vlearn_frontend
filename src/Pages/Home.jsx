@@ -153,8 +153,8 @@ function Home() {
   return (
     <>
       <Navbar />
-      <section className='relative h-fit bg-[url(images/Vlearn_bg1.png)] bg-cover bg-fixed bg-no-repeat'>
-        {/* <div className="absolute inset-0 bg-white/70 md:bg-white/50 z-0"></div> */}
+      <section className='relative h-fit bg-[url(/images/Vlearn_bg1.png)] bg-cover bg-fixed bg-no-repeat'>
+        <div className="absolute inset-0 bg-white/70 md:bg-white/50 z-0"></div>
         <div className="relative z-10 space-y-8 animate-fade-in items-center text-center mx-auto pt-36 md:pt-48 px-4">
           <h1 className="text-4xl md:text-5xl font-bold mx-auto leading-snug max-w-4xl">
             Accessible Science Experiments for Every <span className='text-custom-blue'>Classroom</span> and <span className='text-custom-orange'>Learner</span>
