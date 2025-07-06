@@ -5,7 +5,7 @@ import 'react-multi-carousel/lib/styles.css';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import { Link } from "react-router";
-import { Repeat,ShieldCheck, Presentation, ChevronRight, GraduationCap, PresentationIcon } from 'lucide-react';
+import { Repeat, ShieldCheck, Presentation, ChevronRight, GraduationCap, PresentationIcon } from 'lucide-react';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import Swal from 'sweetalert2';
 import emailjs from '@emailjs/browser';
@@ -186,9 +186,10 @@ function Home() {
         </div>
       </section>
       <section className="h-fit p-10 bg-white">
-        <h2 className="text-4xl font-semibold mb-8 text-custom-blue text-center">
-          Dive into our vast video library
+        <h2 className="text-4xl font-semibold mb-4 text-custom-blue text-center">
+          Your learning adventure starts here.
         </h2>
+        <p className='text-center mb-8 font-light text-lg'><span className='italic font-bold text-custom-orange text-2xl'>From experiments to simulations</span> — Take a peek at the topics that will shape your future.</p>
         <div id="categories" className="">
           {isLoading ? (
             <div className="flex justify-center items-center min-h-[20vh]">
@@ -239,7 +240,7 @@ function Home() {
       <section className='h-fit py-10'>
         <div className="container mx-auto px-6 mb-8">
           <h2 className="text-4xl font-bold text-center mb-4 text-custom-orange">Learning made simple</h2>
-          <h3 className='text-center text-xl mb-10'> Get exclusive access to our repository of<span className='italic font-bold text-custom-orange'> {videoCount.count} </span> science experiment videos and enjoy...</h3>
+          <h3 className='text-center text-xl mb-10 font-light'> Get exclusive access to our repository of<span className='italic font-bold text-custom-orange'> {videoCount.count} </span> science experiment videos and enjoy...</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 text-center gap-6">
             {/* Feature 1 */}
             <div className="p-4 rounded-3xl bg-white hover:shadow-2xl hover:scale-105 hover:cursor-pointer transition-shadow duration-300 transform ">
