@@ -33,7 +33,7 @@ function QuizAttempt() {
 
         // Start new attempt (no need for backend to track time)
         const attemptResponse = await axios.post(
-          `${BASE_URL}/attempts/start/`,
+          `${BASE_URL}/questions/attempts/start/`,
           { quiz_id: id },
           { headers: { Authorization: `Bearer ${token.access}` } }
         );
@@ -42,7 +42,7 @@ function QuizAttempt() {
 
         // Fetch quiz data
         const quizResponse = await axios.get(
-          `${BASE_URL}questions/quizzes/${id}/`,
+          `${BASE_URL}/questions/quizzes/${id}/`,
           { headers: { Authorization: `Bearer ${token.access}` } }
         );
 
@@ -101,7 +101,7 @@ function QuizAttempt() {
     try {
       // Save answer to backend
       const response = await axios.post(
-        `${BASE_URL}/answers/`,
+        `${BASE_URL}/questions/answers/`,
         {
           attempt_id: attempt.id,
           question_id: quiz.questions[currentQuestionIndex].id,
@@ -129,7 +129,7 @@ function QuizAttempt() {
       // First save the current answer if not already saved
       if (selectedAnswerId && !isAnswered) {
         await axios.post(
-          `${BASE_URL}/answers/`,
+          `${BASE_URL}/questions/answers/`,
           {
             attempt_id: attempt.id,
             question_id: quiz.questions[currentQuestionIndex].id,
@@ -146,7 +146,7 @@ function QuizAttempt() {
   
       // Submit attempt with duration and properly calculated score
       const response = await axios.put(
-        `${BASE_URL}/attempts/${attempt.id}/submit/`,
+        `${BASE_URL}/questions/attempts/${attempt.id}/submit/`,
         {
           duration: timeSpent,
           score: percentageScore,  // Send calculated percentage
