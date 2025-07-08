@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import BASE_URL from '../config';
 import UserContext from '../Context/UserContext';
-import { GraduationCap, LockKeyhole } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { GraduationCap, LockKeyhole, ArrowLeft } from 'lucide-react';
+import { useNavigate, Link } from 'react-router';
 
 const SubscriptionPlan = () => {
     const { token } = useContext(UserContext);
@@ -41,13 +41,13 @@ const SubscriptionPlan = () => {
     }, [token]);
 
     return (
-        <div className="min-h-screen bg-gray-50 py-10 px-2 sm:px-4 lg:px-6">
+        <div className="min-h-screen bg-gray-50 py-10 px-2 sm:px-4 lg:px-6 font-light">
             {/* Header */}
-            <div className="max-w-7xl mx-auto text-center mb-12">
-                <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl lg:text-6xl">
+            <div className="max-w-7xl mx-auto text-center mb-10">
+                <h1 className="text-4xl font-extrabold  sm:text-5xl lg:text-6xl">
                     VizLearn Subscription Plans
                 </h1>
-                <p className="mt-5 max-w-xl mx-auto text-xl text-gray-500">
+                <p className="mt-5 max-w-xl mx-auto text-xl ">
                     Choose the plan that works best for your learning journey
                 </p>
             </div>
@@ -56,7 +56,7 @@ const SubscriptionPlan = () => {
             {loading ? (
                 <div className="text-center py-8">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-custom-blue mx-auto" />
-                    <p className="mt-4 text-gray-600">Loading subscription plans...</p>
+                    <p className="mt-4 ">Loading subscription plans...</p>
                 </div>
             ) : error ? (
                 <div className="text-center text-red-600">{error}</div>
@@ -74,8 +74,8 @@ const SubscriptionPlan = () => {
                                 </div>
                             )}
 
-                            <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
-                            <div className="mt-4 flex items-baseline text-gray-900">
+                            <h3 className="text-lg font-semibold ">{plan.name}</h3>
+                            <div className="mt-4 flex items-baseline ">
                                 <span className="text-4xl font-extrabold tracking-tight">{plan.displayPrice}</span>
                                 <span className="ml-1 text-xl font-semibold">/{plan.duration}</span>
                             </div>
@@ -93,7 +93,7 @@ const SubscriptionPlan = () => {
                                         >
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                         </svg>
-                                        <span className="ml-3 text-gray-500">{feature}</span>
+                                        <span className="ml-3 ">{feature}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -108,9 +108,9 @@ const SubscriptionPlan = () => {
             )}
 
             {/* Why Choose VizLearn section */}
-            <div className="mt-16 bg-blue-50 rounded-3xl shadow-2xl p-8 items-center">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Why Choose VizLearn?</h2>
-                <p className="text-gray-600 mb-6 text-center max-w-4xl mx-auto">
+            <div className="mt-8 bg-blue-50 rounded-3xl shadow-2xl p-8 items-center font-light">
+                <h2 className="text-2xl font-bold  mb-4 text-center">Why Choose VizLearn?</h2>
+                <p className=" mb-6 text-center max-w-4xl mx-auto">
                     Our subscription plans are designed to provide flexible learning options for every type of student.
                     Whether you're just starting out or looking to master advanced concepts, we have a plan that fits your needs.
                 </p>
@@ -118,8 +118,8 @@ const SubscriptionPlan = () => {
                     <div className="flex items-start">
                         <GraduationCap className='text-white h-12 w-12 bg-custom-orange p-1 rounded-full' />
                         <div className="ml-4">
-                            <h3 className="text-lg font-medium text-gray-900">Learn at Your Pace</h3>
-                            <p className="mt-1 text-gray-600">
+                            <h3 className="text-lg font-medium ">Learn at Your Pace</h3>
+                            <p className="mt-1 ">
                                 Access courses anytime, anywhere with our mobile-friendly platform.
                             </p>
                         </div>
@@ -128,15 +128,22 @@ const SubscriptionPlan = () => {
                     <div className="flex items-start">
                         <LockKeyhole className='text-white h-12 w-12 bg-custom-orange p-1 rounded-full' />
                         <div className="ml-4">
-                            <h3 className="text-lg font-medium text-gray-900">Secure Payment</h3>
-                            <p className="mt-1 text-gray-600">
+                            <h3 className="text-lg font-medium ">Secure Payment</h3>
+                            <p className="mt-1 ">
                                 Your payment information is always protected with M-Pesa's secure system.
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
+              <div className="flex text-center mx-auto mt-6">
+            <Link to="/" className="flex items-center bg-custom-blue p-4 rounded-4xl mx-auto text-white hover:bg-custom-orange transition-colors hover:cursor-pointer">
+              <ArrowLeft className="h-5 w-5 mr-2" />
+              <span className="text-sm font-medium">Back to the home page</span>
+            </Link>
+          </div>
         </div>
+        
     );
 };
 

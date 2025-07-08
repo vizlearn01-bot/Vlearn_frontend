@@ -40,7 +40,7 @@ function Login() {
           confirmButtonText: "OK",
         });
 
-        navigate("/dashboard/home");
+        navigate("/dashboard/user");
       }
     } catch (error) {
       const errorMessage =

@@ -271,7 +271,7 @@ function Home() {
           </div>
         </div>
       </section>
-      <section className="bg-custom-blue py-20">
+      <section className="bg-custom-blue py-20" id='demobooking'>
         <div className="container mx-auto px-6 " id="demo" >
           <h2 className="text-4xl font-bold text-white mb-6 text-center">
             Ready to Transform Your Science Class?
