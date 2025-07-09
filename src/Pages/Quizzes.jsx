@@ -48,7 +48,7 @@ function Quizzes() {
       html: `
         <div class="items-center gap-2">
           <b id="countdown" class="text-4xl font-bold text-custom-blue texts-center">${seconds}</b>
-          <span class="text-gray-600 items-center text-2xl">seconds</span>
+          <span class="text-black items-center text-2xl">seconds</span>
         </div>
       `,
       timer: seconds * 1000, // Convert to milliseconds
@@ -106,31 +106,31 @@ function Quizzes() {
       </div> */}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {quizzes.map((quiz) => (
-          <div key={quiz.id} className="bg-white rounded-3xl shadow-2xl p-6 h-fit w-full">
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">{quiz.title}</h3>
-            <p className="text-gray-600 mb-4">{quiz.description}</p>
+          <div key={quiz.id} className="bg-white rounded-3xl shadow-2xl p-6 h-full w-full items-center">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">{quiz.title}</h3>
+            <p className="text-black mb-4 font-light text-sm">{quiz.description}</p>
 
             <div className="space-y-3 mb-6">
-              <div className="flex items-center text-gray-600">
+              <div className="flex items-center text-black font-bold text-sm">
                 <Clock className="h-5 w-5 mr-2" />
                 <span>{quiz.time_limit} minutes</span>
               </div>
-              <div className="flex items-center text-gray-600">
+              <div className="flex items-center text-black font-bold text-sm">
                 <BarChart className="h-5 w-5 mr-2" />
                 <span>{quiz.question_count} questions</span>
               </div>
-              <div className="flex items-center text-gray-600">
+              <div className="flex items-center text-black font-bold text-sm">
                 <Award className="h-5 w-5 mr-2" />
                 <span>{quiz.difficulty}</span>
               </div>
             </div>
 
-            <div className="flex space-x-3">
+            <div className="flex space-x-3 items">
               <button
                 onClick={() => countDownAlert(quiz.id)}
-                className="bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange w-full">
+                className="bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange w-full cursor-pointer">
                 Start Quiz
               </button>
               {/* <button className="flex-1 border border-custom-blue text-custom-blue px-4 py-2 rounded-3xl hover:bg-indigo-50">
