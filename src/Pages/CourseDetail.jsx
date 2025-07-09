@@ -42,7 +42,7 @@ function CourseDetail() {
     const fetchQuizzes = async () => {
       setQuizLoading(true);
       try {
-        const response = await axios.get(`${BASE_URL}/quizzes/`, {
+        const response = await axios.get(`${BASE_URL}/questions/quizzes/`, {
           headers: {
             Authorization: `Bearer ${token?.access}`, // Use the token from context
           },

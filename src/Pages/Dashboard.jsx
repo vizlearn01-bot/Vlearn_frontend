@@ -95,7 +95,7 @@ console.log(user)
         {/* Search Bar */}
         <header className="flex items-start justify-normal p-4 md:gap-96 bg-white shadow-2xl top-0 fixed w-full z-10">
           {/* Search Bar */}
-          <div className="relative w-full md:w-1/3">
+          <div className="relative w-1/3 md:w-1/3">
             <div className="flex items-center border border-custom-blue rounded-3xl overflow-hidden">
               <Search className="absolute left-3 h-5 w-5 text-custom-blue" />
               <input
@@ -103,7 +103,7 @@ console.log(user)
                 placeholder="Search courses..."
                 defaultValue={searchItem}
                 onChange={handleInputChange}
-                className="pl-10 pr-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-custom-blue placeholder-gray-400"
+                className="pl-10 pr-4 py-2 w-2xl focus:outline-none focus:ring-2 focus:ring-custom-blue placeholder-gray-400"
               />
             </div>
           </div>
