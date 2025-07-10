@@ -106,10 +106,10 @@ function Quizzes() {
       </div> */}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {quizzes.map((quiz) => (
           <div key={quiz.id} className="bg-white rounded-3xl shadow-2xl p-6 h-full w-full items-center">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">{quiz.title}</h3>
+            <h3 className="text-lg font-semibold text-black mb-2">{quiz.title}</h3>
             <p className="text-black mb-4 font-light text-sm">{quiz.description}</p>
 
             <div className="space-y-3 mb-6">
@@ -121,13 +121,13 @@ function Quizzes() {
                 <BarChart className="h-5 w-5 mr-2" />
                 <span>{quiz.question_count} questions</span>
               </div>
-              <div className="flex items-center text-black font-bold text-sm">
+              {/* <div className="flex items-center text-black font-bold text-sm">
                 <Award className="h-5 w-5 mr-2" />
                 <span>{quiz.difficulty}</span>
-              </div>
+              </div> */}
             </div>
 
-            <div className="flex space-x-3 items">
+            <div className="flex space-x-3">
               <button
                 onClick={() => countDownAlert(quiz.id)}
                 className="bg-custom-blue text-white px-4 py-2 rounded-3xl hover:bg-custom-orange w-full cursor-pointer">
