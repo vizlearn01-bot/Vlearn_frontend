@@ -346,7 +346,7 @@ function Home() {
             </div>
             <button
               type="submit"
-              className="bg-custom-blue w-full md:w-1/3 mx-auto text-white px-6 py-3 rounded-3xl hover:bg-custom-orange transition duration-300 ease-in-out flex items-center justify-center mt-4"
+              className="bg-custom-blue w-full md:w-1/3 mx-auto text-white px-6 py-3 rounded-3xl hover:bg-custom-orange hover:cursor-pointer transition duration-300 ease-in-out flex items-center justify-center mt-4"
             >
               Get Started Now
               <GraduationCap className="ml-2 h-5 w-5" />
