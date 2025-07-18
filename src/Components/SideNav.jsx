@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 
 const SideNav = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const sidebarRef = useRef(null); // 👈 Ref for sidebar
+  const sidebarRef = useRef(null); //Ref for sidebar
   const { logout } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -75,7 +75,7 @@ const SideNav = () => {
 
       {/* Sidebar */}
       <aside
-        ref={sidebarRef} // 👈 Attach ref
+        ref={sidebarRef} // Attach ref
         className={`fixed left-0 top-0 z-20 h-screen w-64 bg-white border-r border-gray-300 p-4 transition-transform duration-300 flex flex-col justify-between
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
       >
