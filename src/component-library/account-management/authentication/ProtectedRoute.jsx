@@ -1,17 +1,10 @@
 import React from "react";
 import { Navigate } from "react-router";
-import { AuthenticationContext } from "./AuthenticationContextProvider";
 import LoadingScreen from "../../utils/LoadingScreen";
 import UserContext from "../../../Context/UserContext";
 
-const ProtectedRoute = ({
-    children,
-    redirectUrl = "/login",
-}) => {
-    const userContext = React.useContext(UserContext)
-
-    console.log(userContext);
-    
+const ProtectedRoute = ({ children, redirectUrl = "/login" }) => {
+    const userContext = React.useContext(UserContext);
 
     return Boolean(userContext == null) ? (
         <LoadingScreen />
