@@ -31,7 +31,11 @@ function App() {
         children: [
             {
                 index: true,
-                element: <Dashboard />,
+                element:
+                    <SubscriptionRestricted
+                        allowedSubscriptionPlans={["pro_plan"]}>
+                        <Dashboard />
+                    </SubscriptionRestricted>
             },
             {
                 path: "home",
@@ -60,10 +64,10 @@ function App() {
             {
                 path: "quizzes",
                 element: (
-                    // <SubscriptionRestricted allowedSubscriptionPlans={["pro_plan"]}>
-                    <Quizzes />
+                    <SubscriptionRestricted allowedSubscriptionPlans={["pro_plan"]}>
+                        <Quizzes />
+                    </SubscriptionRestricted>
                 ),
-                // </SubscriptionRestricted>
             },
             {
                 path: "simulations",
@@ -81,7 +85,12 @@ function App() {
             },
             {
                 path: "results",
-                element: <Results />,
+                element:
+                    <SubscriptionRestricted
+                        allowedSubscriptionPlans={["pro_plan"]}
+                    >
+                        <Results />
+                    </SubscriptionRestricted>,
             },
         ],
     };
