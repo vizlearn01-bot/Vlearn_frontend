@@ -217,20 +217,25 @@ function Home() {
               renderButtonGroupOutside={true}
             >
               {Categories.map((item, index) => (
-                <div key={index} className="group overflow-hidden mx-5 rounded-3xl">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl mx-5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer z-0">
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <h3 className="text-xl font-bold text-white mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-gray-200 text-sm font-light">{item.description}</p>
+                <div key={index} className="mx-5">
+                  {/* Card */}
+                  <div className="group overflow-hidden rounded-3xl relative">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 rounded-3xl to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer z-0">
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
+                        <p className="text-gray-200 text-sm font-light">{item.description}</p>
+                      </div>
                     </div>
                   </div>
+
+                  {/* Mobile-only title outside the card */}
+                  <p className="text-center font-light mt-2 md:hidden">{item.title}</p>
+                  <p className="text-center font-light mt-2 md:hidden text-sm">{item.description}</p>
                 </div>
               ))}
             </Carousel>
