@@ -7,19 +7,21 @@ import Button from "../../butttons/Button";
 const SubscriptionRestricted = ({
     allowedSubscriptionPlans,
     fallBackComponent = (
-        <div className="text-center my-10 flex flex-col items-center">
-            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full ">
-                <ShieldExclamationIcon />
+        <div className="flex items-center justify-center min-h-screen">
+            <div className="text-center my-10 flex flex-col items-center">
+                <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full">
+                    <ShieldExclamationIcon strokeWidth={1} className="text-custom-orange" />
+                </div>
+                <h3 className="mt-2 text-lg font-bold text-custom-orange">
+                    Not Allowed! <br /> You do not have an active subscription for this.
+                </h3>
+                <p className="my-1 text-lg text-custom-blue">
+                     Renew your subscription below to gain access
+                </p>
+                <Link to={"/billing-and-payments/subscriptions"}>
+                    <Button variant="text">Go to Subscriptions</Button>
+                </Link>
             </div>
-            <h3 className="mt-2 text-sm font-semibold text-gray-900">
-                Not Allowed!
-            </h3>
-            <p className="mt-1 text-sm text-gray-500">
-                You do not have an active subscription for this.
-            </p>
-            <Link to={"/billing-and-payments/subscriptions"}>
-                <Button variant="text">Go to Subscriptions</Button>
-            </Link>
         </div>
     ),
     children,

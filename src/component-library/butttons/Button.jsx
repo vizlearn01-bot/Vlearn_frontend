@@ -31,7 +31,7 @@ const buttonStyle = {
     },
     text: {
         primary:
-            "text-primary-palette-500 hover:text-primary-palette-600 active:text-primary-palette-700 disabled:text-primary-palette-200",
+            "text-custom-blue hover:text-primary-palette-600 active:text-primary-palette-700 disabled:text-primary-palette-200 hover:cursor-pointer",
         secondary:
             "text-secondary-palette-600 hover:text-secondary-palette-700 active:text-secondary-palette-800 disabled:text-secondary-palette-300",
         info: "text-info-palette-500 hover:text-info-palette-600 active:text-info-palette-700 disabled:text-info-palette-200",
