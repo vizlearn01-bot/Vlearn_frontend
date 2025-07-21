@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children, redirectUrl = "/login" }) => {
     ) : Boolean(userContext?.token == null) ? (
         <Navigate to={redirectUrl} />
     ) : Boolean(userContext?.user == null) ? (
-        <LoadingScreen message="Getting User Details" />
+        <LoadingScreen message="Getting User Details..." />
     ) : (
         children
     );
