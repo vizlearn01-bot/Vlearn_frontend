@@ -3,6 +3,7 @@ import { useSubscriptionContext } from "./SubscriptionContextProvider";
 import { Link } from "react-router";
 import { ShieldExclamationIcon } from "@heroicons/react/24/outline";
 import Button from "../../butttons/Button";
+import { ArrowRight } from "lucide-react";
 
 const SubscriptionRestricted = ({
     allowedSubscriptionPlans,
@@ -19,7 +20,7 @@ const SubscriptionRestricted = ({
                      Renew your subscription below to gain access
                 </p>
                 <Link to={"/billing-and-payments/subscriptions"}>
-                    <Button variant="text">Go to Subscriptions</Button>
+                    <Button variant="text">Go to Subscriptions <ArrowRight strokeWidth={1}/></Button>
                 </Link>
             </div>
         </div>
