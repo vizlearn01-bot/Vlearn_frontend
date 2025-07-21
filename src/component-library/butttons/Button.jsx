@@ -31,7 +31,7 @@ const buttonStyle = {
     },
     text: {
         primary:
-            "text-custom-blue hover:text-primary-palette-600 active:text-primary-palette-700 disabled:text-primary-palette-200 hover:cursor-pointer",
+            "text-white hover:cursor-pointer border py-2 px-4 rounded-3xl mt-2 bg-custom-orange text",
         secondary:
             "text-secondary-palette-600 hover:text-secondary-palette-700 active:text-secondary-palette-800 disabled:text-secondary-palette-300",
         info: "text-info-palette-500 hover:text-info-palette-600 active:text-info-palette-700 disabled:text-info-palette-200",
@@ -84,9 +84,9 @@ const Button = ({
             className={classNames(
                 buttonStyle[variant][color],
                 Boolean(variant == "text")
-                    ? "hover:underline"
+                    ? "hover:no-underline"
                     : "rounded-full px-3 py-1 text-center text-sm/6 border flex justify-center items-center cursor-pointer",
-                "text-sm",
+                "text-medium",
                 className
             )}
             type={type}
