@@ -33,7 +33,7 @@ function App() {
                 index: true,
                 element:
                     <SubscriptionRestricted
-                        allowedSubscriptionPlans={["pro_plan"]}>
+                        allowedSubscriptionPlans={["pro_plan", "free_trial", "explorer_plan", "daily"]}>
                         <Dashboard />
                     </SubscriptionRestricted>
             },
@@ -41,7 +41,7 @@ function App() {
                 path: "home",
                 element: (
                     <SubscriptionRestricted
-                        allowedSubscriptionPlans={["pro_plan"]}
+                        allowedSubscriptionPlans={["pro_plan", "free_trial", "explorer_plan", "daily"]}
                     >
                         <Dashboard />
                     </SubscriptionRestricted>
@@ -55,7 +55,7 @@ function App() {
                 path: "resources",
                 element: (
                     <SubscriptionRestricted
-                        allowedSubscriptionPlans={["pro_plan"]}
+                        allowedSubscriptionPlans={["pro_plan", "free_trial", "explorer_plan", "daily"]}
                     >
                         <Resources />
                     </SubscriptionRestricted>
@@ -64,7 +64,7 @@ function App() {
             {
                 path: "quizzes",
                 element: (
-                    <SubscriptionRestricted allowedSubscriptionPlans={["pro_plan"]}>
+                    <SubscriptionRestricted allowedSubscriptionPlans={["pro_plan", "free_trial", "explorer_plan", "daily"]}>
                         <Quizzes />
                     </SubscriptionRestricted>
                 ),
@@ -73,7 +73,7 @@ function App() {
                 path: "simulations",
                 element: (
                     <SubscriptionRestricted
-                        allowedSubscriptionPlans={["pro_plan"]}
+                        allowedSubscriptionPlans={["pro_plan", "free_trial", "explorer_plan", "daily"]}
                     >
                         <Simulations />
                     </SubscriptionRestricted>
@@ -87,7 +87,7 @@ function App() {
                 path: "results",
                 element:
                     <SubscriptionRestricted
-                        allowedSubscriptionPlans={["pro_plan"]}
+                        allowedSubscriptionPlans={["pro_plan", "free_trial", "explorer_plan", "daily"]}
                     >
                         <Results />
                     </SubscriptionRestricted>,
