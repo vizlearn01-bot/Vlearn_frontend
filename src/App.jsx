@@ -19,6 +19,8 @@ import { BillingAndPaymentsRoutes } from "./component-library/account-management
 import SubscriptionRestricted from "./component-library/billing-and-payments/subscriptions/SubscriptionRestricted";
 import SubscriptionContextProvider from "./component-library/billing-and-payments/subscriptions/SubscriptionContextProvider";
 import ProtectedRoute from "./component-library/account-management/authentication/ProtectedRoute";
+import AdminDashboard from "./Pages/AdminDashboard";
+import AdminDashboardOutlet from "./Pages/AdminDashboardOutlet";
 
 function App() {
     const dashboardRoutes = {
@@ -94,6 +96,19 @@ function App() {
             },
         ],
     };
+    const adminDashboardRoutes = {
+        path: "admin-dashboard",
+        element: (
+                <AdminDashboardOutlet />
+        ),
+        children: [
+            {
+                index: true,
+                element:
+                        <AdminDashboard />
+            },
+        ]
+    }
 
     const Router = createBrowserRouter([
         {
@@ -113,6 +128,10 @@ function App() {
                     element: <ContactUs />,
                 },
                 {
+                    path: "admin-dashboard",
+                    element: <AdminDashboard />
+                },
+                {
                     path: "login",
                     element: <Login />,
                 },
@@ -129,6 +148,7 @@ function App() {
                     element: <CourseDetail />,
                 },
                 dashboardRoutes,
+                adminDashboardRoutes,
                 BillingAndPaymentsRoutes(),
             ],
         },

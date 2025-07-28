@@ -6,7 +6,7 @@ import LazyLoad from 'react-lazyload';
 import debounce from 'lodash.debounce';
 import UserContext from '../Context/UserContext';
 import BASE_URL from '../config';
-import SideNav from '../Components/SideNav';
+import SideNav from '../Components/User/SideNav';
 import { filter } from 'lodash';
 
 function Dashboard() {

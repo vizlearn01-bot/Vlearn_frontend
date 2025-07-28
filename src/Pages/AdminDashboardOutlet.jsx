@@ -1,10 +1,10 @@
 import { Outlet } from "react-router";
-import SideNav from '../Components/User/SideNav';
+import AdminSideNav from "../Components/AdminSideNav";
 
-function DashboardOutlet() {
+function AdminDashboardOutlet() {
   return (
     <div className="flex">
-      <SideNav />
+      <AdminSideNav />
       {/* Main Content */}
       
       <main className="md:ml-64 w-full">
@@ -14,4 +14,4 @@ function DashboardOutlet() {
   );
 }
 
-export default DashboardOutlet;
+export default AdminDashboardOutlet;

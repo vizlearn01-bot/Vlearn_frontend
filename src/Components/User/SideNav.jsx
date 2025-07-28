@@ -3,8 +3,8 @@ import {
   Menu, GraduationCap, User, ClipboardPen, FolderClosed,
   Home, ClipboardCheck, Cpu, X
 } from 'lucide-react';
-import { useState, useContext, useRef, useEffect } from 'react'; // 👈 Add useRef and useEffect
-import UserContext from '../Context/UserContext';
+import { useState, useContext, useRef, useEffect } from 'react';
+import UserContext from '../../Context/UserContext';
 import Swal from 'sweetalert2';
 
 const SideNav = () => {

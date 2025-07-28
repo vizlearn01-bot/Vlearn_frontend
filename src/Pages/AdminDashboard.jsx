@@ -1,9 +1,12 @@
-import React from 'react'
+import AdminSideNav from "../Components/AdminSideNav"
 
 function AdminDashboard() {
   return (
-    <div>
-      This is my admin dashboard
+    <div className="flex">
+      <AdminSideNav />
+      <div>
+        <p>This is my admin dashboard </p>
+      </div>
     </div>
   )
 }
