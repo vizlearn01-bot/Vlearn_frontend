@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { BookOpen, Trophy, Clock, Calendar, GraduationCap, BarChart, AlignCenterVertical as Certificate } from 'lucide-react';
 import axios from 'axios';
+import BASE_URL from '../../config';
 import UserContext from '../../Context/UserContext';
 import { useNavigate } from "react-router";
 import { useSubscriptionContext } from '../../component-library/billing-and-payments/subscriptions/SubscriptionContextProvider';

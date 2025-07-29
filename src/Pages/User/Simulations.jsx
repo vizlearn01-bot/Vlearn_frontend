@@ -49,7 +49,7 @@ export default function Simulations() {
                   onClick={() => setCurrentSimulation(simKey)}
                   className={`px-4 py-2 rounded-3xl transition-colors ${currentSimulation === simKey
                     ? 'bg-custom-orange text-white'
-                    : 'bg-custom-blue text-white hover:bg-custom-orange'
+                    : 'bg-custom-blue text-white hover:bg-custom-orange hover:cursor-pointer'
                     }`}
                 >
                   {simKey.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase())}
