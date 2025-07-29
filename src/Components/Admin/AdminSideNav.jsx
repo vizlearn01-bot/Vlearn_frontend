@@ -3,7 +3,8 @@ import {
     Menu, GraduationCap,ChartNoAxesCombined, Library, LayoutDashboard, UserCog, FolderClosed, X
 } from 'lucide-react';
 import { useState, useContext, useRef, useEffect } from 'react';
-import UserContext from '../Context/UserContext';
+
+import UserContext from '../../Context/UserContext';
 import Swal from 'sweetalert2';
 
 const SideNav = () => {

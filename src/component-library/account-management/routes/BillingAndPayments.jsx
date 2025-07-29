@@ -8,7 +8,7 @@ import { Navigate, Outlet, useRoutes } from "react-router";
 import ProtectedRoute from "../authentication/ProtectedRoute";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../../Context/UserContext";
-import DashboardOutlet from "../../../Pages/DashboardOutlet";
+import DashboardOutlet from "../../../Pages/User/DashboardOutlet";
 
 export const BillingAndPaymentsRoutes = () => {
 

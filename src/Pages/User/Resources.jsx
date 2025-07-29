@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FileText, ExternalLink, Clock, Star } from 'lucide-react';
 import axios from 'axios';
-import BASE_URL from '../config';
+import BASE_URL from '../../config';
 
 const courses = [
   {

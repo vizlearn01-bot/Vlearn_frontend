@@ -1,4 +1,4 @@
-import AdminSideNav from "../Components/AdminSideNav"
+import AdminSideNav from '../../Components/Admin/AdminSideNav'
 
 function AdminDashboard() {
   return (

@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useContext } from 'react';
-import UserContext from '../Context/UserContext';
+import UserContext from '../../Context/UserContext';
 import { Link } from "react-router";
 
 const simulationComponents = {

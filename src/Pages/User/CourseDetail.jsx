@@ -1,13 +1,13 @@
 import { useParams, Link, useNavigate } from "react-router";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import BASE_URL from "../config";
+import BASE_URL from "../../config";
 import { GraduationCap, User } from "lucide-react";
-import UserContext from "../Context/UserContext";
+import UserContext from "../../Context/UserContext";
 import Swal from "sweetalert2";
 import ReactPlayer from "react-player";
 import { ArrowLeft } from "lucide-react";
-import Breadcrumb from "../Components/Breadcrumb";
+import Breadcrumb from "../../Components/Breadcrumb";
 
 function CourseDetail() {
   const { id } = useParams();

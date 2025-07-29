@@ -1,26 +1,26 @@
 import "/src/index.css";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 import Home from "../src/Pages/Home";
-import Dashboard from "./Pages/Dashboard";
+import Dashboard from "./Pages/User/Dashboard";
 import ContactUs from "../src/Pages/ContactUs";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
-import CourseDetail from "./Pages/CourseDetail";
-import User from "./Pages/User";
-import Resources from "./Pages/Resources";
-import Quizzes from "./Pages/Quizzes";
-import DashboardOutlet from "./Pages/DashboardOutlet";
+import CourseDetail from "./Pages/User/CourseDetail";
+import User from "./Pages/User/User";
+import Resources from "./Pages/User/Resources";
+import Quizzes from "./Pages/User/Quizzes";
+import DashboardOutlet from "./Pages/User/DashboardOutlet";
 // import Quiz from './Pages/Quiz';
-import QuizAttempt from "./Pages/QuizAttempt";
-import Results from "./Pages/Results";
+import QuizAttempt from "./Pages/User/QuizAttempt";
+import Results from "./Pages/User/Results";
+import Simulations from "./Pages/User/Simulations";
 import SubscriptionPlan from "./Components/SubscriptionPlan";
-import Simulations from "./Pages/Simulations";
 import { BillingAndPaymentsRoutes } from "./component-library/account-management/routes/BillingAndPayments";
 import SubscriptionRestricted from "./component-library/billing-and-payments/subscriptions/SubscriptionRestricted";
 import SubscriptionContextProvider from "./component-library/billing-and-payments/subscriptions/SubscriptionContextProvider";
 import ProtectedRoute from "./component-library/account-management/authentication/ProtectedRoute";
-import AdminDashboard from "./Pages/AdminDashboard";
-import AdminDashboardOutlet from "./Pages/AdminDashboardOutlet";
+import AdminDashboard from "./Pages/Admin/AdminDashboard";
+import AdminDashboardOutlet from "./Pages/Admin/AdminDashboardOutlet";
 
 function App() {
     const dashboardRoutes = {

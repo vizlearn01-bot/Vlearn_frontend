@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import UserContext from '../Context/UserContext';
+import UserContext from '../../Context/UserContext';
 import axios from 'axios';
-import BASE_URL from '../config';
+import BASE_URL from '../../config';
 import { Trophy, Clock, Calendar, BarChart } from 'lucide-react';
 
 function Results() {

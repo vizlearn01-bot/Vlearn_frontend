@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from "react-router";
 import axios from 'axios';
-import BASE_URL from '../config';
+import BASE_URL from '../../config';
 import Swal from 'sweetalert2';
 import { Clock, CheckCircle2, XCircle, RotateCcw, ChevronRight } from 'lucide-react';
-import UserContext from '../Context/UserContext';
+import UserContext from '../../Context/UserContext';
 
 function QuizAttempt() {
   const { id } = useParams();
