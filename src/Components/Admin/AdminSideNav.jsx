@@ -55,10 +55,10 @@ const SideNav = () => {
     };
 
     const navItems = [
-        { icon: LayoutDashboard, text: "Dashboard", path: '/dashboard/AdminDashboard' },
-        { icon: Library, text: 'Course management', path: '/dashboard/home' },
-        { icon: UserCog, text: "User management", path: '/dashboard/user' },
-        { icon: ChartNoAxesCombined, text: "Analytics and reports", path: '/dashboard/resources' },
+        { icon: LayoutDashboard, text: "Dashboard", path: '/admin-dashboard/' },
+        { icon: Library, text: 'Course management', path: '/admin-dashboard/course-management' },
+        { icon: UserCog, text: "User management", path: '/admin-dashboard/user-management' },
+        { icon: ChartNoAxesCombined, text: "Analytics and reports", path: '/admin-dashboard/analytics' },
     ];
 
     return (

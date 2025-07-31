@@ -1,11 +1,11 @@
 import { Outlet } from "react-router";
-// import AdminSideNav from "../Components/Admin/AdminSideNav"
+import AdminSideNav from "../../Components/Admin/AdminSideNav"
 
 
 function AdminDashboardOutlet() {
   return (
     <div className="flex">
-      {/* <AdminSideNav /> */}
+      <AdminSideNav />
       {/* Main Content */}
 
       <main className="md:ml-64 w-full">

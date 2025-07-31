@@ -21,6 +21,9 @@ import SubscriptionContextProvider from "./component-library/billing-and-payment
 import ProtectedRoute from "./component-library/account-management/authentication/ProtectedRoute";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import AdminDashboardOutlet from "./Pages/Admin/AdminDashboardOutlet";
+import CourseManagement from "./Pages/Admin/CourseManagement";
+import UserManagement from "./Pages/Admin/UserManagement";
+import Analytics from "./Pages/Admin/Analytics";
 
 function App() {
     const dashboardRoutes = {
@@ -106,6 +109,21 @@ function App() {
                 index: true,
                 element:
                         <AdminDashboard />
+            },
+             {
+                path:"course-management",
+                element:
+                        <CourseManagement />
+            },
+             {
+                path:"user-management",
+                element:
+                        <UserManagement />
+            },
+             {
+                path:"analytics",
+                element:
+                        <Analytics />
             },
         ]
     }
