@@ -55,10 +55,14 @@ function QuestionManagement() {
             id="description"
             className='w-full border border-gray-300 rounded-3xl h-42 py-3 px-4'
             placeholder='Enter the full question description'></textarea>
-          <label htmlFor="answers" >Answers</label>
+          <div className='flex justify-between items-center'>
+            <label htmlFor="answers" >Answers</label>
+            <button className='bg-custom-orange text-white py-2 px-4 rounded-3xl'>Add an answer slot</button>
+          </div>
+
           <div className='space-y-4'>
             <div className='flex items-center border border-gray-300 rounded-3xl px-4 py-2 w-2/3'>
-             <CircleCheckBig className='text-custom-orange mr-4' />
+              <CircleCheckBig className='text-custom-orange mr-4' />
               <input
                 type="text"
                 placeholder='answer option 1'
