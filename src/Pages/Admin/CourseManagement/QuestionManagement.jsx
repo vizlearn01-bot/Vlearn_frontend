@@ -20,7 +20,7 @@ function QuestionManagement() {
                 type="text"
                 name='title'
                 placeholder='Enter Question title'
-                className='border border-gray-300 rounded-3xl py-2 px-4 w-2/3'
+                className='border border-gray-300 rounded-3xl py-2 px-4 w-2/3 placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400'
               />
             </div>
             <div>
@@ -29,7 +29,7 @@ function QuestionManagement() {
                 type="text"
                 name='category'
                 placeholder='Category'
-                className=' border border-gray-300 rounded-3xl py-2 px-4 w-2/3'
+                className=' border border-gray-300 rounded-3xl py-2 px-4 w-2/3 placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400'
               />
             </div>
           </div>
@@ -48,35 +48,50 @@ function QuestionManagement() {
           </select>
 
           <label
-            htmlFor="description"
-          >Question Description</label>
+            htmlFor="description">Question Description</label>
           <textarea
             name="description"
             id="description"
-            className='w-full border border-gray-300 rounded-3xl h-42 py-3 px-4'
+            className='w-full border border-gray-300 rounded-3xl h-42 py-3 px-4 placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400'
             placeholder='Enter the full question description'></textarea>
-          <div className='flex justify-between items-center'>
+          <div className='flex justify-between items-center mt-4'>
             <label htmlFor="answers" >Answers</label>
             <button className='bg-custom-orange text-white py-2 px-4 rounded-3xl'>Add an answer slot</button>
           </div>
 
           <div className='space-y-4'>
-            <div className='flex items-center border border-gray-300 rounded-3xl px-4 py-2 w-2/3'>
+            <div className='flex items-center border border-gray-300 rounded-3xl px-4 py-2 w-1/3'>
               <CircleCheckBig className='text-custom-orange mr-4' />
               <input
                 type="text"
                 placeholder='answer option 1'
-                className='w-full'
+                className='w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400'
               />
             </div>
 
 
-            <div className='flex items-center border border-gray-300 rounded-3xl px-4 py-2 w-2/3'>
+            <div className='flex items-center border border-gray-300 rounded-3xl px-4 py-2 w-1/3'>
               <CircleCheckBig className='text-custom-orange mr-4' />
               <input
                 type="text"
                 placeholder='answer option 2'
-                className='w-full '
+                className='w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400'
+              />
+            </div>
+             <div className='flex items-center border border-gray-300 rounded-3xl px-4 py-2 w-1/3'>
+              <CircleCheckBig className='text-custom-orange mr-4' />
+              <input
+                type="text"
+                placeholder='answer option 3'
+                className='w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400'
+              />
+            </div>
+             <div className='flex items-center border border-gray-300 rounded-3xl px-4 py-2 w-1/3'>
+              <CircleCheckBig className='text-custom-orange mr-4' />
+              <input
+                type="text"
+                placeholder='answer option 4'
+                className='w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400'
               />
             </div>
 
