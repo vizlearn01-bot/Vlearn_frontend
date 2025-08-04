@@ -1,0 +1,103 @@
+import React from 'react';
+import { Plus, CircleCheckBig } from 'lucide-react';
+
+function QuestionGroupManagement() {
+    return (
+        <div className="px-4 md:px-8 py-8">
+            <div className="shadow-2xl border-2 border-gray-100 rounded-3xl p-4 md:p-8 w-full max-w-5xl mx-auto bg-gray-50">
+                {/* Header Section */}
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
+                    <Plus strokeWidth={1.5} className="bg-custom-blue h-12 w-12 rounded-xl text-white" />
+                    <div>
+                        <h1 className="text-2xl font-bold">Create new Question</h1>
+                        <p className="font-light">Add questions for students to practice</p>
+                    </div>
+                </div>
+
+                {/* Form Section */}
+                <form action="">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-10 mb-6">
+                        {/* Related Video Dropdown */}
+                        <div>
+                            <label htmlFor="related-video" className="block mb-2">Related video</label>
+                            <select
+                                name="related-video"
+                                id="related-video"
+                                className="border border-gray-300 rounded-3xl py-2 px-4 w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
+                            >
+                                <option value="default">Pick a video related to the Questions</option>
+                                <option value="hard">Chlorine and its compounds</option>
+                                <option value="medium">Sulphur and its compounds</option>
+                                <option value="easy">Nitrogen and its compounds</option>
+                            </select>
+                        </div>
+
+                        {/* Title Input */}
+                        <div>
+                            <label htmlFor="category" className="block mb-2">Title</label>
+                            <input
+                                type="text"
+                                name="title"
+                                placeholder="Title"
+                                className="border border-gray-300 rounded-3xl py-2 px-4 w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Difficulty Level */}
+                    <div className="mb-6">
+                        <label htmlFor="difficulty" className="block mb-2">Difficulty</label>
+                        <select
+                            name="difficulty"
+                            id="difficulty"
+                            className="w-full border border-gray-300 rounded-3xl py-3 px-4"
+                        >
+                            <option value="default">Pick a difficulty level</option>
+                            <option value="hard">Hard</option>
+                            <option value="medium">Medium</option>
+                            <option value="easy">Easy</option>
+                        </select>
+                    </div>
+
+                    {/* Description */}
+                    <div className="mb-6">
+                        <label htmlFor="description" className="block mb-2">Question Description</label>
+                        <textarea
+                            name="description"
+                            id="description"
+                            className="w-full border border-gray-300 rounded-3xl h-42 py-3 px-4 placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
+                            placeholder="Enter the full question description"
+                        ></textarea>
+                    </div>
+
+                    {/* Answer Section */}
+                    <div className="flex justify-between items-center mt-4 mb-4">
+                        <label htmlFor="answers" className="text-base font-medium">Answers</label>
+                        <button type="button" className="bg-custom-orange text-white py-2 px-4 rounded-3xl text-sm">
+                            Add an answer slot
+                        </button>
+                    </div>
+
+                    {/* Answer Inputs */}
+                    <div className="space-y-4">
+                        {[1, 2, 3, 4].map((index) => (
+                            <div
+                                key={index}
+                                className="flex items-center border border-gray-300 rounded-3xl px-4 py-2 w-full"
+                            >
+                                <CircleCheckBig className="text-custom-orange mr-4" />
+                                <input
+                                    type="text"
+                                    placeholder={`Answer option ${index}`}
+                                    className="w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+}
+
+export default QuestionGroupManagement;
