@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import BASE_URL from "../../config"
 import axios from "axios";
-import { Users, ListVideo , UserCheck} from "lucide-react";
+import { Users, ListVideo, UserCheck } from "lucide-react";
 
 function AdminDashboard() {
     const [enrolledLearners, setEnrolledLearners] = useState(0)
@@ -32,38 +32,36 @@ function AdminDashboard() {
     return (
         <div className="p-4">
             <h2 className="text-custom-blue text-3xl font-semibold mb-2 text-center md:text-left">Dashboard</h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 mx-auto md:mx-0 gap-10 md:border-b border-gray-300 pb-6 w-full">
-                <div className="bg-custom-blue px-8 py-6 w-72 h-44 rounded-3xl relative">
-                    <Users strokeWidth={1} className="text-white w-12 h-12 absolute top-4 right-4" />
-                    <h1 className="text-white text-6xl font-semibold mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10 md:border-b border-gray-300 w-full px-4 md:px-8 pb-6">
+                <div className="bg-custom-blue px-6 py-6 rounded-3xl relative w-full">
+                    <Users strokeWidth={1} className="text-white w-10 h-10 md:w-12 md:h-12 absolute top-4 right-4" />
+                    <h1 className="text-white text-5xl md:text-6xl font-semibold mb-6">
                         {enrolledLearners.user_count}
                     </h1>
-                    <p className="text-white font-extralight tracking-wide text-xl">
+                    <p className="text-white font-extralight tracking-wide text-lg md:text-xl">
                         Enrolled learners
                     </p>
                 </div>
-                <div className="bg-custom-orange px-8 py-6 w-72 h-44 rounded-3xl relative">
-                    <UserCheck strokeWidth={1} className="text-white w-12 h-12 absolute top-4 right-4" />
-                    <h1 className="text-white text text-6xl font-semibold mb-8">
+
+                <div className="bg-custom-orange px-6 py-6 rounded-3xl relative w-full">
+                    <UserCheck strokeWidth={1} className="text-white w-10 h-10 md:w-12 md:h-12 absolute top-4 right-4" />
+                    <h1 className="text-white text-5xl md:text-6xl font-semibold mb-6">
                         {activeUsers.subscribed_users}
                     </h1>
-                    <p className="text-white font-extralight tracking-wide text-xl w-full">
+                    <p className="text-white font-extralight tracking-wide text-lg md:text-xl">
                         Subscribed learners
                     </p>
                 </div>
 
-                <div className="bg-custom-blue px-8 py-6 w-72 h-44 rounded-3xl relative">
-                    <ListVideo strokeWidth={1} className="text-white w-12 h-12 absolute top-4 right-4" />
-                    <h1 className="text-white text text-6xl font-semibold mb-4">
+                <div className="bg-custom-blue px-6 py-6 rounded-3xl relative w-full">
+                    <ListVideo strokeWidth={1} className="text-white w-10 h-10 md:w-12 md:h-12 absolute top-4 right-4" />
+                    <h1 className="text-white text-5xl md:text-6xl font-semibold mb-6">
                         {videoCount.count}
                     </h1>
-                    <p className="text-white font-extralight tracking-wide text-xl w-full">
+                    <p className="text-white font-extralight tracking-wide text-lg md:text-xl">
                         Available Science experiments
                     </p>
                 </div>
-
-
-
             </div>
         </div>
     )
