@@ -16,7 +16,7 @@ function QuestionGroupManagement() {
 
                 {/* Form Section */}
                 <form action="">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-10 mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10 mb-6">
                         {/* Related Video Dropdown */}
                         <div>
                             <label htmlFor="related-video" className="block mb-2">Related video</label>
@@ -34,7 +34,7 @@ function QuestionGroupManagement() {
 
                         {/* Title Input */}
                         <div>
-                            <label htmlFor="category" className="block mb-2">Title</label>
+                            <label htmlFor="title" className="block mb-2">Title</label>
                             <input
                                 type="text"
                                 name="title"
@@ -42,26 +42,20 @@ function QuestionGroupManagement() {
                                 className="border border-gray-300 rounded-3xl py-2 px-4 w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
                             />
                         </div>
-                    </div>
-
-                    {/* Difficulty Level */}
-                    <div className="mb-6">
-                        <label htmlFor="difficulty" className="block mb-2">Difficulty</label>
-                        <select
-                            name="difficulty"
-                            id="difficulty"
-                            className="w-full border border-gray-300 rounded-3xl py-3 px-4"
-                        >
-                            <option value="default">Pick a difficulty level</option>
-                            <option value="hard">Hard</option>
-                            <option value="medium">Medium</option>
-                            <option value="easy">Easy</option>
-                        </select>
+                        <div>
+                            <label htmlFor="duration" className="block mb-2">Duration</label>
+                            <input
+                                type="number"
+                                name="duration"
+                                placeholder="Duration (mins)"
+                                className="border border-gray-300 rounded-3xl py-2 px-4 w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
+                            />
+                        </div>
                     </div>
 
                     {/* Description */}
                     <div className="mb-6">
-                        <label htmlFor="description" className="block mb-2">Question Description</label>
+                        <label htmlFor="description" className="block mb-2">Question group Description</label>
                         <textarea
                             name="description"
                             id="description"
@@ -69,31 +63,7 @@ function QuestionGroupManagement() {
                             placeholder="Enter the full question description"
                         ></textarea>
                     </div>
-
-                    {/* Answer Section */}
-                    <div className="flex justify-between items-center mt-4 mb-4">
-                        <label htmlFor="answers" className="text-base font-medium">Answers</label>
-                        <button type="button" className="bg-custom-orange text-white py-2 px-4 rounded-3xl text-sm">
-                            Add an answer slot
-                        </button>
-                    </div>
-
-                    {/* Answer Inputs */}
-                    <div className="space-y-4">
-                        {[1, 2, 3, 4].map((index) => (
-                            <div
-                                key={index}
-                                className="flex items-center border border-gray-300 rounded-3xl px-4 py-2 w-full"
-                            >
-                                <CircleCheckBig className="text-custom-orange mr-4" />
-                                <input
-                                    type="text"
-                                    placeholder={`Answer option ${index}`}
-                                    className="w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
-                                />
-                            </div>
-                        ))}
-                    </div>
+                    <button className='flex justify-center mx-auto bg-custom-blue text-white py-2 px-4 rounded-3xl shadow-2xl hover:cursor-pointer hover:bg-custom-orange'>Submit</button>
                 </form>
             </div>
         </div>

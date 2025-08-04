@@ -14,18 +14,17 @@ function QuestionManagement() {
           </div>
         </div>
 
-        {/* Form */}
         <form action="">
-          {/* Title & Category */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div>
-              <label htmlFor="title" className="block mb-2">Question title</label>
-              <input
-                type="text"
-                name="title"
-                placeholder="Enter Question title"
-                className="border border-gray-300 rounded-3xl py-2 px-4 w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
-              />
+              <label htmlFor="title" className="block mb-2">Related question group </label>
+              <select name="quiz-group" id="quiz-group"
+                className='border border-gray-300 rounded-3xl py-2 px-4 w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400'>
+                <option value="default">Pick a related question group</option>
+                <option value="ammonia gas">Preparation of ammonia gas</option>
+                <option value="nitrogen">Preparation of nitrogen in a lab</option>
+                <option value="titration">Titration</option>
+              </select>
             </div>
             <div>
               <label htmlFor="category" className="block mb-2">Category</label>
@@ -36,31 +35,24 @@ function QuestionManagement() {
                 className="border border-gray-300 rounded-3xl py-2 px-4 w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
               />
             </div>
+            <div>
+              <label htmlFor="points" className="block mb-2">Points</label>
+              <input
+                type="number"
+                name="points"
+                placeholder="Points"
+                className="border border-gray-300 rounded-3xl py-2 px-4 w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
+              />
+            </div>
           </div>
 
-          {/* Difficulty */}
           <div className="mb-6">
-            <label htmlFor="difficulty" className="block mb-2">Difficulty</label>
-            <select
-              name="difficulty"
-              id="difficulty"
-              className="w-full border border-gray-300 rounded-3xl py-3 px-4"
-            >
-              <option value="default">Pick a difficulty level</option>
-              <option value="hard">Hard</option>
-              <option value="medium">Medium</option>
-              <option value="easy">Easy</option>
-            </select>
-          </div>
-
-          {/* Description */}
-          <div className="mb-6">
-            <label htmlFor="description" className="block mb-2">Question Description</label>
+            <label htmlFor="text" className="block mb-2">Question text</label>
             <textarea
-              name="description"
-              id="description"
+              name="text"
+              id="text"
               className="w-full border border-gray-300 rounded-3xl h-42 py-3 px-4 placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
-              placeholder="Enter the full question description"
+              placeholder="Enter the full question text"
             ></textarea>
           </div>
 
@@ -73,7 +65,7 @@ function QuestionManagement() {
           </div>
 
           {/* Answer Options */}
-          <div className="space-y-4">
+          <div className="space-y-4 mb-4">
             {[1, 2, 3, 4].map((index) => (
               <div
                 key={index}
@@ -88,6 +80,7 @@ function QuestionManagement() {
               </div>
             ))}
           </div>
+          <button className='flex justify-center mx-auto bg-custom-blue text-white py-2 px-4 rounded-3xl shadow-2xl hover:cursor-pointer hover:bg-custom-orange'>Submit</button>
         </form>
       </div>
     </div>
