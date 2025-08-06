@@ -1,7 +1,18 @@
-import React from 'react'
+import { useState } from 'react'
 import { Plus, CircleCheckBig } from 'lucide-react'
 
 function QuestionManagement() {
+
+  const [answerFields, setAnswerFields] = useState([
+    { text: "", isCorrect: false },
+    { text: "", isCorrect: false }
+  ])
+
+  function addAnswerField(){
+      setAnswerFields([...answerFields, { text: '', isCorrect: false }]);
+
+  }
+
   return (
     <div className="px-4 md:px-8 py-8">
       <div className="shadow-2xl border-2 border-gray-100 rounded-3xl p-6 md:p-8 w-full max-w-5xl mx-auto bg-gray-50">
@@ -13,7 +24,6 @@ function QuestionManagement() {
             <p className="font-light">Add questions for students to practice</p>
           </div>
         </div>
-
         <form action="">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div>
@@ -59,14 +69,17 @@ function QuestionManagement() {
           {/* Answers Header */}
           <div className="flex justify-between items-center mt-4 mb-4">
             <label htmlFor="answers" className="text-base font-medium">Answers</label>
-            <button type="button" className="bg-custom-orange text-white py-2 px-4 rounded-3xl text-sm">
+            <button
+              type="button"
+              className="bg-custom-orange text-white py-2 px-4 rounded-3xl text-sm"
+              onClick={addAnswerField}>
               Add an answer slot
             </button>
           </div>
 
           {/* Answer Options */}
           <div className="space-y-4 mb-4">
-            {[1, 2, 3, 4].map((index) => (
+            {answerFields.map((answerField, index) => (
               <div
                 key={index}
                 className="flex items-center border border-gray-300 rounded-3xl px-4 py-2 w-full md:w-2/3"
@@ -74,7 +87,7 @@ function QuestionManagement() {
                 <CircleCheckBig className="text-custom-orange mr-4" />
                 <input
                   type="text"
-                  placeholder={`Answer option ${index}`}
+                  placeholder={`Answer option ${index + 1}`}
                   className="w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
                 />
               </div>
