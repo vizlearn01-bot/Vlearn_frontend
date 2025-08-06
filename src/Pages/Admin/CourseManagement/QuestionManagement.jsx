@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, CircleCheckBig } from 'lucide-react'
+import { Plus, CircleCheckBig, Trash2 } from 'lucide-react'
 
 function QuestionManagement() {
 
@@ -8,9 +8,13 @@ function QuestionManagement() {
     { text: "", isCorrect: false }
   ])
 
-  function addAnswerField(){
-      setAnswerFields([...answerFields, { text: '', isCorrect: false }]);
-
+  function addAnswerField() {
+    setAnswerFields([...answerFields, { text: '', isCorrect: false }]);
+  }
+  function removefield(index) {
+    let data = [...answerFields];
+    data.splice(index, 1)
+    setAnswerFields(data)
   }
 
   return (
@@ -90,6 +94,9 @@ function QuestionManagement() {
                   placeholder={`Answer option ${index + 1}`}
                   className="w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
                 />
+                <Trash2
+                  onClick={() => removefield(index)}
+                  className='text-custom-blue hover:cursor-pointer hover:text-custom-orange' />
               </div>
             ))}
           </div>
