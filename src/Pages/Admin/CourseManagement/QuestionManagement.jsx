@@ -72,10 +72,10 @@ function QuestionManagement() {
 
           {/* Answers Header */}
           <div className="flex justify-between items-center mt-4 mb-4">
-            <label htmlFor="answers" className="text-base font-medium">Answers</label>
+            <label htmlFor="answers" className="text-base">Answers</label>
             <button
               type="button"
-              className="bg-custom-orange text-white py-2 px-4 rounded-3xl text-sm"
+              className="bg-custom-orange text-white py-2 px-4 rounded-3xl text-sm hover:cursor-pointer"
               onClick={addAnswerField}>
               Add an answer slot
             </button>
@@ -86,17 +86,17 @@ function QuestionManagement() {
             {answerFields.map((answerField, index) => (
               <div
                 key={index}
-                className="flex items-center border border-gray-300 rounded-3xl px-4 py-2 w-full md:w-2/3"
+                className="flex items-center  rounded-full px-4 py-2 w-full md:w-2/3"
               >
                 <CircleCheckBig className="text-custom-orange mr-4" />
                 <input
                   type="text"
                   placeholder={`Answer option ${index + 1}`}
-                  className="w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400"
+                  className="w-full placeholder:text-sm placeholder:font-extralight placeholder:text-gray-400 rounded-3xl border border-gray-400 px-4 py-2"
                 />
                 <Trash2
                   onClick={() => removefield(index)}
-                  className='text-custom-blue hover:cursor-pointer hover:text-custom-orange' />
+                  className='ml-4 text-custom-blue hover:cursor-pointer hover:text-custom-orange' />
               </div>
             ))}
           </div>
