@@ -98,7 +98,7 @@ function App() {
                     </SubscriptionRestricted>,
             },
         ],
-    };
+    }
     const adminDashboardRoutes = {
         path: "admin-dashboard",
         element: (
