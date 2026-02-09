@@ -15,6 +15,7 @@ export const UserProvider = ({ children }) => {
       return null;
     }
   });
+  
 //fetch user on token change
   useEffect(() => {
     const fetchUserProfile = async () => {

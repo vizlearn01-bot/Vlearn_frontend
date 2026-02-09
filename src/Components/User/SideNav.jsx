@@ -13,7 +13,7 @@ const SideNav = () => {
   const { logout } = useContext(UserContext);
   const navigate = useNavigate();
 
-  // 👇 useEffect to handle outside click
+  // useEffect to handle outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -31,28 +31,22 @@ const SideNav = () => {
     };
   }, []);
 
-  const handleLogout = () => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You will be logged out!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#02a0bf",
-      cancelButtonColor: "#ff4900",
-      confirmButtonText: "Yes, log me out!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        logout();
-        Swal.fire({
-          title: "Logged Out!",
-          text: "You have been successfully logged out.",
-          icon: "success"
-        }).then(() => {
-          navigate("/login");
-        });
-      }
-    });
-  };
+function handleLogout() {
+  Swal.fire({
+    title: 'Are you sure you want to logout?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, logout!',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      logout(); // Call the logout function from context
+      navigate('/login'); // Redirect to login page
+      Swal.fire('Logged out!', 'You have been logged out successfully.', 'success');
+    }
+  });
+}
 
   const navItems = [
     { icon: Home, text: 'Dashboard', path: '/dashboard/home' },

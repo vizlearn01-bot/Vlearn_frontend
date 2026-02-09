@@ -86,7 +86,6 @@ function Dashboard() {
 // extracts and removes duplicates from the categories
   const allCategories = courses.map(course => course.category)
   const uniqueCategories = ["All", ...new Set(allCategories)]
-// console.log(user)
   return (
     <div className="flex">
       <SideNav />
