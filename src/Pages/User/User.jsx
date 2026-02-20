@@ -136,12 +136,12 @@ function User() {
                   </div>
 
                   {subscriptionContext?.activeSubscriptions?.length > 0 ? (
-                    <button className='bg-custom-orange mt-4 py-2 px-4 rounded-3xl text-white'>
+                    <button className='bg-custom-orange mt-4 py-2 px-4 rounded-3xl text-white hover:bg-custom-blue transition-colors duration-200 hover:cursor-pointer'>
                       Active subscription
                     </button>
                   ) : (
                     <button
-                      className='bg-custom-orange py-2 px-4 rounded-3xl text-white'
+                      className='bg-custom-orange py-2 px-4 rounded-3xl text-white hover:bg-custom-blue transition-colors duration-200 hover:cursor-pointer'
                       onClick={handleSubscription}
                     >
                       Renew subscription
