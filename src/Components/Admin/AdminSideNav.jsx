@@ -59,6 +59,7 @@ const SideNav = () => {
         { icon: Library, text: 'Course management', path: '/admin-dashboard/course-management' },
         { icon: UserCog, text: "User management", path: '/admin-dashboard/user-management' },
         { icon: ChartNoAxesCombined, text: "Analytics and reports", path: '/admin-dashboard/analytics' },
+        { icon: FolderClosed, text: "Resource management", path: '/admin-dashboard/resource-management' },
     ];
 
     return (

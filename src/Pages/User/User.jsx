@@ -8,8 +8,6 @@ import { useSubscriptionContext } from '../../component-library/billing-and-paym
 
 
 // Define your Cloudinary base URL
-const CLOUDINARY_BASE_URL = 'https://res.cloudinary.com/dfycvaiv7/';
-
 function User() {
   const { user: contextUser, token } = useContext(UserContext);
   const [user, setUser] = useState(null);
