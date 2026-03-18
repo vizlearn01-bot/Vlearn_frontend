@@ -149,6 +149,12 @@ function Home() {
       title: "Chlorine and its compounds",
       description: "This chapter explores the preparation, properties, and uses of chlorine and hydrogen chloride. You'll learn how solvents affect hydrogen chloride, how hydrochloric acid is made industrially, and the environmental impact of chlorine compounds."
     },
+     {
+      image:
+        "https://www.medigoapp.com/uploads/hydrochloric_acid_7_dc8263b24d.jpg",
+      title: "Chlorine and its compounds",
+      description: "This chapter explores the preparation, properties, and uses of chlorine and hydrogen chloride. You'll learn how solvents affect hydrogen chloride, how hydrochloric acid is made industrially, and the environmental impact of chlorine compounds."
+    },
   ];
   return (
     <>
