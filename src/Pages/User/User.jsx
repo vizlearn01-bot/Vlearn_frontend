@@ -101,7 +101,7 @@ function User() {
     return <div className="min-h-screen flex items-center justify-center">No user data available.</div>;
   }
 
-  const avatarUrl = `${CLOUDINARY_BASE_URL}${user.profile.avatar}`;
+  // const avatarUrl = `${CLOUDINARY_BASE_URL}${user.profile.avatar}`;
 
   const handleSubscription = (e) => {
     e.preventDefault();
