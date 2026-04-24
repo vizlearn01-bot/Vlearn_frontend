@@ -29,7 +29,7 @@
 
 ## Overview
 
-**Vlearn** is an interactive e-learning web application aimed at students and academic institutions. It supports structured course delivery through video content, downloadable resources, multiple-choice quizzes, and hands-on science simulations. The platform has two distinct portals — a **Student Dashboard** and an **Admin Dashboard** — with subscription-based access control integrated with **M-Pesa** and card payments.
+**Vlearn** is an interactive e-learning web application aimed at students and academic institutions. It supports structured course delivery through video content, downloadable resources, multiple-choice quizzes, and hands-on science simulations. The platform has two distinct portals — a **Student Dashboard** and an **Admin Dashboard** — with subscription-based access control integrated with **M-Pesa** payments.
 
 ---
 
@@ -39,7 +39,7 @@
 - 🎬 **Video Lessons** — Stream course videos using a built-in media player
 - 📚 **Course Detail Pages** — Browse course content and enroll
 - 📝 **Quizzes** — Attempt quizzes, submit answers, and view results
-- 🔬 **Science Simulations** — Interact with 7 subject-specific simulations covering Physics and Chemistry
+- 🔬 **Science Simulations** — Interact with 7 subject-specific simulations covering Chemistry
 - 📂 **Resources** — Access and download supplementary learning materials
 - 💳 **Subscription Plans** — `Free Trial`, `Explorer Plan`, `Pro Plan`, and `Daily` tiers
 
