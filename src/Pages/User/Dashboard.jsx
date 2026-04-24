@@ -17,12 +17,12 @@ function Dashboard() {
   const [error, setError] = useState(null);
   const { user, token } = useContext(UserContext); // Consume UserContext
   const [activeCategory, setActiveCategory] = useState('All');
-  const [videoCount, setVideoCount] =  useState(0)
+  const [videoCount, setVideoCount] = useState(0)
 
 
   // Fetch courses on component mount
   useEffect(() => {
-     const fetchVideoCount = async () => {
+    const fetchVideoCount = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/video-count`);
         console.log(response.data)
@@ -34,7 +34,7 @@ function Dashboard() {
       }
     };
     fetchVideoCount();
-    
+
     const fetchCourses = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/experiment_videos`, {
@@ -60,7 +60,7 @@ function Dashboard() {
       setIsLoading(false);
     }
   }, [token]
-);
+  );
 
   // Debounced search input handler
   const handleInputChange = debounce((e) => {
@@ -83,7 +83,7 @@ function Dashboard() {
       return course.category?.toLowerCase() === activeCategory.toLowerCase();
     });
 
-// extracts and removes duplicates from the categories
+  // extracts and removes duplicates from the categories
   const allCategories = courses.map(course => course.category)
   const uniqueCategories = ["All", ...new Set(allCategories)]
   return (
@@ -165,7 +165,8 @@ function Dashboard() {
                       {category}
                     </button>
                   ))}
-              </div></>
+              </div>
+            </>
 
           ) : null}
 
