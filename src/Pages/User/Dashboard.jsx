@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Bell, Search, Bookmark, Clock } from 'lucide-react';
+import { Bell, Search, Bookmark, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from "react-router";
 import axios from 'axios';
 import LazyLoad from 'react-lazyload';
@@ -9,24 +9,26 @@ import BASE_URL from '../../config';
 import SideNav from '../../Components/User/SideNav';
 import { filter } from 'lodash';
 
+const COURSES_PER_PAGE = 8;
+
 function Dashboard() {
   const [searchItem, setSearchItem] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState(null);
-  const { user, token } = useContext(UserContext); // Consume UserContext
+  const { user, token } = useContext(UserContext);
   const [activeCategory, setActiveCategory] = useState('All');
-  const [videoCount, setVideoCount] = useState(0)
-
+  const [videoCount, setVideoCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Fetch courses on component mount
   useEffect(() => {
     const fetchVideoCount = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/video-count`);
-        console.log(response.data)
-        setVideoCount(response.data)
+        console.log(response.data);
+        setVideoCount(response.data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -39,7 +41,7 @@ function Dashboard() {
       try {
         const response = await axios.get(`${BASE_URL}/experiment_videos`, {
           headers: {
-            Authorization: `Bearer ${token?.access}`, // Use the token from context
+            Authorization: `Bearer ${token?.access}`,
           },
         });
         setCourses(response.data);
@@ -54,13 +56,17 @@ function Dashboard() {
     };
 
     if (token?.access) {
-      fetchCourses(); // Fetch courses only if the token is available
+      fetchCourses();
     } else {
       setError('Please log in to access courses.');
       setIsLoading(false);
     }
-  }, [token]
-  );
+  }, [token]);
+
+  // Reset to page 1 whenever search or category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchItem, activeCategory]);
 
   // Debounced search input handler
   const handleInputChange = debounce((e) => {
@@ -81,11 +87,25 @@ function Dashboard() {
     .filter(course => {
       if (activeCategory === 'All') return true;
       return course.category?.toLowerCase() === activeCategory.toLowerCase();
-    });
+    })
+    .sort((a, b) => a.title.localeCompare(b.title));
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredCategory.length / COURSES_PER_PAGE);
+  const paginatedCourses = filteredCategory.slice(
+    (currentPage - 1) * COURSES_PER_PAGE,
+    currentPage * COURSES_PER_PAGE
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // extracts and removes duplicates from the categories
-  const allCategories = courses.map(course => course.category)
-  const uniqueCategories = ["All", ...new Set(allCategories)]
+  const allCategories = courses.map(course => course.category);
+  const uniqueCategories = ["All", ...new Set(allCategories)];
+
   return (
     <div className="flex">
       <SideNav />
@@ -107,14 +127,11 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* User Info*/}
+          {/* User Info */}
           <div className="flex items-center space-x-6 md:ml-72">
-            {/* Notification Bell */}
             <button className="p-2 hover:bg-custom-blue hover:text-white rounded-3xl transition-colors duration-200">
               <Bell className="h-6 w-6 text-gray-600 hover:text-white" />
             </button>
-
-            {/* User Info */}
             {user ? (
               <Link to='/dashboard/user'>
                 <div className="flex items-center space-x-4">
@@ -167,7 +184,6 @@ function Dashboard() {
                   ))}
               </div>
             </>
-
           ) : null}
 
           {isLoading ? (
@@ -177,27 +193,29 @@ function Dashboard() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredCategory
-                .sort((a, b) => a.title.localeCompare(b.title))
-                .map((course) => (
+            <>
+              {/* Results count */}
+              {user && (
+                <p className="text-sm text-gray-500 text-center mb-4">
+                  Showing {paginatedCourses.length} of {filteredCategory.length} experiment{filteredCategory.length !== 1 ? 's' : ''}
+                </p>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {paginatedCourses.map((course) => (
                   <div key={course.id} className="mb-6">
-                    {/* Clickable card area with hover effects */}
                     <Link
                       to={`/coursedetails/${course.id}`}
-                      className="group relative block rounded-3xl shadow-sm  overflow-hidden"
+                      className="group relative block rounded-3xl shadow-sm overflow-hidden"
                     >
                       <LazyLoad height={200} offset={100} once>
                         <div className="relative">
-                          {/* Course Image with Zoom Effect */}
                           <img
                             src={course.image}
                             alt={course.title}
                             className="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-500"
                             loading="lazy"
                           />
-
-                          {/* Gradient Overlay */}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
                             <div className="absolute bottom-0 left-0 right-0 p-6 space-y-2">
                               <h3 className="text-xl font-bold text-white line-clamp-2">
@@ -218,14 +236,72 @@ function Dashboard() {
                         </div>
                       </LazyLoad>
                     </Link>
-
-                    {/* Visible title outside the card */}
                     <h3 className="mt-3 font-semibold text-lg px-2 text-center">
                       {course.title}
                     </h3>
                   </div>
                 ))}
-            </div>
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 mt-8">
+                  {/* Previous button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="p-2 rounded-full bg-custom-blue text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-custom-orange transition-colors duration-200"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+
+                  {/* Page numbers */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                    // Always show first, last, current, and neighbours; collapse others to "..."
+                    const showPage =
+                      page === 1 ||
+                      page === totalPages ||
+                      Math.abs(page - currentPage) <= 1;
+
+                    const showLeftEllipsis = page === currentPage - 2 && currentPage > 3;
+                    const showRightEllipsis = page === currentPage + 2 && currentPage < totalPages - 2;
+
+                    if (showLeftEllipsis || showRightEllipsis) {
+                      return (
+                        <span key={page} className="px-1 text-gray-400 select-none">
+                          …
+                        </span>
+                      );
+                    }
+
+                    if (!showPage) return null;
+
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`w-9 h-9 rounded-full text-sm font-medium transition-colors duration-200 ${
+                          currentPage === page
+                            ? 'bg-custom-orange text-white'
+                            : 'bg-custom-blue text-white hover:bg-custom-orange'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+
+                  {/* Next button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="p-2 rounded-full bg-custom-blue text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-custom-orange transition-colors duration-200"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </section>
       </main>
@@ -234,8 +310,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-
-
-
-
