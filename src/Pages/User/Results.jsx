@@ -16,8 +16,7 @@ function Results() {
         const response = await axios.get(`${BASE_URL}/questions/attempts/`, {
           headers: { Authorization: `Bearer ${token.access}` },
         });
-        setAttempts(response.data);
-        console.log(response.data)
+        setAttempts(response.data.results || response.data);
         setLoading(false);
       } catch (err) {
         setError(err.response?.data?.error || err.message);

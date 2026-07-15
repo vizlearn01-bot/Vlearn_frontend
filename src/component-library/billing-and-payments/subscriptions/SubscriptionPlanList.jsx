@@ -80,7 +80,7 @@ const SubscriptionPlanList = ({ onSelect }) => {
                                 role="list"
                                 className="mt-8 space-y-3 text-sm/6 text-gray-600 xl:mt-10"
                             >
-                                {plan?.details?.features.map((feature) => (
+                                {plan?.details?.features?.map((feature) => (
                                     <li key={feature} className="flex gap-x-3">
                                         <CheckIcon
                                             aria-hidden="true"

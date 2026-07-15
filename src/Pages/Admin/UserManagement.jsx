@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import BASE_URL from '../../config';
 
 function UserManagement() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/user-details/')
+      .get(`${BASE_URL}/user-details/`)
       .then((res) => {
         setUsers(res.data);
       })

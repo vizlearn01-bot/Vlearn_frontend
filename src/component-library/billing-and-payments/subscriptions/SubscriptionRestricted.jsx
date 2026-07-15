@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { ShieldExclamationIcon } from "@heroicons/react/24/outline";
 import Button from "../../butttons/Button";
 import { ArrowRight } from "lucide-react";
+import UserContext from "../../../Context/UserContext";
 
 const SubscriptionRestricted = ({
     allowedSubscriptionPlans,
@@ -28,26 +29,35 @@ const SubscriptionRestricted = ({
     children,
 }) => {
     const subscriptionContext = useSubscriptionContext();
+    const userContext = React.useContext(UserContext);
     const [allowed, setAllowed] = React.useState(false);
 
     React.useEffect(() => {
+        if (userContext?.user?.is_superuser) {
+            setAllowed(true);
+            return;
+        }
+
         if (subscriptionContext?.activeSubscriptions) {
             if (allowedSubscriptionPlans?.length > 0) {
+                let isAllowed = false;
                 subscriptionContext.activeSubscriptions.forEach((subscription) => {
                     if (
-                        allowedSubscriptionPlans.includes(
-                            subscription.plan_id
-                        )
+                        allowedSubscriptionPlans.includes(subscription.plan_id) ||
+                        allowedSubscriptionPlans.includes(subscription.plan_name) ||
+                        allowedSubscriptionPlans.includes(subscription.plan_name?.toLowerCase().replace(/\s+/g, '_'))
                     ) {
-                        setAllowed(true);
-                        return;
+                        isAllowed = true;
                     }
                 });
+                setAllowed(isAllowed);
             } else {
                 setAllowed(true);
             }
+        } else {
+            setAllowed(false);
         }
-    }, [subscriptionContext, allowedSubscriptionPlans]);
+    }, [subscriptionContext, allowedSubscriptionPlans, userContext]);
 
     return allowed ? children : fallBackComponent;
 };

@@ -16,7 +16,7 @@ const RestrictedRoute = ({
     React.useEffect(() => {
         if (allowedRoles.length > 0) {
             if (authContext?.userDetails?.roles) {
-                authContext?.userDetails?.roles.forEach((role) => {
+                authContext?.userDetails?.roles?.forEach((role) => {
                     if (allowedRoles.includes(role)) {
                         setallowed(true);
                         return;

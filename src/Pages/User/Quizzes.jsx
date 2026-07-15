@@ -23,7 +23,7 @@ function Quizzes() {
           }
         );
         console.log(response.data)
-        setQuizzes(response.data);
+        setQuizzes(response.data.results || response.data);
       } catch (err) {
         setError(err.message);
       } finally {

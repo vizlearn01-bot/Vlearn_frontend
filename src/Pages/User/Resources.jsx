@@ -42,8 +42,7 @@ function Resources() {
     const fetchResources = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/files/`);
-        setResources(response.data);
-        console.log(response.data)
+        setResources(response.data.results || response.data);
       } catch (error) {
         console.error('Error fetching resources:', error);
       } finally {

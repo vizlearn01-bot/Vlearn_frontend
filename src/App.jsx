@@ -24,6 +24,11 @@ import AdminDashboardOutlet from "./Pages/Admin/AdminDashboardOutlet";
 import CourseManagement from "./Pages/Admin/CourseManagement";
 import UserManagement from "./Pages/Admin/UserManagement";
 import Analytics from "./Pages/Admin/Analytics";
+import ContentStudio from "./Pages/Admin/ContentStudio/ContentStudio";
+import { LessonViewer } from "./Pages/LessonViewer";
+import { TopicsView } from "./Pages/User/TopicsView";
+import NotFound from "./Pages/NotFound";
+import CurriculumBuilder from "./Pages/Admin/CurriculumBuilder";
 
 function App() {
     const dashboardRoutes = {
@@ -97,6 +102,16 @@ function App() {
                         <Results />
                     </SubscriptionRestricted>,
             },
+            {
+                path: "subject/:subjectId",
+                element: (
+                    <SubscriptionRestricted
+                        allowedSubscriptionPlans={["pro_plan", "free_trial", "explorer_plan", "daily"]}
+                    >
+                        <TopicsView />
+                    </SubscriptionRestricted>
+                ),
+            },
         ],
     }
     const adminDashboardRoutes = {
@@ -125,6 +140,14 @@ function App() {
                 element:
                         <Analytics />
             },
+            {
+                path:"content-studio/:learningUnitId?",
+                element: <ContentStudio />
+            },
+            {
+                path:"curriculum-builder",
+                element: <CurriculumBuilder />
+            },
         ]
     }
 
@@ -146,10 +169,6 @@ function App() {
                     element: <ContactUs />,
                 },
                 {
-                    path: "admin-dashboard",
-                    element: <AdminDashboard />
-                },
-                {
                     path: "login",
                     element: <Login />,
                 },
@@ -165,9 +184,17 @@ function App() {
                     path: "coursedetails/:id",
                     element: <CourseDetail />,
                 },
+                {
+                    path: "lesson-viewer/:topicId?",
+                    element: <LessonViewer paginated={true} />
+                },
                 dashboardRoutes,
                 adminDashboardRoutes,
                 BillingAndPaymentsRoutes(),
+                {
+                    path: "*",
+                    element: <NotFound />
+                }
             ],
         },
     ]);

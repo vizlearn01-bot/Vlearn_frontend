@@ -44,7 +44,9 @@ function Login() {
       }
     } catch (error) {
       const errorMessage =
-        error.response?.data?.non_field_errors?.[0] || "Login failed. Please try again.";
+        error.response?.data?.detail ||
+        error.response?.data?.non_field_errors?.[0] ||
+        "Login failed. Please try again.";
       setError(errorMessage);
       Swal.fire({
         title: "Error",

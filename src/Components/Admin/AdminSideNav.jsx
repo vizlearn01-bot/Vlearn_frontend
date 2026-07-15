@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import {
-    Menu, GraduationCap,ChartNoAxesCombined, Library, LayoutDashboard, UserCog, FolderClosed, X
+    Menu, GraduationCap,ChartNoAxesCombined, Library, LayoutDashboard, UserCog, FolderClosed, X, FolderTree
 } from 'lucide-react';
 import { useState, useContext, useRef, useEffect } from 'react';
 
@@ -59,7 +59,8 @@ const SideNav = () => {
         { icon: Library, text: 'Course management', path: '/admin-dashboard/course-management' },
         { icon: UserCog, text: "User management", path: '/admin-dashboard/user-management' },
         { icon: ChartNoAxesCombined, text: "Analytics and reports", path: '/admin-dashboard/analytics' },
-        { icon: FolderClosed, text: "Resource management", path: '/admin-dashboard/resource-management' },
+        { icon: FolderTree, text: "Curriculum Builder", path: '/admin-dashboard/curriculum-builder' },
+        { icon: Library, text: "Content Studio", path: '/admin-dashboard/content-studio' },
     ];
 
     return (

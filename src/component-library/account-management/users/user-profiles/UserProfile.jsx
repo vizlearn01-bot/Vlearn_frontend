@@ -56,7 +56,7 @@ const UserProfile = ({ adminView = false }) => {
     React.useEffect(() => {
         if (accountDetails?.category_details) {
             let userGroups = [];
-            accountDetails?.category_details?.user_groups.map((group) => {
+            accountDetails?.category_details?.user_groups?.map((group) => {
                 userGroups.push({
                     label: group.name,
                     value: group.id,

@@ -60,7 +60,7 @@ function User() {
         const response = await axios.get(`${BASE_URL}/video_interactions`, {
           headers: { Authorization: `Bearer ${token.access}` },
         });
-        setAnalytics(response.data);
+        setAnalytics(response.data.results || response.data);
       } catch (error) {
         console.error('Error fetching user analytics', error);
         setError('Failed to fetch user analytics.');
@@ -78,7 +78,7 @@ function User() {
         const response = await axios.get(`${BASE_URL}/questions/attempts/`, {
           headers: { Authorization: `Bearer ${token.access}` },
         });
-        setQuizAttempts(response.data);
+        setQuizAttempts(response.data.results || response.data);
       } catch (err) {
         setQuizError(err.response?.data?.error || err.message);
       } finally {

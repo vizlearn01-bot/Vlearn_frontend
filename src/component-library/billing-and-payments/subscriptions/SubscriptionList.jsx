@@ -52,7 +52,14 @@ const AddSubscriptionForm = ({ errors, setErrors, defaultvalues }) => {
             <UseFetcherData
                 url={"/billing-and-payments/subscriptions/plans/list"}
                 setData={(data) => {
-                    setSubscriptionPlans(data.responseData.data);
+                    let plans = data?.responseData?.data;
+                    if (plans && !Array.isArray(plans) && plans.results) {
+                        plans = plans.results;
+                    }
+                    if (!Array.isArray(plans)) {
+                        plans = [];
+                    }
+                    setSubscriptionPlans(plans);
                 }}
             />
             <div className="flex flex-col space-y-3">

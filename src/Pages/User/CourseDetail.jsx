@@ -47,7 +47,8 @@ function CourseDetail() {
             Authorization: `Bearer ${token?.access}`, // Use the token from context
           },
         });
-        const courseQuiz = response.data.find(q => q.video === parseInt(id));
+        setQuizzes(response.data.results || response.data);
+        const courseQuiz = (response.data.results || response.data).find(q => q.video === parseInt(id));
         setQuiz(courseQuiz || null);
       } catch (err) {
         console.error("Error fetching quizzes:", err);
