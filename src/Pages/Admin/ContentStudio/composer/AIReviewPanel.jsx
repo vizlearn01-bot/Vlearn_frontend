@@ -1,15 +1,10 @@
 import React from 'react';
-import { Brain, FileText, ImageIcon, Activity, Clock, CheckCircle } from 'lucide-react';
+import { Brain, FileText, ImageIcon, Activity, Clock, CheckCircle, Lightbulb, AlertTriangle } from 'lucide-react';
 
 export default function AIReviewPanel({ lesson, blocks, assets }) {
-    // Heuristic computations for the review panel
-    const totalAssets = assets.length;
-    const repoAssets = assets.filter(a => a.source_type === 'knowledge_repository').length;
-    const repoCoverage = totalAssets === 0 ? 100 : Math.round((repoAssets / totalAssets) * 100);
+    // ─── Heuristic Computations ──────────────────────────────────────────────
     
-    const missingAssets = assets.filter(a => a.status === 'pending').length;
-    const visualOpps = blocks.filter(b => ['suggested_diagram', 'suggested_video', 'suggested_image', 'image_placeholder', 'video_ref'].includes(b.block_type)).length;
-
+    // 1. Reading Load
     let wordCount = 0;
     blocks.forEach(b => {
         let text = b.content || '';
@@ -17,67 +12,85 @@ export default function AIReviewPanel({ lesson, blocks, assets }) {
         wordCount += text.split(/\s+/).length;
     });
     const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+    const readingLoadStatus = readingTime > 15 ? 'High' : (readingTime < 3 ? 'Low' : 'Optimal');
 
-    const kcCount = blocks.filter(b => ['knowledge_check', 'revision_questions'].includes(b.block_type)).length;
-    const actCount = blocks.filter(b => b.block_type === 'experiment').length;
+    // 2. Media Coverage
+    const visualBlocks = blocks.filter(b => ['suggested_diagram', 'suggested_video', 'suggested_image', 'image_placeholder', 'video_ref', 'suggested_illustration', 'suggested_infographic'].includes(b.block_type)).length;
+    const missingAssets = assets.filter(a => a.status === 'pending').length;
+    const mediaCoverage = visualBlocks > 0 ? (missingAssets === 0 ? 'Excellent' : 'Needs Assets') : 'Poor';
 
-    // A fake pedagogy score based on component diversity
-    const hasGoals = blocks.some(b => ['learning_goal', 'objectives'].includes(b.block_type));
-    const hasSummary = blocks.some(b => b.block_type === 'summary');
-    let pedagogyScore = 'Moderate';
-    if (hasGoals && hasSummary && kcCount > 0 && visualOpps > 0) pedagogyScore = 'High';
-    
-    let genQuality = 94; // Dummy AI metric
+    // 3. Interaction Density
+    const activeBlocks = blocks.filter(b => ['knowledge_check', 'multiple_choice', 'true_false', 'short_answer', 'reflection', 'experiment', 'classroom_activity'].includes(b.block_type)).length;
+    const interactionDensity = activeBlocks >= 2 ? 'High' : (activeBlocks === 1 ? 'Moderate' : 'Low');
+
+    // 4. Local Context & Coaching
+    const hasContext = blocks.some(b => ['real_world_example', 'analogy'].includes(b.block_type));
+    const hasMisconception = blocks.some(b => ['common_misconception', 'common_mistake'].includes(b.block_type));
+    const hasSummary = blocks.some(b => ['summary', 'key_takeaway'].includes(b.block_type));
+
+    // ─── Actionable Coaching ─────────────────────────────────────────────────
+    const tips = [];
+    if (readingLoadStatus === 'High') tips.push("This concept is text-heavy. Consider breaking it down or adding visuals.");
+    if (mediaCoverage === 'Poor') tips.push("Add a diagram or video to support visual learners.");
+    if (interactionDensity === 'Low') tips.push("Add a Knowledge Check or Pause & Reflect to improve engagement.");
+    if (!hasContext) tips.push("Consider adding a Real-World Example or Analogy to ground the concept.");
+    if (!hasMisconception) tips.push("Pre-empt confusion by adding a Common Misconception.");
+    if (!hasSummary) tips.push("Add a Key Takeaway to reinforce the main learning goal.");
     
     return (
-        <div className="w-64 bg-gray-50 border-l border-gray-200 flex flex-col h-full overflow-y-auto">
-            <div className="px-4 py-3 border-b border-gray-200 bg-white sticky top-0">
-                <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
-                    <Brain size={16} className="text-custom-blue" /> AI Review
+        <div className="w-72 bg-custom-cream border-l border-gray-200/60 flex flex-col h-full overflow-y-auto">
+            <div className="px-5 py-4 border-b border-gray-200/60 bg-white sticky top-0 shadow-sm z-10">
+                <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2 font-serif">
+                    <Brain size={18} className="text-custom-terracotta" /> Instructional Coach
                 </h3>
-                <p className="text-xs text-gray-500 mt-0.5">Instructional Designer</p>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1 font-sans">Real-time analysis</p>
             </div>
 
-            <div className="p-4 space-y-6">
+            <div className="p-5 space-y-8">
                 
-                {/* Generation Quality */}
+                {/* Actionable Feedback */}
                 <div>
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Quality</p>
-                    <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">Generation Quality</span>
-                        <span className="text-sm font-bold text-emerald-600">{genQuality}%</span>
-                    </div>
-                    <div className="flex items-center justify-between mt-2">
-                        <span className="text-sm text-gray-700">Pedagogy Score</span>
-                        <span className="text-sm font-bold text-custom-blue">{pedagogyScore}</span>
-                    </div>
-                    <div className="flex items-center justify-between mt-2">
-                        <span className="text-sm text-gray-700">Repository Coverage</span>
-                        <span className="text-sm font-bold text-gray-800">{repoCoverage}%</span>
+                    <p className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest mb-3 font-sans">Coaching Suggestions</p>
+                    {tips.length > 0 ? (
+                        <div className="space-y-3">
+                            {tips.slice(0, 3).map((tip, i) => (
+                                <div key={i} className="bg-white border-l-2 border-custom-terracotta p-3 rounded-r-xl shadow-sm text-sm text-gray-700 leading-relaxed font-sans flex gap-2">
+                                    <Lightbulb size={14} className="text-custom-ochre shrink-0 mt-0.5" />
+                                    <span>{tip}</span>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="bg-white border border-[#E3EBE6] p-3 rounded-xl shadow-sm text-sm text-custom-forest flex gap-2 font-sans">
+                            <CheckCircle size={16} className="text-custom-forest shrink-0 mt-0.5" />
+                            <span>This concept looks well-balanced and highly engaging!</span>
+                        </div>
+                    )}
+                </div>
+
+                <hr className="border-gray-200/60" />
+
+                {/* Pedagogy Metrics */}
+                <div>
+                    <p className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest mb-4 font-sans">Pedagogical Health</p>
+                    <div className="space-y-4">
+                        <MetricRow icon={FileText} label="Reading Load" value={readingLoadStatus} color={readingLoadStatus === 'Optimal' ? 'text-custom-forest' : 'text-custom-terracotta'} />
+                        <MetricRow icon={Activity} label="Interaction Density" value={interactionDensity} color={interactionDensity === 'Low' ? 'text-custom-terracotta' : 'text-custom-forest'} />
+                        <MetricRow icon={ImageIcon} label="Media Coverage" value={mediaCoverage} color={mediaCoverage === 'Poor' || mediaCoverage === 'Needs Assets' ? 'text-custom-ochre' : 'text-custom-forest'} />
+                        <MetricRow icon={Clock} label="Est. Reading Time" value={`~${readingTime} min`} />
                     </div>
                 </div>
 
-                <hr className="border-gray-200" />
+                <hr className="border-gray-200/60" />
 
-                {/* Content Metrics */}
+                {/* Checklist */}
                 <div>
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Content</p>
+                    <p className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest mb-4 font-sans">Design Checklist</p>
                     <div className="space-y-3">
-                        <MetricRow icon={FileText} label="Reading Difficulty" value="Moderate" />
-                        <MetricRow icon={Clock} label="Estimated Time" value={`${readingTime} min`} />
-                        <MetricRow icon={CheckCircle} label="Knowledge Checks" value={kcCount} />
-                        <MetricRow icon={Activity} label="Activities" value={actCount} />
-                    </div>
-                </div>
-
-                <hr className="border-gray-200" />
-
-                {/* Media Metrics */}
-                <div>
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Media</p>
-                    <div className="space-y-3">
-                        <MetricRow icon={ImageIcon} label="Visual Opportunities" value={visualOpps} />
-                        <MetricRow icon={ImageIcon} label="Missing Assets" value={missingAssets} color={missingAssets > 0 ? 'text-amber-600' : 'text-emerald-600'} />
+                        <ChecklistItem label="Real-World Context" checked={hasContext} />
+                        <ChecklistItem label="Misconception Addressed" checked={hasMisconception} />
+                        <ChecklistItem label="Checks for Understanding" checked={activeBlocks > 0} />
+                        <ChecklistItem label="Clear Summary" checked={hasSummary} />
                     </div>
                 </div>
 
@@ -86,13 +99,28 @@ export default function AIReviewPanel({ lesson, blocks, assets }) {
     );
 }
 
-function MetricRow({ icon: Icon, label, value, color = 'text-gray-800' }) {
+function MetricRow({ icon: Icon, label, value, color = 'text-gray-900' }) {
     return (
-        <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-700 flex items-center gap-2">
+        <div className="flex items-center justify-between font-sans">
+            <span className="text-xs font-semibold text-gray-500 flex items-center gap-2">
                 <Icon size={14} className="text-gray-400" /> {label}
             </span>
-            <span className={`text-sm font-bold ${color}`}>{value}</span>
+            <span className={`text-xs font-bold ${color}`}>{value}</span>
+        </div>
+    );
+}
+
+function ChecklistItem({ label, checked }) {
+    return (
+        <div className="flex items-center gap-2 font-sans">
+            {checked ? (
+                <CheckCircle size={14} className="text-custom-forest shrink-0" />
+            ) : (
+                <div className="w-[14px] h-[14px] rounded-full border-2 border-gray-300 shrink-0" />
+            )}
+            <span className={`text-xs ${checked ? 'text-gray-800 font-medium' : 'text-gray-500'}`}>
+                {label}
+            </span>
         </div>
     );
 }

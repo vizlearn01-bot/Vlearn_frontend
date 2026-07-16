@@ -1,50 +1,58 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 import BASE_URL from '../../config';
+import { ContentNormalizer } from '../../utils/ContentNormalizer';
 import {
   Target, Book, PenTool, Lightbulb, AlertTriangle, XCircle, Zap, Star, BrainCircuit, Globe, Hand, FlaskConical, Sparkles, CheckCircle2, PlayCircle, BarChart, Image as ImageIcon, MonitorPlay, Link2, BookOpen, Check, X
 } from 'lucide-react';
 
 // ─── Content extraction helper ───────────────────────────────────────────────
-const text = (c) => {
-  if (!c) return '';
-  if (typeof c === 'string') { try { const p = JSON.parse(c); return p.text || p.content || c; } catch { return c; } }
-  if (typeof c === 'object') return c.text || c.content || c.procedure || '';
-  return String(c);
-};
+const text = (c) => ContentNormalizer.sanitizeText(ContentNormalizer.extractText(c));
+const parseContent = (c) => ContentNormalizer.parseContent(c);
 
 const MD = ({ children, className = '' }) => (
-  <div className={`prose prose-gray max-w-none leading-relaxed ${className}`}>
-    <ReactMarkdown>{children}</ReactMarkdown>
+  <div className={`prose prose-stone max-w-none leading-relaxed text-gray-800 font-sans ${className}`}>
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm, remarkMath]}
+      rehypePlugins={[rehypeKatex]}
+      components={{
+        p: ({ node, ...props }) => <p className="mb-4 text-gray-800 leading-relaxed font-sans" {...props} />,
+        li: ({ node, ...props }) => <li className="mb-2 text-gray-800 font-sans" {...props} />,
+        code: ({ node, inline, ...props }) => 
+          inline ? (
+            <code className="bg-gray-100 text-gray-800 px-1.5 py-0.5 rounded text-sm font-mono" {...props} />
+          ) : (
+            <pre className="bg-gray-50 border border-gray-200 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono">
+              <code {...props} />
+            </pre>
+          ),
+      }}
+    >
+      {children}
+    </ReactMarkdown>
   </div>
 );
 
-const parseContent = (content) => {
-  if (!content) return {};
-  if (typeof content === 'object') return content;
-  if (typeof content === 'string') {
-      try { return JSON.parse(content); }
-      catch { return { text: content }; }
-  }
-  return {};
-};
-
 // ─── Learning Goal ────────────────────────────────────────────────────────────
 export const LearningGoalBlock = ({ block }) => (
-  <div className="flex items-start gap-3 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl px-5 py-4 my-4">
-    <Target className="text-blue-500 w-5 h-5 mt-0.5 shrink-0" />
+  <div className="flex items-start gap-3 bg-custom-cream border-t-2 border-custom-terracotta px-5 py-6 my-6 shadow-sm">
+    <Target className="text-custom-terracotta w-6 h-6 mt-0.5 shrink-0" />
     <div>
-      <p className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-1">By the end of this concept</p>
-      <p className="text-blue-900 font-medium text-sm leading-relaxed">{text(block.content)}</p>
+      <p className="text-xs font-bold text-custom-terracotta uppercase tracking-widest mb-2 font-sans">By the end of this concept</p>
+      <p className="text-gray-900 font-medium text-base leading-relaxed font-serif">{text(block.content)}</p>
     </div>
   </div>
 );
 
 // ─── Concept Explanation ──────────────────────────────────────────────────────
 export const ConceptExplanationBlock = ({ block }) => (
-  <div className="my-5">
-    {block.title && <h3 className="text-xl font-bold text-gray-900 mb-3">{block.title}</h3>}
-    <MD className="text-gray-700 text-base">{text(block.content)}</MD>
+  <div className="my-8">
+    {block.title && <h3 className="text-2xl font-bold text-gray-900 mb-4 font-serif">{block.title}</h3>}
+    <MD className="text-gray-800 text-lg leading-relaxed font-sans">{ContentNormalizer.removeDuplicateHeading(text(block.content), block.title)}</MD>
   </div>
 );
 
@@ -54,109 +62,149 @@ export const DefinitionCardBlock = ({ block }) => {
   const term = c.term || block.title || 'Definition';
   const definition = c.content || c.text || text(block.content);
   return (
-    <div className="my-5 border-l-4 border-amber-400 bg-amber-50 rounded-r-2xl pl-5 pr-5 py-4 flex gap-3">
-      <Book className="text-amber-500 w-5 h-5 mt-0.5 shrink-0" />
+    <div className="my-6 border-l-4 border-custom-ochre bg-white rounded-r-xl pl-5 pr-5 py-5 flex gap-4 shadow-sm">
+      <Book className="text-custom-ochre w-6 h-6 mt-1 shrink-0" />
       <div>
-        <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-1">Definition</p>
-        <p className="font-bold text-amber-900 text-base mb-1">{term}</p>
-        <p className="text-amber-800 text-sm leading-relaxed">{definition}</p>
+        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 font-sans">Definition</p>
+        <p className="font-bold text-gray-900 text-lg mb-2 font-serif">{term}</p>
+        <p className="text-gray-700 text-base leading-relaxed">{definition}</p>
       </div>
     </div>
   );
 };
 
 // ─── Worked Example ───────────────────────────────────────────────────────────
-export const WorkedExampleBlock = ({ block }) => (
-  <div className="my-6 bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-    <div className="bg-gray-50 border-b border-gray-100 px-5 py-3 flex items-center gap-2">
-      <PenTool className="text-gray-500 w-5 h-5 shrink-0" />
-      <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Worked Example</p>
-      {block.title && <span className="text-sm font-semibold text-gray-800 ml-1">— {block.title}</span>}
+export const WorkedExampleBlock = ({ block }) => {
+  const content = text(block.content);
+  const parsedContent = parseContent(block.content);
+  
+  // Try to get structured data first (new Learning Experience schema)
+  let intro = '';
+  let steps = [];
+  
+  if (parsedContent.steps && Array.isArray(parsedContent.steps)) {
+    intro = parsedContent.intro || parsedContent.problem || '';
+    steps = parsedContent.steps.map((s, i) => ({ number: i + 1, text: s }));
+  } else {
+    // Fall back to regex detection for backward compatibility
+    const parsed = ContentNormalizer.parseSteps(content);
+    intro = parsed.intro;
+    steps = parsed.steps;
+  }
+  
+  const cleanTitle = block.title || 'Worked Example';
+  const cleanIntro = ContentNormalizer.removeDuplicateHeading(intro, cleanTitle);
+  
+  return (
+    <div className="my-8 bg-white border border-gray-200/60 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-custom-cream border-b border-gray-100 px-6 py-4 flex items-center gap-3">
+        <PenTool className="text-custom-forest w-5 h-5 shrink-0" />
+        <p className="text-xs font-bold text-custom-forest uppercase tracking-widest font-sans">Worked Example</p>
+        <span className="text-sm font-semibold text-gray-800 ml-1 font-sans">— {cleanTitle}</span>
+      </div>
+      <div className="px-6 py-6">
+        {cleanIntro && <MD className="text-gray-800 text-base leading-relaxed mb-6">{cleanIntro}</MD>}
+        
+        {steps.length > 0 ? (
+          <div className="space-y-4">
+            {steps.map((step) => (
+              <div key={step.number} className="flex items-start gap-4 p-4 rounded-xl border border-gray-100 bg-gray-50/50">
+                <div className="w-8 h-8 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center shrink-0">
+                  <span className="text-sm font-bold text-custom-forest">{step.number}</span>
+                </div>
+                <div className="flex-1 mt-1">
+                  <MD className="text-gray-800 text-base leading-relaxed">{step.text}</MD>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <MD className="text-gray-800 text-base leading-relaxed">{content}</MD>
+        )}
+      </div>
     </div>
-    <div className="px-5 py-4">
-      <MD className="text-gray-700 text-sm">{text(block.content)}</MD>
-    </div>
-  </div>
-);
+  );
+};
 
 // ─── Analogy ──────────────────────────────────────────────────────────────────
 export const AnalogyBlock = ({ block }) => (
-  <div className="my-5 bg-violet-50 border border-violet-100 rounded-2xl px-5 py-4 flex gap-3">
-    <Lightbulb className="text-violet-400 w-5 h-5 mt-0.5 shrink-0" />
+  <div className="my-6 bg-white border border-gray-200/60 rounded-xl px-6 py-5 flex gap-4 shadow-sm relative overflow-hidden">
+    <div className="absolute top-0 left-0 w-1 h-full bg-custom-ochre" />
+    <Lightbulb className="text-custom-ochre w-6 h-6 mt-0.5 shrink-0" />
     <div>
-      <p className="text-xs font-bold text-violet-400 uppercase tracking-widest mb-1">Think of it this way</p>
-      <p className="text-violet-900 text-sm leading-relaxed italic">{text(block.content)}</p>
+      <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 font-sans">Think of it this way</p>
+      <p className="text-gray-800 text-base leading-relaxed italic font-serif">"{text(block.content)}"</p>
     </div>
   </div>
 );
 
 // ─── Common Misconception ─────────────────────────────────────────────────────
 export const CommonMisconceptionBlock = ({ block }) => (
-  <div className="my-5 bg-rose-50 border border-rose-100 rounded-2xl px-5 py-4 flex gap-3">
-    <AlertTriangle className="text-rose-400 w-5 h-5 mt-0.5 shrink-0" />
+  <div className="my-6 bg-[#FAF7F5] border border-[#E8DFD8] rounded-xl px-6 py-5 flex gap-4 shadow-sm">
+    <AlertTriangle className="text-custom-terracotta w-6 h-6 mt-0.5 shrink-0" />
     <div>
-      <p className="text-xs font-bold text-rose-500 uppercase tracking-widest mb-1">Common Misconception</p>
-      <p className="text-rose-900 text-sm leading-relaxed">{text(block.content)}</p>
+      <p className="text-xs font-bold text-custom-terracotta uppercase tracking-widest mb-2 font-sans">Common Misconception</p>
+      <p className="text-gray-800 text-base leading-relaxed">{text(block.content)}</p>
     </div>
   </div>
 );
 
 // ─── Common Mistake (action-oriented) ────────────────────────────────────────
 export const CommonMistakeBlock = ({ block }) => (
-  <div className="my-5 bg-orange-50 border border-orange-200 rounded-2xl px-5 py-4 flex gap-3">
-    <XCircle className="text-orange-400 w-5 h-5 mt-0.5 shrink-0" />
+  <div className="my-6 bg-[#FAF7F5] border border-[#E8DFD8] rounded-xl px-6 py-5 flex gap-4 shadow-sm">
+    <XCircle className="text-custom-terracotta w-6 h-6 mt-0.5 shrink-0" />
     <div>
-      <p className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-1">Watch Out</p>
-      <p className="text-orange-900 text-sm leading-relaxed">{text(block.content)}</p>
+      <p className="text-xs font-bold text-custom-terracotta uppercase tracking-widest mb-2 font-sans">Watch Out</p>
+      <p className="text-gray-800 text-base leading-relaxed">{text(block.content)}</p>
     </div>
   </div>
 );
 
 // ─── Callout ──────────────────────────────────────────────────────────────────
 export const CalloutBlock = ({ block }) => (
-  <div className="my-5 bg-sky-50 border-l-4 border-sky-400 rounded-r-2xl px-5 py-4">
-    <p className="text-xs font-bold text-sky-500 uppercase tracking-widest mb-1">Important</p>
-    <p className="text-sky-900 text-sm leading-relaxed">{text(block.content)}</p>
+  <div className="my-6 bg-white border-l-4 border-custom-forest rounded-r-xl px-6 py-5 shadow-sm">
+    <p className="text-xs font-bold text-custom-forest uppercase tracking-widest mb-2 font-sans">Important</p>
+    <p className="text-gray-800 text-base leading-relaxed">{text(block.content)}</p>
   </div>
 );
 
 // ─── Quick Fact ───────────────────────────────────────────────────────────────
 export const QuickFactBlock = ({ block }) => (
-  <div className="my-4 bg-teal-50 border border-teal-100 rounded-xl px-4 py-3 flex items-start gap-2">
-    <Zap className="text-teal-500 w-4 h-4 mt-0.5 shrink-0" />
-    <p className="text-teal-900 text-sm font-medium leading-relaxed">{text(block.content)}</p>
+  <div className="my-4 bg-white border border-gray-200/60 rounded-xl px-5 py-4 flex items-start gap-3 shadow-sm">
+    <Zap className="text-custom-ochre w-5 h-5 mt-0.5 shrink-0" />
+    <p className="text-gray-800 text-base font-medium leading-relaxed">{text(block.content)}</p>
   </div>
 );
 
 // ─── Did You Know ─────────────────────────────────────────────────────────────
 export const DidYouKnowBlock = ({ block }) => (
-  <div className="my-4 bg-purple-50 border border-purple-100 rounded-xl px-4 py-3 flex items-start gap-2">
-    <Star className="text-purple-400 w-4 h-4 mt-0.5 shrink-0" />
+  <div className="my-4 bg-white border border-gray-200/60 rounded-xl px-5 py-4 flex items-start gap-3 shadow-sm">
+    <Star className="text-custom-ochre w-5 h-5 mt-0.5 shrink-0" />
     <div>
-      <p className="text-xs font-bold text-purple-400 uppercase tracking-widest mb-0.5">Did you know?</p>
-      <p className="text-purple-900 text-sm leading-relaxed">{text(block.content)}</p>
+      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 font-sans">Did you know?</p>
+      <p className="text-gray-800 text-base leading-relaxed">{text(block.content)}</p>
     </div>
   </div>
 );
 
 // ─── Memory Tip ───────────────────────────────────────────────────────────────
 export const MemoryTipBlock = ({ block }) => (
-  <div className="my-4 bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-3 flex items-start gap-2">
-    <BrainCircuit className="text-yellow-500 w-4 h-4 mt-0.5 shrink-0" />
+  <div className="my-4 bg-custom-cream border border-custom-ochre/30 rounded-xl px-5 py-4 flex items-start gap-3 shadow-sm">
+    <BrainCircuit className="text-custom-ochre w-5 h-5 mt-0.5 shrink-0" />
     <div>
-      <p className="text-xs font-bold text-yellow-600 uppercase tracking-widest mb-0.5">Memory tip</p>
-      <p className="text-yellow-900 text-sm leading-relaxed">{text(block.content)}</p>
+      <p className="text-[10px] font-bold text-custom-ochre uppercase tracking-widest mb-1 font-sans">Memory tip</p>
+      <p className="text-gray-800 text-base leading-relaxed font-serif italic">{text(block.content)}</p>
     </div>
   </div>
 );
 
 // ─── Real World Connection ────────────────────────────────────────────────────
 export const RealWorldConnectionBlock = ({ block }) => (
-  <div className="my-5 bg-emerald-50 border border-emerald-100 rounded-2xl px-5 py-4 flex gap-3">
-    <Globe className="text-emerald-500 w-5 h-5 mt-0.5 shrink-0" />
+  <div className="my-6 bg-[#F5F8F6] border border-[#E3EBE6] rounded-xl px-6 py-5 flex gap-4 shadow-sm">
+    <Globe className="text-custom-forest w-6 h-6 mt-0.5 shrink-0" />
     <div>
-      <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-1">In the real world</p>
-      <p className="text-emerald-900 text-sm leading-relaxed">{text(block.content)}</p>
+      <p className="text-xs font-bold text-custom-forest uppercase tracking-widest mb-2 font-sans">In the real world</p>
+      <p className="text-gray-800 text-base leading-relaxed">{text(block.content)}</p>
     </div>
   </div>
 );
@@ -168,18 +216,18 @@ export const RealWorldExampleBlock = ({ block }) => (
 
 // ─── Reflection ───────────────────────────────────────────────────────────────
 export const ReflectionBlock = ({ block }) => (
-  <div className="my-6 bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100 rounded-2xl px-5 py-5">
-    <p className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2">Pause & Reflect</p>
-    <p className="text-indigo-900 text-base font-medium leading-relaxed italic">"{text(block.content)}"</p>
+  <div className="my-8 bg-white border border-gray-200/60 rounded-xl px-6 py-6 shadow-sm">
+    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 font-sans">Pause & Reflect</p>
+    <p className="text-gray-900 text-lg font-medium leading-relaxed italic font-serif">"{text(block.content)}"</p>
   </div>
 );
 
 // ─── Prediction ───────────────────────────────────────────────────────────────
 export const PredictionBlock = ({ block }) => (
-  <div className="my-6 border-2 border-dashed border-blue-200 bg-blue-50/50 rounded-2xl px-5 py-5">
-    <p className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2">Make a Prediction</p>
-    <p className="text-blue-900 text-base leading-relaxed">{text(block.content)}</p>
-    <p className="text-blue-400 text-xs mt-3">Keep your answer in mind as you continue.</p>
+  <div className="my-8 border-2 border-dashed border-gray-300 bg-white rounded-xl px-6 py-6 shadow-sm">
+    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 font-sans">Make a Prediction</p>
+    <p className="text-gray-900 text-lg leading-relaxed font-serif">{text(block.content)}</p>
+    <p className="text-gray-400 text-xs mt-4 font-sans uppercase tracking-widest">Keep your answer in mind as you continue.</p>
   </div>
 );
 
@@ -189,14 +237,14 @@ export const MiniActivityBlock = ({ block }) => {
   const title = c.title || block.title || 'Try This';
   const instruction = c.content || c.text || text(block.content);
   return (
-    <div className="my-6 bg-green-50 border border-green-200 rounded-2xl overflow-hidden">
-      <div className="bg-green-100 border-b border-green-200 px-5 py-3 flex items-center gap-2">
-        <FlaskConical className="text-green-700 w-5 h-5 shrink-0" />
-        <p className="text-xs font-bold text-green-700 uppercase tracking-widest">Mini Activity</p>
-        <span className="text-sm font-semibold text-green-800 ml-1">— {title}</span>
+    <div className="my-8 bg-white border border-gray-200/60 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-[#F5F8F6] border-b border-[#E3EBE6] px-6 py-4 flex items-center gap-3">
+        <FlaskConical className="text-custom-forest w-5 h-5 shrink-0" />
+        <p className="text-xs font-bold text-custom-forest uppercase tracking-widest font-sans">Mini Activity</p>
+        <span className="text-sm font-semibold text-gray-800 ml-1 font-sans">— {title}</span>
       </div>
-      <div className="px-5 py-4">
-        <p className="text-green-900 text-sm leading-relaxed">{instruction}</p>
+      <div className="px-6 py-5">
+        <p className="text-gray-800 text-base leading-relaxed">{instruction}</p>
       </div>
     </div>
   );
@@ -208,13 +256,13 @@ export const FormulaBreakdownBlock = ({ block }) => {
   const formula = c.formula || block.title || '';
   const breakdown = c.content || c.text || text(block.content);
   return (
-    <div className="my-6 bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden">
-      <div className="bg-slate-800 px-5 py-4 text-center">
-        <p className="text-white font-mono text-xl font-bold tracking-wide">{formula}</p>
+    <div className="my-8 bg-white border border-gray-200/60 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-gray-900 px-6 py-6 text-center">
+        <p className="text-white font-mono text-2xl font-bold tracking-wide">{formula}</p>
       </div>
-      <div className="px-5 py-4">
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Variable Breakdown</p>
-        <MD className="text-slate-700 text-sm font-mono">{breakdown}</MD>
+      <div className="px-6 py-5">
+        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 font-sans">Variable Breakdown</p>
+        <MD className="text-gray-700 text-sm font-mono">{breakdown}</MD>
       </div>
     </div>
   );
@@ -222,31 +270,31 @@ export const FormulaBreakdownBlock = ({ block }) => {
 
 // ─── Key Takeaway ─────────────────────────────────────────────────────────────
 export const KeyTakeawayBlock = ({ block }) => (
-  <div className="my-6 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl px-6 py-5 flex items-start gap-3">
-    <Sparkles className="text-white w-5 h-5 mt-0.5 shrink-0" />
+  <div className="my-8 bg-custom-forest rounded-xl px-8 py-6 flex items-start gap-4 shadow-md">
+    <Sparkles className="text-custom-ochre w-6 h-6 mt-0.5 shrink-0" />
     <div>
-      <p className="text-xs font-bold text-blue-200 uppercase tracking-widest mb-1">Key Takeaway</p>
-      <p className="text-white font-semibold text-base leading-relaxed">{text(block.content)}</p>
+      <p className="text-xs font-bold text-white/60 uppercase tracking-widest mb-2 font-sans">Key Takeaway</p>
+      <p className="text-white font-semibold text-lg leading-relaxed font-serif">{text(block.content)}</p>
     </div>
   </div>
 );
 
 // ─── Before You Continue ──────────────────────────────────────────────────────
 export const BeforeYouContinueBlock = ({ block }) => (
-  <div className="my-5 bg-amber-50 border-2 border-amber-200 rounded-2xl px-5 py-4 flex gap-3">
-    <Hand className="text-amber-500 w-5 h-5 mt-0.5 shrink-0" />
+  <div className="my-6 bg-white border-2 border-custom-terracotta/20 rounded-xl px-6 py-5 flex gap-4 shadow-sm">
+    <Hand className="text-custom-terracotta w-6 h-6 mt-0.5 shrink-0" />
     <div>
-      <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-1">Before you continue</p>
-      <p className="text-amber-900 text-sm leading-relaxed">{text(block.content)}</p>
+      <p className="text-xs font-bold text-custom-terracotta uppercase tracking-widest mb-2 font-sans">Before you continue</p>
+      <p className="text-gray-800 text-base leading-relaxed">{text(block.content)}</p>
     </div>
   </div>
 );
 
 // ─── Summary ──────────────────────────────────────────────────────────────────
 export const SummaryBlock = ({ block }) => (
-  <div className="my-6 bg-gradient-to-br from-slate-50 to-gray-100 border border-gray-200 rounded-2xl px-6 py-5">
-    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Summary</p>
-    <MD className="text-gray-700 text-sm">{text(block.content)}</MD>
+  <div className="my-8 bg-white border-t-4 border-gray-300 rounded-b-xl px-8 py-8 shadow-sm">
+    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 font-sans">Summary</p>
+    <MD className="text-gray-800 text-base font-serif">{text(block.content)}</MD>
   </div>
 );
 
@@ -265,9 +313,9 @@ export const KnowledgeCheckBlock = ({ block, onInteract }) => {
   const [selected, setSelected] = useState(null);
 
   const c = parseContent(block.content);
-  const checkType = c.check_type || block.content?.check_type || 'short_answer';
+  const checkType = c.check_type || 'short_answer';
   const question = c.content || c.question || text(block.content);
-  const options = c.options || [];
+  const options = ContentNormalizer.parseOptions(c.options);
   const answer = c.answer;
 
   const handleSubmit = () => {
@@ -275,37 +323,41 @@ export const KnowledgeCheckBlock = ({ block, onInteract }) => {
     if (onInteract) onInteract(block.id);
   };
 
-  const isCorrect = selected !== null && selected === answer;
+  const selectedIndex = selected ? selected.charCodeAt(0) - 65 : -1;
+  const isCorrect = selected !== null && (
+    selected === answer || 
+    (selectedIndex >= 0 && options[selectedIndex] === answer)
+  );
 
   return (
-    <div className="my-8 bg-white border border-indigo-100 rounded-2xl overflow-hidden shadow-sm relative">
-      <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500 rounded-l-2xl" />
-      <div className="px-6 py-5">
-        <p className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-3">Check Your Understanding</p>
-        <p className="text-gray-800 font-medium text-base mb-4">{question}</p>
+    <div className="my-10 bg-white border border-gray-200/60 rounded-xl overflow-hidden shadow-sm relative">
+      <div className="absolute top-0 left-0 w-1.5 h-full bg-custom-terracotta" />
+      <div className="px-8 py-8">
+        <p className="text-[10px] font-bold text-custom-terracotta uppercase tracking-widest mb-4 font-sans">Check Your Understanding</p>
+        <p className="text-gray-900 font-medium text-lg mb-6 font-serif">{question}</p>
 
         {/* Multiple choice */}
         {checkType === 'multiple_choice' && options.length > 0 && (
-          <div className="space-y-2 mb-4">
+          <div className="space-y-3 mb-6">
             {options.map((opt, i) => {
               const label = String.fromCharCode(65 + i);
               const isSelected = selected === label;
-              const isRight = revealed && label === answer;
-              const isWrong = revealed && isSelected && label !== answer;
+              const isRight = revealed && (label === answer || opt === answer);
+              const isWrong = revealed && isSelected && !isRight;
               return (
                 <button
                   key={i}
                   onClick={() => !revealed && setSelected(label)}
-                  className={`w-full text-left px-4 py-3 rounded-xl border text-sm font-medium transition-all ${
-                    isRight ? 'bg-emerald-50 border-emerald-400 text-emerald-800' :
-                    isWrong ? 'bg-rose-50 border-rose-400 text-rose-800' :
-                    isSelected ? 'bg-indigo-50 border-indigo-400 text-indigo-800' :
-                    'bg-gray-50 border-gray-200 text-gray-700 hover:border-indigo-300 hover:bg-indigo-50/50'
+                  className={`w-full text-left px-5 py-4 rounded-xl border text-base font-medium transition-all ${
+                    isRight ? 'bg-[#F5F8F6] border-[#606C38] text-[#283618]' :
+                    isWrong ? 'bg-red-50 border-red-300 text-red-900' :
+                    isSelected ? 'bg-orange-50 border-custom-terracotta text-custom-terracotta' :
+                    'bg-white border-gray-200 text-gray-700 hover:border-custom-terracotta/50 hover:bg-orange-50/20'
                   }`}
                 >
-                  <span className="font-bold mr-2">{label}.</span>{opt}
-                  {isRight && <Check className="inline-block ml-2 w-4 h-4 text-emerald-600" />}
-                  {isWrong && <X className="inline-block ml-2 w-4 h-4 text-rose-600" />}
+                  <span className="font-bold mr-3 text-gray-400">{label}.</span>{opt}
+                  {isRight && <Check className="inline-block ml-3 w-5 h-5 text-custom-forest" />}
+                  {isWrong && <X className="inline-block ml-3 w-5 h-5 text-red-500" />}
                 </button>
               );
             })}
@@ -314,7 +366,7 @@ export const KnowledgeCheckBlock = ({ block, onInteract }) => {
 
         {/* True / False */}
         {checkType === 'true_false' && (
-          <div className="flex gap-3 mb-4">
+          <div className="flex gap-4 mb-6">
             {['True', 'False'].map((opt) => {
               const val = opt === 'True';
               const isSelected = selected === val;
@@ -324,11 +376,11 @@ export const KnowledgeCheckBlock = ({ block, onInteract }) => {
                 <button
                   key={opt}
                   onClick={() => !revealed && setSelected(val)}
-                  className={`flex-1 py-3 rounded-xl border font-semibold text-sm transition-all ${
-                    isRight ? 'bg-emerald-50 border-emerald-400 text-emerald-800' :
-                    isWrong ? 'bg-rose-50 border-rose-400 text-rose-800' :
-                    isSelected ? 'bg-indigo-50 border-indigo-400 text-indigo-800' :
-                    'bg-gray-50 border-gray-200 text-gray-700 hover:border-indigo-300'
+                  className={`flex-1 py-4 rounded-xl border font-semibold text-base transition-all ${
+                    isRight ? 'bg-[#F5F8F6] border-[#606C38] text-[#283618]' :
+                    isWrong ? 'bg-red-50 border-red-300 text-red-900' :
+                    isSelected ? 'bg-orange-50 border-custom-terracotta text-custom-terracotta' :
+                    'bg-white border-gray-200 text-gray-700 hover:border-custom-terracotta/50 hover:bg-orange-50/20'
                   }`}
                 >
                   {opt}
@@ -341,8 +393,8 @@ export const KnowledgeCheckBlock = ({ block, onInteract }) => {
         {/* Short answer / predict / explain */}
         {(checkType === 'short_answer' || checkType === 'predict_outcome' || checkType === 'explain_in_words' || checkType === 'fill_blank') && !revealed && (
           <textarea
-            className="w-full border border-gray-200 rounded-xl p-3 text-sm text-gray-700 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition resize-none mb-4"
-            rows={3}
+            className="w-full border border-gray-300 rounded-xl p-4 text-base text-gray-800 focus:border-custom-terracotta focus:ring-1 focus:ring-custom-terracotta transition resize-none mb-6 font-sans"
+            rows={4}
             placeholder="Write your answer here…"
           />
         )}
@@ -350,15 +402,15 @@ export const KnowledgeCheckBlock = ({ block, onInteract }) => {
         {!revealed ? (
           <button
             onClick={handleSubmit}
-            className="px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition shadow-sm"
+            className="px-8 py-3 bg-custom-terracotta text-white rounded-xl text-sm font-bold hover:bg-custom-terracotta-dark transition shadow-sm font-sans uppercase tracking-wide"
           >
             Submit Answer
           </button>
         ) : (
-          <div className="mt-2 space-y-3">
-            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2">
-              <CheckCircle2 className="text-emerald-500 w-5 h-5 shrink-0" />
-              <p className="text-emerald-800 text-sm font-semibold">
+          <div className="mt-4 space-y-4">
+            <div className="p-4 bg-[#F5F8F6] border border-[#E3EBE6] rounded-xl flex items-center gap-3">
+              <CheckCircle2 className="text-custom-forest w-6 h-6 shrink-0" />
+              <p className="text-custom-forest text-base font-semibold">
                 {(checkType === 'multiple_choice' || checkType === 'true_false') && isCorrect
                   ? 'Correct! Well done.'
                   : (checkType === 'multiple_choice' || checkType === 'true_false') && !isCorrect
@@ -367,9 +419,9 @@ export const KnowledgeCheckBlock = ({ block, onInteract }) => {
               </p>
             </div>
             {!(checkType === 'multiple_choice' || checkType === 'true_false') && (answer || c.explanation) && (
-                <div className="p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Suggested Answer / Explanation</p>
-                    <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">{answer || c.explanation}</p>
+                <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-sm">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 font-sans">Suggested Answer / Explanation</p>
+                    <p className="text-gray-800 text-base leading-relaxed whitespace-pre-wrap font-serif">{answer || c.explanation}</p>
                 </div>
             )}
           </div>
@@ -404,14 +456,14 @@ const MEDIA_CONFIG = {
 };
 
 const COLOR_MAP = {
-  blue:   ['bg-blue-50',   'border-blue-200',   'text-blue-500',  'text-blue-700', 'text-blue-400'],
-  red:    ['bg-red-50',    'border-red-200',    'text-red-500',   'text-red-700',  'text-red-400'],
-  violet: ['bg-violet-50', 'border-violet-200', 'text-violet-500','text-violet-700','text-violet-400'],
-  cyan:   ['bg-cyan-50',   'border-cyan-200',   'text-cyan-500',  'text-cyan-700', 'text-cyan-400'],
-  teal:   ['bg-teal-50',   'border-teal-200',   'text-teal-500',  'text-teal-700', 'text-teal-400'],
-  green:  ['bg-green-50',  'border-green-200',  'text-green-500', 'text-green-700','text-green-400'],
-  slate:  ['bg-slate-50',  'border-slate-200',  'text-slate-500', 'text-slate-700','text-slate-400'],
-  gray:   ['bg-gray-50',   'border-gray-200',   'text-gray-500',  'text-gray-700', 'text-gray-400'],
+  blue:   ['bg-white', 'border-gray-200', 'text-gray-600',  'text-gray-800', 'text-gray-500'],
+  red:    ['bg-white', 'border-gray-200', 'text-custom-terracotta', 'text-gray-800', 'text-gray-500'],
+  violet: ['bg-white', 'border-gray-200', 'text-custom-ochre','text-gray-800','text-gray-500'],
+  cyan:   ['bg-white', 'border-gray-200', 'text-custom-blue', 'text-gray-800', 'text-gray-500'],
+  teal:   ['bg-white', 'border-gray-200', 'text-custom-forest', 'text-gray-800', 'text-gray-500'],
+  green:  ['bg-white', 'border-gray-200', 'text-custom-forest', 'text-gray-800','text-gray-500'],
+  slate:  ['bg-white', 'border-gray-200', 'text-gray-600', 'text-gray-800','text-gray-500'],
+  gray:   ['bg-white', 'border-gray-200', 'text-gray-600', 'text-gray-800', 'text-gray-500'],
 };
 
 export const SuggestedMediaBlock = ({ block }) => {
@@ -440,22 +492,22 @@ export const SuggestedMediaBlock = ({ block }) => {
         ['suggested_external_link', 'suggested_activity', 'suggested_simulation', 'simulation_placeholder'].includes(block.block_type) ||
         asset?.asset_type === 'simulation') {
         return (
-          <div className="my-6 bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden">
-             <div className="px-5 py-4 flex items-center justify-between">
+          <div className="my-6 bg-white border border-gray-200/60 rounded-xl overflow-hidden shadow-sm">
+             <div className="px-6 py-5 flex items-center justify-between">
                 <div>
-                   <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">{cfg.label}</p>
-                   <p className="font-semibold text-slate-800 text-sm mt-1">{block.title}</p>
+                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest font-sans">{cfg.label}</p>
+                   <p className="font-semibold text-gray-800 text-base mt-1 font-sans">{block.title}</p>
                 </div>
-                <a href={resolvedImageUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-slate-200 text-slate-700 text-sm font-bold rounded-lg hover:bg-slate-300 transition">Open Link</a>
+                <a href={resolvedImageUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 bg-gray-100 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-200 transition">Open Link</a>
              </div>
           </div>
         );
     }
     return (
-      <div className="my-8 flex flex-col items-center">
-        <figure className="bg-white p-2 rounded-2xl shadow-sm border border-gray-100 w-full overflow-hidden hover:shadow-md transition-shadow">
+      <div className="my-10 flex flex-col items-center">
+        <figure className="bg-white p-3 rounded-2xl shadow-sm border border-gray-200/60 w-full overflow-hidden">
           <img src={resolvedImageUrl} alt={block.title} className="w-full h-auto object-cover rounded-xl" />
-          {block.title && <figcaption className="text-gray-500 mt-3 mb-1 text-sm text-center font-medium">{block.title}</figcaption>}
+          {block.title && <figcaption className="text-gray-500 mt-4 mb-2 text-sm text-center font-medium font-sans">{block.title}</figcaption>}
         </figure>
       </div>
     );
@@ -474,44 +526,44 @@ export const SuggestedMediaBlock = ({ block }) => {
         }
         
         return (
-          <div className="my-8 bg-slate-900 rounded-2xl overflow-hidden shadow-lg border border-slate-800">
-            <div className="px-5 py-3 bg-slate-800 border-b border-slate-700 flex items-center gap-2">
-              <PlayCircle className="text-red-500 w-5 h-5 shrink-0" />
-              <span className="text-white font-semibold text-sm">{block.title || 'Video Resource'}</span>
-            </div>
-            <div className="aspect-video">
+          <div className="my-10 bg-black rounded-2xl overflow-hidden shadow-xl border border-gray-200">
+            <div className="aspect-video w-full">
               <iframe src={`https://www.youtube.com/embed/${videoId}`} className="w-full h-full" allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen />
+            </div>
+            <div className="px-5 py-3 bg-white border-t border-gray-100 flex items-center justify-between">
+              <span className="text-gray-800 font-semibold text-sm font-sans">{block.title || 'Video Resource'}</span>
+              <PlayCircle className="text-gray-400 w-5 h-5 shrink-0" />
             </div>
           </div>
         );
     }
     
     return (
-      <div className="my-8 bg-slate-900 rounded-2xl overflow-hidden shadow-lg border border-slate-800">
-        <div className="px-5 py-3 bg-slate-800 border-b border-slate-700 flex items-center gap-2">
-          <PlayCircle className="text-red-500 w-5 h-5 shrink-0" />
-          <span className="text-white font-semibold text-sm">{block.title || 'Video Resource'}</span>
-        </div>
-        <div className="aspect-video">
+      <div className="my-10 bg-black rounded-2xl overflow-hidden shadow-xl border border-gray-200">
+        <div className="aspect-video w-full">
           <video controls className="w-full h-full" src={resolvedUrl}>
             Your browser doesn't support video.
           </video>
+        </div>
+        <div className="px-5 py-3 bg-white border-t border-gray-100 flex items-center justify-between">
+          <span className="text-gray-800 font-semibold text-sm font-sans">{block.title || 'Video Resource'}</span>
+          <PlayCircle className="text-gray-400 w-5 h-5 shrink-0" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`my-6 ${bg} border ${border} rounded-2xl overflow-hidden`}>
-      <div className="px-5 py-4 flex items-start gap-3">
+    <div className={`my-8 ${bg} border ${border} rounded-xl overflow-hidden shadow-sm`}>
+      <div className="px-6 py-5 flex items-start gap-4">
         <cfg.icon className={`${iconColor} w-6 h-6 mt-0.5 shrink-0`} />
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <p className={`text-xs font-bold ${iconColor} uppercase tracking-widest`}>{cfg.label}</p>
-            <span className="text-xs text-gray-400 bg-white/60 border border-gray-200 px-2 py-0.5 rounded-full">Coming soon</span>
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <p className={`text-[10px] font-bold ${iconColor} uppercase tracking-widest font-sans`}>{cfg.label}</p>
+            <span className="text-[10px] text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold font-sans">Coming soon</span>
           </div>
-          {block.title && <p className={`font-semibold ${textColor} text-sm mb-1`}>{block.title}</p>}
-          <div className={`${subColor} text-xs leading-relaxed whitespace-pre-wrap`}>{instruction}</div>
+          {block.title && <p className={`font-semibold ${textColor} text-base mb-2 font-sans`}>{block.title}</p>}
+          <div className={`${subColor} text-sm leading-relaxed whitespace-pre-wrap font-sans`}>{instruction}</div>
         </div>
       </div>
     </div>
@@ -529,21 +581,21 @@ export const ConceptCompletionCard = ({ page, nextPageTitle, onNext, onComplete,
   }).slice(0, 3);
 
   return (
-    <div className="mt-10 mb-2 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl px-6 py-6">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-7 h-7 bg-emerald-500 rounded-full flex items-center justify-center">
-          <Check className="text-white w-4 h-4" />
+    <div className="mt-12 mb-8 bg-custom-forest border border-custom-forest-light rounded-2xl px-8 py-8 shadow-md">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+          <Check className="text-white w-5 h-5" />
         </div>
-        <p className="font-bold text-emerald-800 text-base">Concept Complete</p>
+        <p className="font-bold text-white text-xl font-serif">Concept Complete</p>
       </div>
 
       {takeaways.length > 0 && (
-        <div className="mb-5">
-          <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-2">You now understand</p>
-          <ul className="space-y-1">
+        <div className="mb-6">
+          <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-3 font-sans">You now understand</p>
+          <ul className="space-y-2">
             {takeaways.map((t, i) => (
-              <li key={i} className="flex items-start gap-2 text-emerald-800 text-sm">
-                <span className="text-emerald-400 mt-0.5">•</span>
+              <li key={i} className="flex items-start gap-3 text-white/90 text-base font-sans">
+                <span className="text-custom-ochre mt-0.5">•</span>
                 <span>{t.replace(/^[•\-*]\s*/, '')}</span>
               </li>
             ))}
@@ -552,8 +604,9 @@ export const ConceptCompletionCard = ({ page, nextPageTitle, onNext, onComplete,
       )}
 
       {!isLast && nextPageTitle && (
-        <p className="text-sm text-emerald-700 border-t border-emerald-200 pt-4">
-          <span className="font-semibold">Next:</span> {nextPageTitle}
+        <p className="text-sm text-white/70 border-t border-white/10 pt-5 mt-2 font-sans">
+          <span className="font-semibold uppercase tracking-wider text-[10px]">Next up:</span> <br/>
+          <span className="text-lg font-serif text-white">{nextPageTitle}</span>
         </p>
       )}
     </div>

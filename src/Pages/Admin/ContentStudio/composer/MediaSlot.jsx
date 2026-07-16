@@ -93,17 +93,13 @@ export function MediaSlot({ asset, lessonId, blockId, onAssetUpdated }) {
         try {
             if (!asset.id) {
                 formData.append('lesson', lessonId);
-                formData.append('blocks', blockId);
                 formData.append('asset_type', asset.asset_type);
                 formData.append('title', asset.title || '');
                 formData.append('description', asset.description || '');
-                await apiClient.post(`/api/curriculum/lesson-assets/`, formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' },
-                });
+                const res = await apiClient.post(`/api/curriculum/lesson-assets/`, formData);
+                await apiClient.post(`/api/curriculum/lesson-assets/${res.data.id}/attach_to_block/`, { block_id: blockId });
             } else {
-                await apiClient.patch(`/api/curriculum/lesson-assets/${asset.id}/`, formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' },
-                });
+                await apiClient.patch(`/api/curriculum/lesson-assets/${asset.id}/`, formData);
             }
             onAssetUpdated();
         } catch {

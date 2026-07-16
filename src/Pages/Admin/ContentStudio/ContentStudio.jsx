@@ -278,12 +278,14 @@ export default function ContentStudio() {
             formData.append('storage_type', 'file');
             formData.append('status', 'attached');
             formData.append('lesson', lesson.id);
-            formData.append('blocks', newBlockId);
             formData.append('asset_type', mapBlockTypeToAssetType(blockType));
             formData.append('title', title);
             
-            await apiClient.post(`/api/curriculum/lesson-assets/`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+            const assetRes = await apiClient.post(`/api/curriculum/lesson-assets/`, formData);
+
+            // 3. Attach asset to block
+            await apiClient.post(`/api/curriculum/lesson-assets/${assetRes.data.id}/attach_to_block/`, {
+                block_id: newBlockId
             });
 
             await fetchBlocks(lesson.id);

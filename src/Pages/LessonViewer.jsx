@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 import { BlockRenderer } from '../Components/LessonBlocks/BlockRenderer';
 import { ConceptCompletionCard } from '../Components/LessonBlocks/BlueprintComponents';
 import apiClient from '../config/apiClient';
+import { ContentNormalizer } from '../utils/ContentNormalizer';
 import {
     ChevronLeft, ChevronRight, BookOpen, Clock,
     CheckCircle, Circle, LayoutList, Zap
@@ -102,6 +103,60 @@ function groupBlocksIntoPages(blocks) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Region grouping helper (Migration mapping)
+// ─────────────────────────────────────────────────────────────────────────────
+function getFallbackRegion(blockType) {
+    const heroTypes = ['learning_goal', 'objectives', 'hook', 'story', 'introduction', 'overview'];
+    const coreTypes = ['concept_explanation', 'core_explanation', 'definitions', 'formula_breakdown'];
+    const visualTypes = ['visual_learning', 'suggested_diagram', 'suggested_illustration', 'suggested_image', 'image_placeholder', 'diagram_placeholder', 'suggested_gif', 'video_ref', 'suggested_video', 'repository_asset', 'suggested_infographic', 'suggested_table', 'suggested_graph', 'suggested_timeline', 'suggested_flowchart', 'suggested_mind_map'];
+    const engagementTypes = ['experiment', 'classroom_activity', 'discussion_prompt', 'suggested_simulation', 'simulation_placeholder', 'mini_activity', 'suggested_activity', 'suggested_external_link'];
+    const contextTypes = ['worked_example', 'real_world_example', 'real_world_connection', 'analogy'];
+    const checkTypes = ['knowledge_check', 'multiple_choice', 'true_false', 'fill_in_the_blank', 'short_answer', 'revision_questions', 'prediction', 'reflection'];
+    const coachingTypes = ['common_misconception', 'common_mistake', 'callout', 'quick_fact', 'did_you_know', 'memory_tip', 'before_you_continue', 'transition'];
+    const summaryTypes = ['key_takeaway', 'summary'];
+
+    if (heroTypes.includes(blockType)) return 'hero';
+    if (coreTypes.includes(blockType)) return 'core';
+    if (visualTypes.includes(blockType)) return 'visual';
+    if (engagementTypes.includes(blockType)) return 'engagement';
+    if (contextTypes.includes(blockType)) return 'context';
+    if (checkTypes.includes(blockType)) return 'check';
+    if (coachingTypes.includes(blockType)) return 'coaching';
+    if (summaryTypes.includes(blockType)) return 'summary';
+    
+    return 'core'; // default fallback
+}
+
+function groupBlocksIntoRegions(blocks) {
+    const regions = {
+        hero: [],
+        core: [],
+        visual: [],
+        engagement: [],
+        context: [],
+        coaching: [],
+        check: [],
+        summary: [],
+        uncategorized: []
+    };
+
+    blocks.forEach(block => {
+        if (!ContentNormalizer.hasContent(block)) return;
+
+        // Use backend supplied region if available, otherwise fallback
+        const region = block.region || getFallbackRegion(block.block_type);
+        if (regions[region]) {
+            regions[region].push(block);
+        } else {
+            // If backend provides a new unknown region, capture it dynamically
+            regions[region] = [block];
+        }
+    });
+
+    return regions;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Estimated reading time (rough: 200 wpm)
 // ─────────────────────────────────────────────────────────────────────────────
 function estimateReadingTime(blocks) {
@@ -120,11 +175,8 @@ function estimateReadingTime(blocks) {
             seconds += 180;
         }
         
-        let text = b.content || '';
-        if (typeof text === 'object') {
-            try { text = text.text || text.content || text.procedure || JSON.stringify(text); } catch { text = ''; }
-        }
-        const words = String(text).split(/\s+/).length;
+        const textStr = ContentNormalizer.extractText(b.content);
+        const words = textStr.split(/\s+/).filter(Boolean).length;
         seconds += (words / 200) * 60;
     });
     return Math.max(1, Math.ceil(seconds / 60));
@@ -340,13 +392,13 @@ function PaginatedViewer({ lesson, topicId, isPreview }) {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <div className="min-h-screen bg-custom-cream font-sans flex flex-col">
             {/* ── Top bar ──────────────────────────────────────────────── */}
-            <div className="sticky top-0 z-20 bg-white border-b border-gray-200 shadow-sm">
+            <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-gray-200/60 shadow-sm">
                 {/* Progress bar */}
                 <div className="h-1 bg-gray-100">
                     <div
-                        className="h-1 bg-gradient-to-r from-custom-blue to-indigo-500 transition-all duration-500"
+                        className="h-1 bg-custom-terracotta transition-all duration-500"
                         style={{ width: `${completionPercentage}%` }}
                     />
                 </div>
@@ -437,48 +489,145 @@ function PaginatedViewer({ lesson, topicId, isPreview }) {
             )}
 
             {/* ── Page content ─────────────────────────────────────────── */}
-            <div key={pageIndex} className="flex-1 max-w-3xl mx-auto w-full px-4 py-10 animate-slide-up-fade">
-                {/* Concept header */}
-                <div className="mb-8">
-                    <div className="flex items-center gap-2 mb-3">
-                        <span className="text-xs font-bold text-custom-blue bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wide">
-                            Concept {pageIndex + 1} of {totalPages}
-                        </span>
-                        <span className="text-xs text-gray-400 flex items-center gap-1">
-                            <Clock size={11} /> ~{readingTime} min read
-                        </span>
-                    </div>
-                    <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
-                        {currentPage?.title}
-                    </h2>
-                </div>
+            <div key={pageIndex} className="flex-1 w-full animate-slide-up-fade">
+                
+                {/* We render regions sequentially based on standard layout flow */}
+                {(() => {
+                    const regions = groupBlocksIntoRegions(currentPage?.blocks || []);
+                    
+                    return (
+                        <div className="max-w-4xl mx-auto w-full px-4 py-10 lg:py-16">
+                            
+                            {/* Hero Region */}
+                            {(regions.hero?.length > 0 || currentPage?.title) && (
+                                <div className="mb-12 pb-8 border-b border-gray-200/60">
+                                    <div className="flex items-center gap-2 mb-6">
+                                        <span className="text-[11px] font-bold text-custom-terracotta bg-red-50/50 px-3 py-1 rounded-full uppercase tracking-widest border border-red-100/50">
+                                            Concept {pageIndex + 1} of {totalPages}
+                                        </span>
+                                        <span className="text-xs text-gray-400 flex items-center gap-1.5 font-medium">
+                                            <Clock size={12} /> ~{readingTime} min read
+                                        </span>
+                                    </div>
+                                    <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 leading-tight mb-8">
+                                        {currentPage?.title}
+                                    </h2>
+                                    <div className="space-y-6">
+                                        {regions.hero?.map((block) => (
+                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
 
-                {/* Blocks */}
-                <div className="space-y-6">
-                    {currentPage?.blocks?.map((block) => (
-                        <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
-                    ))}
-                </div>
+                            {/* Core, Visual, Context, Coaching Interleaved (Basic flow) */}
+                            <div className="space-y-12">
+                                {/* Core Region */}
+                                {regions.core?.length > 0 && (
+                                    <div className="space-y-6">
+                                        {regions.core.map((block) => (
+                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
+                                        ))}
+                                    </div>
+                                )}
+                                
+                                {/* Visual Region */}
+                                {regions.visual?.length > 0 && (
+                                    <div className="space-y-8 my-10 px-2 sm:px-8 bg-white/50 rounded-3xl py-8 border border-gray-100">
+                                        {regions.visual.map((block) => (
+                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Context Region */}
+                                {regions.context?.length > 0 && (
+                                    <div className="space-y-6">
+                                        {regions.context.map((block) => (
+                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Engagement Region */}
+                                {regions.engagement?.length > 0 && (
+                                    <div className="space-y-6">
+                                        {regions.engagement.map((block) => (
+                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Coaching Region */}
+                                {regions.coaching?.length > 0 && (
+                                    <div className="space-y-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {regions.coaching.map((block) => (
+                                            <div key={block.id} className="break-inside-avoid">
+                                                <BlockRenderer block={block} onInteract={handleInteract} />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Check Region */}
+                            {regions.check?.length > 0 && (
+                                <div className="mt-16 pt-12 border-t border-gray-200/60">
+                                    <div className="space-y-8">
+                                        {regions.check.map((block) => (
+                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Summary Region */}
+                            {regions.summary?.length > 0 && (
+                                <div className="mt-12">
+                                    <div className="space-y-6">
+                                        {regions.summary.map((block) => (
+                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Render any unrecognized regions (for future compatibility) */}
+                            {Object.entries(regions).filter(([k, v]) => !['hero', 'core', 'visual', 'engagement', 'context', 'check', 'coaching', 'summary'].includes(k) && v.length > 0).map(([regionName, blocks]) => (
+                                <div key={regionName} className="mt-12">
+                                    <div className="space-y-6">
+                                        {blocks.map((block) => (
+                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    );
+                })()}
 
                 {/* Concept completion card */}
-                <ConceptCompletionCard
-                    page={currentPage}
-                    nextPageTitle={pageIndex < totalPages - 1 ? pages[pageIndex + 1]?.title : null}
-                    isLast={pageIndex === totalPages - 1}
-                />
+                <div className="max-w-4xl mx-auto px-4">
+                    <ConceptCompletionCard
+                        page={currentPage}
+                        nextPageTitle={pageIndex < totalPages - 1 ? pages[pageIndex + 1]?.title : null}
+                        isLast={pageIndex === totalPages - 1}
+                    />
+                </div>
 
-                {/* Dot progress indicator */}
-                <LessonTimeline 
-                    totalPages={totalPages} 
-                    currentPageIndex={pageIndex} 
-                    completedConcepts={completedConcepts} 
-                    onNavigate={navigateTo} 
-                />
+                <div className="max-w-4xl mx-auto px-4 pb-12">
+                    <LessonTimeline 
+                        totalPages={totalPages} 
+                        currentPageIndex={pageIndex} 
+                        completedConcepts={completedConcepts} 
+                        onNavigate={navigateTo} 
+                    />
+                </div>
             </div>
 
             {/* ── Navigation footer ─────────────────────────────────────── */}
-            <div className="sticky bottom-0 bg-white border-t border-gray-200">
-                <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div className="sticky bottom-0 bg-white/95 backdrop-blur border-t border-gray-200/60 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.05)]">
+                <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
                     <button
                         onClick={goPrev}
                         disabled={pageIndex === 0}
@@ -507,7 +656,7 @@ function PaginatedViewer({ lesson, topicId, isPreview }) {
                             onClick={goNext}
                             disabled={isGated}
                             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${
-                                isGated ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-custom-blue text-white hover:opacity-90'
+                                isGated ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-custom-terracotta text-white hover:bg-custom-terracotta-dark'
                             }`}
                         >
                             Next Concept <ChevronRight size={18} />

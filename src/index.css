@@ -136,19 +136,23 @@
     --color-on-surface-variant: #49454e;
     --color-outline: #7a757f;
     --color-outline-variant: #cac4cf;
-}
 
-
-@import "tailwindcss";
-
-@theme {
   /* Custom Colors */
   --color-custom-orange: #ff4900;
   --color-custom-blue: #02a0bf;
   --color-custom-white: #ffffff;
+  
+  --color-custom-cream: #FDFBF7;
+  --color-custom-terracotta: #C65B47;
+  --color-custom-terracotta-dark: #A34633;
+  --color-custom-ochre: #DDA15E;
+  --color-custom-forest: #283618;
+  --color-custom-forest-light: #606C38;
 
   /* Font Family */
   --font-family-poppins: Poppins, sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: Inter, system-ui, sans-serif;
 
   /* Font Weights */
   --font-weight-thin: 100;
@@ -168,6 +172,7 @@
 
   /* Background Images */
   --background-image-custom-bg: url("https://d1ymz67w5raq8g.cloudfront.net/Pictures/1024x536/P/web/e/f/n/classicchemexp_958361.jpg");
+  --background-image-texture: url("https://www.transparenttextures.com/patterns/rice-paper-2.png");
 }
 
 /* Alternative approach using CSS custom properties in :root */
@@ -175,6 +180,12 @@
   --custom-orange: #ff4900;
   --custom-blue: #02a0bf;
   --custom-white: #ffffff;
+  --custom-cream: #FDFBF7;
+  --custom-terracotta: #C65B47;
+  --custom-terracotta-dark: #A34633;
+  --custom-ochre: #DDA15E;
+  --custom-forest: #283618;
+  --custom-forest-light: #606C38;
   --custom-bg-image: url("https://d1ymz67w5raq8g.cloudfront.net/Pictures/1024x536/P/web/e/f/n/classicchemexp_958361.jpg");
 }
 
@@ -201,4 +212,23 @@
 }
 .animate-slide-up-fade {
   animation: slideUpFade 0.4s ease-out forwards;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   KaTeX Equation Cards
+   ───────────────────────────────────────────────────────────────────────────── */
+.katex-display {
+  background-color: white;
+  border: 1px solid rgba(229, 231, 235, 0.6); /* gray-200/60 */
+  border-radius: 0.75rem; /* rounded-xl */
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+  overflow-x: auto;
+  text-align: center;
+}
+
+.katex {
+  font-size: 1.15em;
+  color: #1f2937; /* gray-800 */
 }

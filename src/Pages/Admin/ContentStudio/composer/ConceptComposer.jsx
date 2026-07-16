@@ -53,51 +53,71 @@ export function mapBlockTypeToAssetType(blockType) {
 
 
 const COMPONENT_CATEGORIES = {
-    Text: [
+    'Introductions': [
         { label: 'Learning Goal', type: 'learning_goal' },
         { label: 'Hook', type: 'hook' },
         { label: 'Story', type: 'story' },
-        { label: 'Analogy', type: 'analogy' },
+    ],
+    'Core Explanations': [
+        { label: 'Concept Explanation', type: 'concept_explanation' },
         { label: 'Definition', type: 'definitions' },
-        { label: 'Explanation', type: 'concept_explanation' },
-        { label: 'Key Takeaway', type: 'key_takeaway' },
-        { label: 'Common Misconception', type: 'common_misconception' },
+        { label: 'Analogy', type: 'analogy' },
+    ],
+    'Visuals & Media': [
+        { label: 'Upload Image', type: 'image_placeholder', upload: true },
+        { label: 'Upload Diagram', type: 'diagram_placeholder', upload: true },
+        { label: 'Upload Video', type: 'video_ref', upload: true },
+        { label: 'YouTube Embed', type: 'suggested_video' },
+        { label: 'Diagram Suggestion', type: 'suggested_diagram' },
+        { label: 'Simulation Suggestion', type: 'suggested_simulation' }
+    ],
+    'Real-World Context': [
         { label: 'Worked Example', type: 'worked_example' },
         { label: 'Real-world Example', type: 'real_world_example' },
-        { label: 'Summary', type: 'summary' }
+        { label: 'Experiment', type: 'experiment' },
     ],
-    Visual: [
-        { label: 'Diagram', type: 'suggested_diagram', upload: true },
-        { label: 'Illustration', type: 'suggested_illustration', upload: true },
-        { label: 'Image', type: 'suggested_image', upload: true },
-        { label: 'Infographic', type: 'suggested_infographic', upload: true },
-        { label: 'Table', type: 'suggested_table', upload: true },
-        { label: 'Graph', type: 'suggested_graph', upload: true },
-        { label: 'Timeline', type: 'suggested_timeline', upload: true },
-        { label: 'Flowchart', type: 'suggested_flowchart', upload: true },
-        { label: 'Mind Map', type: 'suggested_mind_map', upload: true }
-    ],
-    Media: [
-        { label: 'Image Upload', type: 'image_placeholder', upload: true },
-        { label: 'Diagram Upload', type: 'diagram_placeholder', upload: true },
-        { label: 'GIF', type: 'suggested_gif', upload: true },
-        { label: 'Video Upload', type: 'video_ref', upload: true },
-        { label: 'YouTube Embed', type: 'suggested_video' },
-        { label: 'Repository Asset', type: 'repository_asset' }
-    ],
-    Assessment: [
+    'Checks for Understanding': [
         { label: 'Multiple Choice', type: 'multiple_choice' },
+        { label: 'Short Answer', type: 'short_answer' },
         { label: 'True/False', type: 'true_false' },
         { label: 'Fill in the Blank', type: 'fill_in_the_blank' },
         { label: 'Reflection', type: 'reflection' },
-        { label: 'Short Answer', type: 'short_answer' }
     ],
-    Activity: [
-        { label: 'Experiment', type: 'experiment' },
-        { label: 'Classroom Activity', type: 'classroom_activity' },
-        { label: 'Discussion Prompt', type: 'discussion_prompt' }
+    'Teacher Coaching & Summary': [
+        { label: 'Common Misconception', type: 'common_misconception' },
+        { label: 'Key Takeaway', type: 'key_takeaway' },
+        { label: 'Summary', type: 'summary' }
     ]
 };
+
+// Map blocks to structural sections for the workspace
+function groupBlocksIntoSections(blocks) {
+    const sections = {
+        'Introduction': [],
+        'Core Material': [],
+        'Visuals & Interactions': [],
+        'Practice & Assessment': [],
+        'Summary & Coaching': []
+    };
+
+    blocks.forEach(block => {
+        const type = block.block_type;
+        if (['learning_goal', 'objectives', 'hook', 'story', 'introduction', 'overview'].includes(type)) {
+            sections['Introduction'].push(block);
+        } else if (['concept_explanation', 'core_explanation', 'definitions', 'formula_breakdown', 'worked_example', 'real_world_example', 'analogy'].includes(type)) {
+            sections['Core Material'].push(block);
+        } else if (['knowledge_check', 'multiple_choice', 'true_false', 'fill_in_the_blank', 'short_answer', 'revision_questions', 'reflection', 'experiment', 'classroom_activity'].includes(type)) {
+            sections['Practice & Assessment'].push(block);
+        } else if (['key_takeaway', 'summary', 'common_misconception', 'common_mistake', 'callout', 'memory_tip'].includes(type)) {
+            sections['Summary & Coaching'].push(block);
+        } else {
+            // Default to Visuals for anything else (media, placeholders, etc)
+            sections['Visuals & Interactions'].push(block);
+        }
+    });
+
+    return sections;
+}
 
 function selectEditor(blockType) {
     switch (blockType) {
@@ -183,29 +203,54 @@ export default function ConceptComposer({
             </div>
 
             {/* Components list */}
-            <div className="flex-1 overflow-y-auto">
-                <div className="max-w-3xl mx-auto px-8 py-8 space-y-12 pb-32">
-                    {concept.blocks.map(block => (
-                        <ComponentWrapper
-                            key={block.id}
-                            block={block}
-                            allAssets={allAssets}
-                            lessonId={lessonId}
-                            onBlockChange={onBlockChange}
-                            onSave={onSave}
-                            onDelete={onDelete}
-                            onDuplicate={onDuplicate}
-                            onRegenerate={onRegenerate}
-                            onAssetUpdated={onAssetUpdated}
-                            onMove={onMove}
-                        />
-                    ))}
+            <div className="flex-1 overflow-y-auto bg-custom-cream/30">
+                <div className="max-w-4xl mx-auto px-8 py-8 space-y-10 pb-32">
+                    
+                    {(() => {
+                        const sections = groupBlocksIntoSections(concept.blocks);
+                        
+                        return Object.entries(sections).map(([sectionName, blocks]) => (
+                            <div key={sectionName} className="bg-white rounded-2xl shadow-sm border border-gray-200/60 p-6 overflow-hidden">
+                                <h3 className="text-sm font-bold text-gray-800 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-custom-terracotta"></div>
+                                    {sectionName}
+                                </h3>
+                                
+                                <div className="space-y-6">
+                                    {blocks.map(block => (
+                                        <ComponentWrapper
+                                            key={block.id}
+                                            block={block}
+                                            allAssets={allAssets}
+                                            lessonId={lessonId}
+                                            onBlockChange={onBlockChange}
+                                            onSave={onSave}
+                                            onDelete={onDelete}
+                                            onDuplicate={onDuplicate}
+                                            onRegenerate={onRegenerate}
+                                            onAssetUpdated={onAssetUpdated}
+                                            onMove={onMove}
+                                        />
+                                    ))}
 
-                    {concept.blocks.length === 0 && (
-                        <div className="text-center py-12 text-gray-400">
-                            No components in this concept.
-                        </div>
-                    )}
+                                    {blocks.length === 0 && (
+                                        <div className="text-center py-8 border-2 border-dashed border-gray-100 rounded-xl bg-gray-50/50">
+                                            <p className="text-sm font-medium text-gray-400 mb-1">No content in this section</p>
+                                            {sectionName === 'Visuals & Interactions' && (
+                                                <p className="text-xs text-custom-terracotta italic">Coach: Consider adding a diagram or video to engage visual learners.</p>
+                                            )}
+                                            {sectionName === 'Practice & Assessment' && (
+                                                <p className="text-xs text-custom-terracotta italic">Coach: Add a Knowledge Check to ensure students understand the core material.</p>
+                                            )}
+                                            {sectionName === 'Summary & Coaching' && (
+                                                <p className="text-xs text-custom-terracotta italic">Coach: Add a Common Misconception or Key Takeaway to reinforce learning.</p>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ));
+                    })()}
                     
                     {/* Add Component Action */}
                     <div className="pt-8 border-t border-gray-100 flex justify-center">
@@ -219,18 +264,18 @@ export default function ConceptComposer({
                             </button>
                             
                             {showAddMenu && (
-                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-screen max-w-2xl bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50">
-                                    <div className="grid grid-cols-5 divide-x divide-gray-100">
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-max min-w-[600px] bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-gray-100 overflow-hidden z-50">
+                                    <div className="grid grid-cols-3 divide-x divide-y divide-gray-100">
                                         {Object.entries(COMPONENT_CATEGORIES).map(([category, items]) => (
-                                            <div key={category} className="p-3">
-                                                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">{category}</h3>
-                                                <div className="space-y-0.5">
+                                            <div key={category} className="p-4 bg-white hover:bg-gray-50/50 transition-colors">
+                                                <h3 className="text-[10px] font-extrabold text-custom-blue uppercase tracking-widest mb-3 px-2">{category}</h3>
+                                                <div className="space-y-1">
                                                     {items.map((item) => {
                                                         if (item.upload) {
                                                             return (
                                                                 <label
                                                                     key={item.type}
-                                                                    className="block w-full text-left px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-50 hover:text-custom-blue rounded-md transition-colors cursor-pointer"
+                                                                    className="block w-full text-left px-3 py-2 text-xs font-medium text-gray-700 hover:bg-orange-50 hover:text-custom-terracotta rounded-lg transition-colors cursor-pointer"
                                                                 >
                                                                     {item.label}
                                                                     <input
@@ -255,7 +300,7 @@ export default function ConceptComposer({
                                                                     onAddBlock(concept.pageNum, item.type, item.label);
                                                                     setShowAddMenu(false);
                                                                 }}
-                                                                className="w-full text-left px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-50 hover:text-custom-blue rounded-md transition-colors"
+                                                                className="w-full text-left px-3 py-2 text-xs font-medium text-gray-700 hover:bg-orange-50 hover:text-custom-terracotta rounded-lg transition-colors"
                                                             >
                                                                 {item.label}
                                                             </button>
@@ -265,7 +310,7 @@ export default function ConceptComposer({
                                             </div>
                                         ))}
                                     </div>
-                                    <div className="bg-gray-50 p-3 text-center border-t border-gray-100">
+                                    <div className="bg-gray-50/80 p-3 text-center border-t border-gray-100">
                                         <button onClick={() => setShowAddMenu(false)} className="text-xs font-semibold text-gray-500 hover:text-gray-700">Close</button>
                                     </div>
                                 </div>

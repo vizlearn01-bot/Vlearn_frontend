@@ -9,7 +9,13 @@ export default {
       colors: {
         'custom-orange': '#ff4900',
         'custom-blue': '#02a0bf',
-        "custom-white": ""
+        "custom-white": "",
+        'custom-cream': '#FDFBF7',
+        'custom-terracotta': '#C65B47',
+        'custom-terracotta-dark': '#A34633',
+        'custom-ochre': '#DDA15E',
+        'custom-forest': '#283618',
+        'custom-forest-light': '#606C38',
       },
       screens: {
         'sm': '640px',
@@ -20,6 +26,8 @@ export default {
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       fontWeight: {
         thin: 100,
@@ -31,7 +39,8 @@ export default {
         extrabold: 800,
       },
       backgroundImage: {
-        'custom-bg': 'url("https://d1ymz67w5raq8g.cloudfront.net/Pictures/1024x536/P/web/e/f/n/classicchemexp_958361.jpg")'
+        'custom-bg': 'url("https://d1ymz67w5raq8g.cloudfront.net/Pictures/1024x536/P/web/e/f/n/classicchemexp_958361.jpg")',
+        'texture': 'url("https://www.transparenttextures.com/patterns/rice-paper-2.png")',
       },
     },
   },

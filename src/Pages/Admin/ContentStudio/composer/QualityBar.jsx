@@ -33,25 +33,19 @@ export default function QualityBar({ blocks, assets, onPublish, lessonStatus, co
                 </div>
             )}
 
-            {/* Publish button */}
-            {lessonStatus !== 'published' && (
-                <button
-                    onClick={onPublish}
-                    className={`px-5 py-2 rounded-full text-xs font-bold text-white transition-all shadow-sm flex-shrink-0 ${
-                        allGood
+            {/* Publish / Republish button */}
+            <button
+                onClick={onPublish}
+                className={`px-5 py-2 rounded-full text-xs font-bold text-white transition-all shadow-sm flex-shrink-0 ${
+                    lessonStatus === 'published'
+                        ? 'bg-emerald-600 hover:bg-emerald-700'
+                        : allGood
                             ? 'bg-custom-blue hover:opacity-90'
                             : 'bg-gray-400 hover:bg-gray-500'
-                    }`}
-                >
-                    Publish
-                </button>
-            )}
-
-            {lessonStatus === 'published' && (
-                <div className="px-5 py-2 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs shadow-sm flex-shrink-0">
-                    ✓ Published
-                </div>
-            )}
+                }`}
+            >
+                {lessonStatus === 'published' ? 'Republish' : 'Publish'}
+            </button>
         </div>
     );
 }
