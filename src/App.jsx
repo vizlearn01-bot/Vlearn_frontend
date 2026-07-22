@@ -29,6 +29,7 @@ import { LessonViewer } from "./Pages/LessonViewer";
 import { TopicsView } from "./Pages/User/TopicsView";
 import NotFound from "./Pages/NotFound";
 import CurriculumBuilder from "./Pages/Admin/CurriculumBuilder";
+import IngestionSandbox from "./Pages/Admin/IngestionSandbox";
 
 function App() {
     const dashboardRoutes = {
@@ -147,6 +148,10 @@ function App() {
             {
                 path:"curriculum-builder",
                 element: <CurriculumBuilder />
+            },
+            {
+                path:"ingestion-sandbox",
+                element: <IngestionSandbox />
             },
         ]
     }

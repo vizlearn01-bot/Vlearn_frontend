@@ -1,11 +1,12 @@
 import React from 'react';
 import { CheckCircle, AlertTriangle, XCircle, X, Send } from 'lucide-react';
 
-export default function PublishGate({ blocks, assets, concepts, onConfirm, onCancel }) {
-    const checks = computeChecks(blocks, assets, concepts);
+export default function PublishGate({ blocks, assets, concepts, qualityReport, onConfirm, onCancel }) {
+    const checks = computeChecks(blocks, assets, concepts, qualityReport);
     const blockingIssues = checks.filter((c) => c.severity === 'error');
     const warnings = checks.filter((c) => c.severity === 'warning');
     const passing = checks.filter((c) => c.severity === 'ok');
+    const score = qualityReport?.quality?.score;
 
     const canPublish = blockingIssues.length === 0;
 
@@ -15,7 +16,14 @@ export default function PublishGate({ blocks, assets, concepts, onConfirm, onCan
 
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-                    <h2 className="text-lg font-bold text-gray-800">Publishing Checklist</h2>
+                    <div>
+                        <h2 className="text-lg font-bold text-gray-800">Publishing Checklist</h2>
+                        {score !== undefined && (
+                            <p className="text-xs font-semibold mt-1">
+                                Educational Quality Score: <span className={score >= 80 ? 'text-emerald-600' : 'text-amber-600'}>{score}/100</span>
+                            </p>
+                        )}
+                    </div>
                     <button
                         onClick={onCancel}
                         className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
@@ -91,7 +99,11 @@ const SEVERITY_META = {
     error:   { icon: XCircle,       color: 'text-red-600',     bg: 'bg-red-50' },
 };
 
-function computeChecks(blocks, assets, concepts) {
+function computeChecks(blocks, assets, concepts, qualityReport) {
+    if (qualityReport && qualityReport.validation && qualityReport.validation.checks) {
+        return qualityReport.validation.checks;
+    }
+
     const checks = [];
 
     if (concepts.length === 0) {

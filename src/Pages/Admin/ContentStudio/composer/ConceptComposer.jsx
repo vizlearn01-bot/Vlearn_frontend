@@ -102,17 +102,49 @@ function groupBlocksIntoSections(blocks) {
 
     blocks.forEach(block => {
         const type = block.block_type;
-        if (['learning_goal', 'objectives', 'hook', 'story', 'introduction', 'overview'].includes(type)) {
+
+        // ── Introduction ─────────────────────────────────────────────────────
+        if ([
+            'learning_goal', 'objectives', 'hook', 'story', 'narrative',
+            'introduction', 'overview', 'orient', 'did_you_know'
+        ].includes(type)) {
             sections['Introduction'].push(block);
-        } else if (['concept_explanation', 'core_explanation', 'definitions', 'formula_breakdown', 'worked_example', 'real_world_example', 'analogy'].includes(type)) {
+
+        // ── Core Material ─────────────────────────────────────────────────────
+        } else if ([
+            'concept_explanation', 'core_explanation', 'definitions', 'definition',
+            'formula_breakdown', 'worked_example', 'real_world_example',
+            'analogy', 'transition', 'visual_learning', 'prediction'
+        ].includes(type)) {
             sections['Core Material'].push(block);
-        } else if (['knowledge_check', 'multiple_choice', 'true_false', 'fill_in_the_blank', 'short_answer', 'revision_questions', 'reflection', 'experiment', 'classroom_activity'].includes(type)) {
-            sections['Practice & Assessment'].push(block);
-        } else if (['key_takeaway', 'summary', 'common_misconception', 'common_mistake', 'callout', 'memory_tip'].includes(type)) {
-            sections['Summary & Coaching'].push(block);
-        } else {
-            // Default to Visuals for anything else (media, placeholders, etc)
+
+        // ── Visuals & Interactions ─────────────────────────────────────────────
+        } else if (
+            type.startsWith('suggested_') ||
+            type.endsWith('_placeholder') ||
+            type === 'video_ref' ||
+            type === 'repository_asset'
+        ) {
             sections['Visuals & Interactions'].push(block);
+
+        // ── Practice & Assessment ──────────────────────────────────────────────
+        } else if ([
+            'knowledge_check', 'multiple_choice', 'true_false', 'fill_in_the_blank',
+            'short_answer', 'revision_questions', 'reflection',
+            'experiment', 'classroom_activity', 'activity', 'explore', 'investigate'
+        ].includes(type)) {
+            sections['Practice & Assessment'].push(block);
+
+        // ── Summary & Coaching ─────────────────────────────────────────────────
+        } else if ([
+            'key_takeaway', 'summary', 'common_misconception', 'common_mistake',
+            'callout', 'memory_tip', 'remediation', 'reteach', 'clarify'
+        ].includes(type)) {
+            sections['Summary & Coaching'].push(block);
+
+        // ── Fallback: Core Material ────────────────────────────────────────────
+        } else {
+            sections['Core Material'].push(block);
         }
     });
 
@@ -209,47 +241,36 @@ export default function ConceptComposer({
                     {(() => {
                         const sections = groupBlocksIntoSections(concept.blocks);
                         
-                        return Object.entries(sections).map(([sectionName, blocks]) => (
-                            <div key={sectionName} className="bg-white rounded-2xl shadow-sm border border-gray-200/60 p-6 overflow-hidden">
-                                <h3 className="text-sm font-bold text-gray-800 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-custom-terracotta"></div>
-                                    {sectionName}
-                                </h3>
-                                
-                                <div className="space-y-6">
-                                    {blocks.map(block => (
-                                        <ComponentWrapper
-                                            key={block.id}
-                                            block={block}
-                                            allAssets={allAssets}
-                                            lessonId={lessonId}
-                                            onBlockChange={onBlockChange}
-                                            onSave={onSave}
-                                            onDelete={onDelete}
-                                            onDuplicate={onDuplicate}
-                                            onRegenerate={onRegenerate}
-                                            onAssetUpdated={onAssetUpdated}
-                                            onMove={onMove}
-                                        />
-                                    ))}
-
-                                    {blocks.length === 0 && (
-                                        <div className="text-center py-8 border-2 border-dashed border-gray-100 rounded-xl bg-gray-50/50">
-                                            <p className="text-sm font-medium text-gray-400 mb-1">No content in this section</p>
-                                            {sectionName === 'Visuals & Interactions' && (
-                                                <p className="text-xs text-custom-terracotta italic">Coach: Consider adding a diagram or video to engage visual learners.</p>
-                                            )}
-                                            {sectionName === 'Practice & Assessment' && (
-                                                <p className="text-xs text-custom-terracotta italic">Coach: Add a Knowledge Check to ensure students understand the core material.</p>
-                                            )}
-                                            {sectionName === 'Summary & Coaching' && (
-                                                <p className="text-xs text-custom-terracotta italic">Coach: Add a Common Misconception or Key Takeaway to reinforce learning.</p>
-                                            )}
-                                        </div>
-                                    )}
+                        return Object.entries(sections).map(([sectionName, blocks]) => {
+                            if (blocks.length === 0) return null;
+                            
+                            return (
+                                <div key={sectionName} className="bg-white rounded-2xl shadow-sm border border-gray-200/60 p-6 overflow-hidden">
+                                    <h3 className="text-sm font-bold text-gray-800 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-custom-terracotta"></div>
+                                        {sectionName}
+                                    </h3>
+                                    
+                                    <div className="space-y-6">
+                                        {blocks.map(block => (
+                                            <ComponentWrapper
+                                                key={block.id}
+                                                block={block}
+                                                allAssets={allAssets}
+                                                lessonId={lessonId}
+                                                onBlockChange={onBlockChange}
+                                                onSave={onSave}
+                                                onDelete={onDelete}
+                                                onDuplicate={onDuplicate}
+                                                onRegenerate={onRegenerate}
+                                                onAssetUpdated={onAssetUpdated}
+                                                onMove={onMove}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        ));
+                            );
+                        });
                     })()}
                     
                     {/* Add Component Action */}

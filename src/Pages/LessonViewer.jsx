@@ -5,156 +5,13 @@ import { ConceptCompletionCard } from '../Components/LessonBlocks/BlueprintCompo
 import apiClient from '../config/apiClient';
 import { ContentNormalizer } from '../utils/ContentNormalizer';
 import {
-    ChevronLeft, ChevronRight, BookOpen, Clock,
-    CheckCircle, Circle, LayoutList, Zap
+    ChevronLeft, ChevronRight, Clock,
+    CheckCircle, Circle, LayoutList
 } from 'lucide-react';
 import { useLessonProgress } from '../Hooks/useLessonProgress';
-import { LessonTimeline, LessonCompletionCard, LessonResumeBanner } from '../Components/LessonBlocks/LessonProgressComponents';
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Page grouping helper (mirrors ConceptNavigator logic)
-// ─────────────────────────────────────────────────────────────────────────────
-const blockOrder = {
-    'learning_goal': 1,
-    'objectives': 1,
-    'hook': 1,
-    'story': 2,
-    'overview': 2,
-    'introduction': 2,
-    'definitions': 3,
-    'core_explanation': 4,
-    'concept_explanation': 4,
-    'visual_learning': 4,
-    'analogy': 4,
-    'suggested_diagram': 5,
-    'suggested_illustration': 5,
-    'suggested_image': 5,
-    'suggested_infographic': 5,
-    'suggested_table': 5,
-    'suggested_graph': 5,
-    'suggested_timeline': 5,
-    'suggested_flowchart': 5,
-    'suggested_mind_map': 5,
-    'image_placeholder': 5,
-    'diagram_placeholder': 5,
-    'suggested_gif': 5,
-    'video_ref': 6,
-    'suggested_video': 6,
-    'repository_asset': 6,
-    'experiment': 7,
-    'classroom_activity': 7,
-    'discussion_prompt': 7,
-    'suggested_simulation': 8,
-    'simulation_placeholder': 8,
-    'suggested_external_link': 8,
-    'worked_example': 9,
-    'real_world_example': 9,
-    'knowledge_check': 10,
-    'multiple_choice': 10,
-    'true_false': 10,
-    'fill_in_the_blank': 10,
-    'short_answer': 10,
-    'reflection': 10,
-    'revision_questions': 10,
-    'common_misconception': 11,
-    'key_takeaway': 12,
-    'summary': 13
-};
-
-function groupBlocksIntoPages(blocks) {
-    const pages = {};
-    const order = [];
-    let currentVirtualPage = 1;
-
-    blocks.forEach((block, index) => {
-        let key = block.page_number;
-        
-        if (key == null) {
-            // Intelligent grouping for legacy lessons
-            if (index > 0 && (block.block_type === 'overview' || block.block_type === 'knowledge_check' || block.block_type === 'revision_questions' || block.block_type === 'summary')) {
-                currentVirtualPage++;
-            }
-            key = `v1_virtual_page_${currentVirtualPage}`;
-        }
-
-        if (!pages[key]) {
-            pages[key] = {
-                key,
-                title: block.page_title || block.title || `Concept ${order.length + 1}`,
-                blocks: [],
-            };
-            order.push(key);
-        }
-        pages[key].blocks.push(block);
-    });
-
-    return order.map((k) => {
-        const page = pages[k];
-        page.blocks.sort((a, b) => {
-            if (a.component_order !== undefined && b.component_order !== undefined && a.component_order !== null && b.component_order !== null) {
-                return a.component_order - b.component_order;
-            }
-            const orderA = blockOrder[a.block_type] || 50;
-            const orderB = blockOrder[b.block_type] || 50;
-            return orderA - orderB;
-        });
-        return page;
-    });
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Region grouping helper (Migration mapping)
-// ─────────────────────────────────────────────────────────────────────────────
-function getFallbackRegion(blockType) {
-    const heroTypes = ['learning_goal', 'objectives', 'hook', 'story', 'introduction', 'overview'];
-    const coreTypes = ['concept_explanation', 'core_explanation', 'definitions', 'formula_breakdown'];
-    const visualTypes = ['visual_learning', 'suggested_diagram', 'suggested_illustration', 'suggested_image', 'image_placeholder', 'diagram_placeholder', 'suggested_gif', 'video_ref', 'suggested_video', 'repository_asset', 'suggested_infographic', 'suggested_table', 'suggested_graph', 'suggested_timeline', 'suggested_flowchart', 'suggested_mind_map'];
-    const engagementTypes = ['experiment', 'classroom_activity', 'discussion_prompt', 'suggested_simulation', 'simulation_placeholder', 'mini_activity', 'suggested_activity', 'suggested_external_link'];
-    const contextTypes = ['worked_example', 'real_world_example', 'real_world_connection', 'analogy'];
-    const checkTypes = ['knowledge_check', 'multiple_choice', 'true_false', 'fill_in_the_blank', 'short_answer', 'revision_questions', 'prediction', 'reflection'];
-    const coachingTypes = ['common_misconception', 'common_mistake', 'callout', 'quick_fact', 'did_you_know', 'memory_tip', 'before_you_continue', 'transition'];
-    const summaryTypes = ['key_takeaway', 'summary'];
-
-    if (heroTypes.includes(blockType)) return 'hero';
-    if (coreTypes.includes(blockType)) return 'core';
-    if (visualTypes.includes(blockType)) return 'visual';
-    if (engagementTypes.includes(blockType)) return 'engagement';
-    if (contextTypes.includes(blockType)) return 'context';
-    if (checkTypes.includes(blockType)) return 'check';
-    if (coachingTypes.includes(blockType)) return 'coaching';
-    if (summaryTypes.includes(blockType)) return 'summary';
-    
-    return 'core'; // default fallback
-}
-
-function groupBlocksIntoRegions(blocks) {
-    const regions = {
-        hero: [],
-        core: [],
-        visual: [],
-        engagement: [],
-        context: [],
-        coaching: [],
-        check: [],
-        summary: [],
-        uncategorized: []
-    };
-
-    blocks.forEach(block => {
-        if (!ContentNormalizer.hasContent(block)) return;
-
-        // Use backend supplied region if available, otherwise fallback
-        const region = block.region || getFallbackRegion(block.block_type);
-        if (regions[region]) {
-            regions[region].push(block);
-        } else {
-            // If backend provides a new unknown region, capture it dynamically
-            regions[region] = [block];
-        }
-    });
-
-    return regions;
-}
+import { LessonTimeline, LessonCompletionCard } from '../Components/LessonBlocks/LessonProgressComponents';
+import { PresentationEngine } from '../services/presentation/PresentationEngine';
+import { LayoutSelectionService } from '../services/presentation/LayoutSelectionService';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Estimated reading time (rough: 200 wpm)
@@ -304,10 +161,10 @@ export const LessonViewer = ({ lessonData, paginated = false }) => {
 // ─────────────────────────────────────────────────────────────────────────────
 // Paginated Viewer — one concept at a time
 // ─────────────────────────────────────────────────────────────────────────────
-// ─────────────────────────────────────────────────────────────────────────────
 function PaginatedViewer({ lesson, topicId, isPreview }) {
     const navigate = useNavigate();
-    const pages = groupBlocksIntoPages(lesson.blocks || []);
+    const presentation = PresentationEngine.composeExperience(lesson, lesson.blocks || [], lesson.assets || []);
+    const pages = presentation.pages;
     const totalPages = pages.length;
     
     const progress = useLessonProgress(lesson.id, totalPages, isPreview);
@@ -458,7 +315,7 @@ function PaginatedViewer({ lesson, topicId, isPreview }) {
                                 const isCurrent = idx === pageIndex;
                                 return (
                                     <button
-                                        key={page.key}
+                                        key={page.key || idx}
                                         onClick={() => { navigateTo(idx); setShowContents(false); }}
                                         className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
                                             isCurrent ? 'bg-blue-50' : 'hover:bg-gray-50'
@@ -474,7 +331,7 @@ function PaginatedViewer({ lesson, topicId, isPreview }) {
                                         </span>
                                         <div className="flex-1 min-w-0">
                                             <p className={`text-sm font-medium truncate ${isCurrent ? 'text-custom-blue' : 'text-gray-700'}`}>
-                                                {page.title}
+                                                {page.pageTitle || page.title || `Concept ${idx + 1}`}
                                             </p>
                                         </div>
                                         <span className="text-xs text-gray-400 flex-shrink-0">
@@ -491,117 +348,36 @@ function PaginatedViewer({ lesson, topicId, isPreview }) {
             {/* ── Page content ─────────────────────────────────────────── */}
             <div key={pageIndex} className="flex-1 w-full animate-slide-up-fade">
                 
-                {/* We render regions sequentially based on standard layout flow */}
+                {/* Presentation Engine Strategy Rendering */}
                 {(() => {
-                    const regions = groupBlocksIntoRegions(currentPage?.blocks || []);
-                    
+                    const currentPage = pages[pageIndex];
+                    const presentationContext = presentation.getPresentationContext(pageIndex);
+                    const layoutKey = currentPage?.resolvedLayoutKey || currentPage?.layoutTemplate || 'DiscoveryLayout';
+                    const StrategyComponent = LayoutSelectionService.getStrategyComponent(layoutKey);
+
                     return (
-                        <div className="max-w-4xl mx-auto w-full px-4 py-10 lg:py-16">
-                            
-                            {/* Hero Region */}
-                            {(regions.hero?.length > 0 || currentPage?.title) && (
-                                <div className="mb-12 pb-8 border-b border-gray-200/60">
-                                    <div className="flex items-center gap-2 mb-6">
-                                        <span className="text-[11px] font-bold text-custom-terracotta bg-red-50/50 px-3 py-1 rounded-full uppercase tracking-widest border border-red-100/50">
-                                            Concept {pageIndex + 1} of {totalPages}
-                                        </span>
-                                        <span className="text-xs text-gray-400 flex items-center gap-1.5 font-medium">
-                                            <Clock size={12} /> ~{readingTime} min read
-                                        </span>
-                                    </div>
-                                    <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 leading-tight mb-8">
-                                        {currentPage?.title}
-                                    </h2>
-                                    <div className="space-y-6">
-                                        {regions.hero?.map((block) => (
-                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
-                                        ))}
-                                    </div>
+                        <div className="max-w-6xl mx-auto w-full px-4 py-10 lg:py-16">
+                            <div className="mb-8 border-b border-gray-200/60 pb-6">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="text-[11px] font-bold text-custom-terracotta bg-red-50/50 px-3 py-1 rounded-full uppercase tracking-widest border border-red-100/50">
+                                        Concept {pageIndex + 1} of {totalPages}
+                                    </span>
+                                    <span className="text-xs text-gray-400 flex items-center gap-1.5 font-medium">
+                                        <Clock size={12} /> ~{readingTime} min read
+                                    </span>
                                 </div>
-                            )}
-
-                            {/* Core, Visual, Context, Coaching Interleaved (Basic flow) */}
-                            <div className="space-y-12">
-                                {/* Core Region */}
-                                {regions.core?.length > 0 && (
-                                    <div className="space-y-6">
-                                        {regions.core.map((block) => (
-                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
-                                        ))}
-                                    </div>
-                                )}
-                                
-                                {/* Visual Region */}
-                                {regions.visual?.length > 0 && (
-                                    <div className="space-y-8 my-10 px-2 sm:px-8 bg-white/50 rounded-3xl py-8 border border-gray-100">
-                                        {regions.visual.map((block) => (
-                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
-                                        ))}
-                                    </div>
-                                )}
-
-                                {/* Context Region */}
-                                {regions.context?.length > 0 && (
-                                    <div className="space-y-6">
-                                        {regions.context.map((block) => (
-                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
-                                        ))}
-                                    </div>
-                                )}
-
-                                {/* Engagement Region */}
-                                {regions.engagement?.length > 0 && (
-                                    <div className="space-y-6">
-                                        {regions.engagement.map((block) => (
-                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
-                                        ))}
-                                    </div>
-                                )}
-
-                                {/* Coaching Region */}
-                                {regions.coaching?.length > 0 && (
-                                    <div className="space-y-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {regions.coaching.map((block) => (
-                                            <div key={block.id} className="break-inside-avoid">
-                                                <BlockRenderer block={block} onInteract={handleInteract} />
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                                <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 leading-tight">
+                                    {currentPage?.pageTitle || currentPage?.title || lesson.title}
+                                </h2>
                             </div>
 
-                            {/* Check Region */}
-                            {regions.check?.length > 0 && (
-                                <div className="mt-16 pt-12 border-t border-gray-200/60">
-                                    <div className="space-y-8">
-                                        {regions.check.map((block) => (
-                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Summary Region */}
-                            {regions.summary?.length > 0 && (
-                                <div className="mt-12">
-                                    <div className="space-y-6">
-                                        {regions.summary.map((block) => (
-                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Render any unrecognized regions (for future compatibility) */}
-                            {Object.entries(regions).filter(([k, v]) => !['hero', 'core', 'visual', 'engagement', 'context', 'check', 'coaching', 'summary'].includes(k) && v.length > 0).map(([regionName, blocks]) => (
-                                <div key={regionName} className="mt-12">
-                                    <div className="space-y-6">
-                                        {blocks.map((block) => (
-                                            <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
+                            <StrategyComponent
+                                page={currentPage}
+                                context={presentationContext}
+                                renderBlock={(block) => (
+                                    <BlockRenderer key={block.id} block={block} onInteract={handleInteract} />
+                                )}
+                            />
                         </div>
                     );
                 })()}
@@ -610,7 +386,7 @@ function PaginatedViewer({ lesson, topicId, isPreview }) {
                 <div className="max-w-4xl mx-auto px-4">
                     <ConceptCompletionCard
                         page={currentPage}
-                        nextPageTitle={pageIndex < totalPages - 1 ? pages[pageIndex + 1]?.title : null}
+                        nextPageTitle={pageIndex < totalPages - 1 ? (pages[pageIndex + 1]?.pageTitle || pages[pageIndex + 1]?.title) : null}
                         isLast={pageIndex === totalPages - 1}
                     />
                 </div>

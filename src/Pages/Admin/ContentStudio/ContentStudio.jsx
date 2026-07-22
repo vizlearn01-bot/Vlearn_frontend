@@ -9,7 +9,7 @@ import PublishGate from './composer/PublishGate';
 import AIReviewPanel from './composer/AIReviewPanel';
 import {
     ArrowLeft, Eye, Edit, CheckCircle, AlertCircle, X,
-    Loader2, Sparkles
+    Loader2, Sparkles, RotateCcw
 } from 'lucide-react';
 
 export default function ContentStudio() {
@@ -28,6 +28,7 @@ export default function ContentStudio() {
     const [isLoading, setIsLoading] = useState(true);
     const [jobStep, setJobStep] = useState(null);
     const [showPublishGate, setShowPublishGate] = useState(false);
+    const [showRegenerateConfirm, setShowRegenerateConfirm] = useState(false);
 
     // ── Notification ──────────────────────────────────────────────────────────
     const [notification, setNotification] = useState(null);
@@ -122,7 +123,7 @@ export default function ContentStudio() {
         try {
             const response = await apiClient.post(
                 `/api/curriculum/learning-units/${learningUnitId}/generate_lesson/`,
-                { mode: 'blueprint' }
+                { mode: 'learning_experience_planner' }
             );
             pollJob(response.data.job_id);
         } catch {
@@ -461,7 +462,7 @@ export default function ContentStudio() {
                 {/* ── LEFT: Concept Navigator (Blueprint) ────────────────────────────────── */}
                 {!isPreview && (
                     <div className="w-80 flex-shrink-0 bg-white hidden md:flex flex-col z-10 relative shadow-[4px_0_15px_-5px_rgba(0,0,0,0.05)]">
-                        {/* Back + preview toggle */}
+                        {/* Back + preview toggle + regenerate */}
                         <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-gray-50">
                             <button
                                 onClick={() => navigate('/admin-dashboard/curriculum-builder')}
@@ -469,12 +470,22 @@ export default function ContentStudio() {
                             >
                                 <ArrowLeft size={14} /> Back to Curriculum
                             </button>
-                            <button
-                                onClick={() => setIsPreview(!isPreview)}
-                                className={`px-3 py-1.5 flex items-center gap-1.5 rounded-lg text-xs font-semibold transition-all bg-gray-200 text-gray-600 hover:bg-gray-300`}
-                            >
-                                <Eye size={13} /> Preview
-                            </button>
+                            <div className="flex items-center gap-1.5">
+                                <button
+                                    onClick={() => setShowRegenerateConfirm(true)}
+                                    disabled={isGenerating}
+                                    title="Regenerate full lesson"
+                                    className="px-2.5 py-1.5 flex items-center gap-1 rounded-lg text-xs font-semibold transition-all bg-orange-50 text-custom-orange hover:bg-orange-100 disabled:opacity-40"
+                                >
+                                    <RotateCcw size={12} /> Regenerate
+                                </button>
+                                <button
+                                    onClick={() => setIsPreview(!isPreview)}
+                                    className="px-3 py-1.5 flex items-center gap-1.5 rounded-lg text-xs font-semibold transition-all bg-gray-200 text-gray-600 hover:bg-gray-300"
+                                >
+                                    <Eye size={13} /> Preview
+                                </button>
+                            </div>
                         </div>
                         <div className="flex-1 overflow-hidden">
                             <ConceptNavigator
@@ -537,9 +548,45 @@ export default function ContentStudio() {
                     blocks={blocks}
                     assets={assets}
                     concepts={concepts}
+                    qualityReport={lesson?.quality_report}
                     onConfirm={handlePublish}
                     onCancel={() => setShowPublishGate(false)}
                 />
+            )}
+
+            {/* ── Regenerate Confirmation Modal ──────────────────────────── */}
+            {showRegenerateConfirm && (
+                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-gray-100">
+                        <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center mb-5 mx-auto">
+                            <RotateCcw size={22} className="text-custom-orange" />
+                        </div>
+                        <h2 className="text-xl font-bold text-gray-900 text-center mb-2">Regenerate Full Lesson?</h2>
+                        <p className="text-sm text-gray-500 text-center mb-6 leading-relaxed">
+                            This will <span className="font-semibold text-red-600">delete all current lesson blocks</span> and
+                            re-run the full AI generation pipeline from scratch using the latest Knowledge Repository content.
+                            <br/><br/>
+                            This action cannot be undone.
+                        </p>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setShowRegenerateConfirm(false)}
+                                className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setShowRegenerateConfirm(false);
+                                    handleGenerateFullLesson();
+                                }}
+                                className="flex-1 py-2.5 bg-custom-orange text-white rounded-xl text-sm font-bold hover:bg-orange-600 transition-colors flex items-center justify-center gap-2"
+                            >
+                                <RotateCcw size={14} /> Yes, Regenerate
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );

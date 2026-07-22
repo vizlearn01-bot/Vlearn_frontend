@@ -23,6 +23,8 @@ import {
   TransitionBlock,
   KnowledgeCheckBlock,
   SuggestedMediaBlock,
+  ComparisonTableBlock,
+  StepProcessBlock,
 } from './BlueprintComponents';
 
 // Legacy V1 blocks — kept intact for backward compatibility
@@ -66,6 +68,8 @@ export const BlockRenderer = ({ block, onInteract }) => {
     case 'before_you_continue':  return <BeforeYouContinueBlock   block={block} />;
     case 'summary':              return <SummaryBlock             block={block} />;
     case 'transition':           return <TransitionBlock          block={block} />;
+    case 'comparison_table':     return <ComparisonTableBlock     block={block} />;
+    case 'step_process':         return <StepProcessBlock         block={block} />;
     case 'knowledge_check':
     case 'multiple_choice':
     case 'true_false':

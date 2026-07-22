@@ -227,6 +227,16 @@ export default function CurriculumBuilder() {
         }
     };
 
+    const handleReprocessPack = async (packId) => {
+        try {
+            const res = await apiClient.post(`/api/curriculum/knowledge-packs/${packId}/reprocess/`);
+            setActivePack(res.data);
+        } catch (err) {
+            console.error("Failed to reprocess pack:", err);
+            alert("Failed to reprocess textbook.");
+        }
+    };
+
     const Column = ({ title, icon: Icon, items, selectedItem, onSelect, type, parentId, placeholder }) => (
         <div className="flex flex-col w-64 bg-white border-r border-gray-200 h-full overflow-hidden shrink-0">
             <div className="p-4 border-b border-gray-200 bg-gray-50 flex items-center gap-2">
@@ -332,9 +342,20 @@ export default function CurriculumBuilder() {
                             <div className="mb-3 mt-4">
                                 <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 border-b border-gray-200 pb-1">Recent Repository</div>
                                 {subjectPacks.map(pack => (
-                                    <div key={pack.id} className="text-xs text-gray-600 truncate py-1.5 flex items-center gap-2">
-                                        <BookOpen className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-                                        <span className="truncate" title={pack.file ? pack.file.split('/').pop() : `Pack ${pack.id}`}>{pack.file ? pack.file.split('/').pop() : `Pack ${pack.id}`}</span>
+                                    <div key={pack.id} className="text-xs text-gray-600 py-1.5 flex items-center justify-between gap-1 group">
+                                        <div className="flex items-center gap-1.5 truncate">
+                                            <BookOpen className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                                            <span className="truncate text-gray-700 font-medium" title={pack.file ? pack.file.split('/').pop() : `Pack ${pack.id}`}>
+                                                {pack.file ? pack.file.split('/').pop() : `Pack ${pack.id}`}
+                                            </span>
+                                        </div>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); handleReprocessPack(pack.id); }}
+                                            className="text-[10px] text-custom-blue hover:text-blue-800 font-medium shrink-0 bg-blue-50 hover:bg-blue-100 px-1.5 py-0.5 rounded border border-blue-200 transition-colors"
+                                            title="Re-extract topics using updated parser"
+                                        >
+                                            Re-extract
+                                        </button>
                                     </div>
                                 ))}
                                 <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-3 border-b border-gray-200 pb-1 mb-2">Upload New</div>

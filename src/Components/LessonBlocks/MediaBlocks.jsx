@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
 import { Image as ImageIcon, PlayCircle, Video, Settings, Loader2, FlaskConical } from 'lucide-react';
+import SimulationViewerContainer from '../../Pages/User/Simulations/SimulationViewerContainer';
 
 export const ImagePlaceholderBlock = ({ block }) => {
     const content = typeof block.content === 'string' ? JSON.parse(block.content) : block.content;
@@ -64,33 +65,35 @@ export const VideoRefBlock = ({ block }) => {
 };
 
 export const SimulationPlaceholderBlock = ({ block }) => {
-    const content = typeof block.content === 'string' ? JSON.parse(block.content) : block.content;
-    
+    const content = typeof block.content === 'string' ? (tryJsonParse(block.content)) : block.content || {};
+    const metadata = block.metadata || {};
+
+    const simKey = metadata.simulation_key || content.simulation_key || 'charles_law';
+    const archetype = metadata.archetype || content.archetype || simKey;
+    const config = metadata.config || content.config || {
+        context_spec: metadata.context_spec || content.context_spec || {}
+    };
+
+    const simObject = {
+        title: block.title || 'Interactive Simulation',
+        key: simKey,
+        archetype: archetype,
+        subject: metadata.subject || 'CHEMISTRY',
+        topic: metadata.concept_group || 'Interactive Simulation',
+        config: config
+    };
+
     return (
-        <div className="my-10 bg-cyan-50 border border-cyan-200 rounded-3xl p-8 shadow-sm">
-            <div className="flex items-center gap-3 mb-4">
-                <Settings className="text-cyan-600 w-8 h-8 shrink-0" />
-                <h2 className="text-xl font-bold text-cyan-900 m-0">{block.title || 'Interactive Simulation'}</h2>
-            </div>
-            <p className="text-cyan-800 mb-6 bg-white/50 p-4 rounded-xl border border-cyan-100 text-sm">
-                <span className="font-bold uppercase tracking-wider text-xs mr-2">Objective:</span> 
-                {content.simulation_objective}
-            </p>
-            
-            {content.resolved_simulation_id ? (
-                <div className="h-80 bg-white rounded-2xl flex items-center justify-center border-2 border-cyan-300 shadow-inner overflow-hidden">
-                    <div className="flex flex-col items-center text-center">
-                        <Loader2 className="text-cyan-500 w-10 h-10 mb-3 animate-spin" />
-                        <p className="text-cyan-700 font-bold">Interactive Simulation Loading...</p>
-                        <p className="text-cyan-500 text-xs mt-2">ID: {content.resolved_simulation_id}</p>
-                    </div>
-                </div>
-            ) : (
-                <div className="h-48 bg-white border border-dashed border-cyan-300 rounded-2xl flex flex-col items-center justify-center text-center p-6">
-                    <FlaskConical className="text-cyan-400 w-10 h-10 mb-2 opacity-50" />
-                    <p className="text-cyan-600 font-medium">Simulation Placeholder</p>
-                </div>
-            )}
+        <div className="my-10">
+            <SimulationViewerContainer simulation={simObject} />
         </div>
     );
 };
+
+function tryJsonParse(str) {
+    try {
+        return JSON.parse(str);
+    } catch (e) {
+        return { simulation_objective: str };
+    }
+}

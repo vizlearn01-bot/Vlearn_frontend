@@ -612,3 +612,68 @@ export const ConceptCompletionCard = ({ page, nextPageTitle, onNext, onComplete,
     </div>
   );
 };
+
+// ─── Comparison Table Block ──────────────────────────────────────────────────
+export const ComparisonTableBlock = ({ block }) => {
+  const c = parseContent(block?.content);
+  const headers = c.headers || ['Feature', 'Concept A', 'Concept B'];
+  const rows = c.rows || (c.text ? [[ 'Details', c.text ]] : []);
+
+  return (
+    <div className="my-8 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-custom-cream px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+        <h4 className="font-bold text-gray-900 text-base font-serif">{block?.title || 'Comparison Matrix'}</h4>
+        <span className="text-xs font-semibold px-2.5 py-1 bg-custom-terracotta/10 text-custom-terracotta rounded-full">Comparative Analysis</span>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr className="bg-gray-50 border-b border-gray-200">
+              {headers.map((h, i) => (
+                <th key={i} className="p-3.5 font-bold text-gray-700">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, rIdx) => (
+              <tr key={rIdx} className="border-b border-gray-100 hover:bg-gray-50/50">
+                {Array.isArray(row) ? row.map((cell, cIdx) => (
+                  <td key={cIdx} className="p-3.5 text-gray-800">{cell}</td>
+                )) : (
+                  <td colSpan={headers.length} className="p-3.5 text-gray-800">{String(row)}</td>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// ─── Step Process Block ─────────────────────────────────────────────────────
+export const StepProcessBlock = ({ block }) => {
+  const c = parseContent(block?.content);
+  const steps = c.steps || (c.text ? c.text.split('\n').filter(s => s.trim()) : []);
+
+  return (
+    <div className="my-8 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+      <h4 className="font-bold text-gray-900 text-base font-serif mb-6 flex items-center gap-2">
+        <span className="w-2.5 h-2.5 rounded-full bg-custom-terracotta inline-block"></span>
+        {block?.title || 'Sequential Process Flow'}
+      </h4>
+      <div className="space-y-4">
+        {steps.map((step, idx) => (
+          <div key={idx} className="flex items-start gap-4 p-4 rounded-lg bg-gray-50 border border-gray-100">
+            <div className="w-8 h-8 rounded-full bg-custom-forest text-white font-bold flex items-center justify-center text-sm shrink-0">
+              {idx + 1}
+            </div>
+            <div className="text-gray-800 text-sm leading-relaxed pt-1">
+              {typeof step === 'string' ? step : step.title || step.description || JSON.stringify(step)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};

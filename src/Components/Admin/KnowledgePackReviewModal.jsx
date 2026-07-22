@@ -110,13 +110,13 @@ export default function KnowledgePackReviewModal({ knowledgePack, onClose, onApp
                                                 className="flex-1 bg-white border border-gray-200 font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-custom-blue rounded px-2 py-1"
                                                 placeholder="Topic Title"
                                             />
-                                            <div className="flex items-center gap-1 shrink-0">
-                                                <span className="text-xs text-gray-500">Page:</span>
+                                            <div className="flex items-center gap-1.5 shrink-0 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">
+                                                <span className="text-xs font-semibold text-blue-700">Start Page:</span>
                                                 <input
                                                     type="number"
                                                     value={topic.start_page || ''}
                                                     onChange={(e) => handlePageChange(tIndex, null, e.target.value)}
-                                                    className="w-16 bg-white border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-custom-blue rounded px-2 py-1"
+                                                    className="w-16 bg-white border border-gray-300 text-sm font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-custom-blue rounded px-2 py-0.5"
                                                     placeholder="1"
                                                     min="1"
                                                 />
