@@ -449,6 +449,40 @@ const LOCAL_FALLBACK_SIMULATIONS = [
     }
   },
   {
+    id: 102,
+    key: 'chem_activity_series_displacement',
+    title: 'Metal Reactivity & Activity Series',
+    subject: 'CHEMISTRY',
+    subject_display: 'Chemistry',
+    topic: 'Metals',
+    status: 'ACTIVE',
+    description: 'A lightweight React simulation demonstrating how the activity (reactivity) series determines whether a displacement reaction occurs.',
+    archetype: 'chem_activity_series_displacement',
+    config: {
+      context_spec: {
+        overview: 'Visually determine whether a metal will replace another metal dissolved in solution based on their positions in the activity series.',
+        how_to_use: [
+          'Step 1: Select a metal strip.',
+          'Step 2: Select a metal salt solution.',
+          'Step 3: Check their relative reactivity in the Activity Series panel.',
+          'Step 4: Run the experiment and observe if a displacement reaction occurs.'
+        ],
+        expected_results: [
+          {
+            action: 'More reactive metal in less reactive solution (e.g. Zinc in Copper Sulfate)',
+            expected_outcome: 'The metal strip is coated and the solution color fades. A reaction occurs.',
+            key_takeaway: 'More reactive metals displace less reactive metals from their solutions.'
+          },
+          {
+            action: 'Less reactive metal in more reactive solution (e.g. Copper in Zinc Sulfate)',
+            expected_outcome: 'No change occurs.',
+            key_takeaway: 'Less reactive metals cannot displace more reactive ones.'
+          }
+        ]
+      }
+    }
+  },
+  {
     id: 9,
     key: 'chemical_equilibrium',
     title: 'Chemical Equilibrium',

@@ -29,6 +29,9 @@ const simulationRegistry = {
   electrode_potential_explorer: lazy(() => import('./ElectrodePotentialSim')),
   chem_preferential_discharge: lazy(() => import('./PreferentialDischargeSim')),
   preferential_discharge: lazy(() => import('./PreferentialDischargeSim')),
+  chem_activity_series_displacement: lazy(() => import('./ActivitySeriesSim')),
+  chem_metal_reactivity_series: lazy(() => import('./MetalReactivitySim')),
+  metal_reactivity_series: lazy(() => import('./MetalReactivitySim')),
 };
 
 export default function SimulationWidgetFactory({ archetype, simulationKey, config = {}, title = '', onTelemetry }) {
