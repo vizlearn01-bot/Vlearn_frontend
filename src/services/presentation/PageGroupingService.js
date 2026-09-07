@@ -22,6 +22,7 @@ export class PageGroupingService {
       .replace(/^-\s*/, '')
       .replace(/^(?:Stage|Card|Part|Module|Concept|Step)\s*\d+[\s:\-–—\.]*/i, '')
       .replace(/^\d+[\s:\-–—\.]+/i, '')
+      .replace(/\s+(?:Visual|Diagram|Visualization|Video)\s*(?:Card|Slot)?$/i, '')
       .trim();
 
     const draftingMap = [
@@ -54,6 +55,13 @@ export class PageGroupingService {
 
     const sortedBlocks = PresentationNormalizer.sortBlocks(blocks);
 
+    const MEDIA_TYPES = new Set([
+      'image', 'diagram', 'video', 'youtube', 'gif',
+      'suggested_diagram', 'suggested_image', 'suggested_video',
+      'image_placeholder', 'diagram_placeholder', 'video_ref',
+      'repository_asset', 'simulation_placeholder'
+    ]);
+
     // 1. Check if backend already assigned distinct page_number values (>= 2 pages)
     const distinctBackendPages = new Set(
       sortedBlocks.map((b) => b.page_number).filter((p) => p !== undefined && p !== null)
@@ -63,16 +71,9 @@ export class PageGroupingService {
       const pageMap = {};
       sortedBlocks.forEach((block) => {
         const pageNum = block.page_number || 1;
-        const fallbackTitle = block.title || `Part ${pageNum}`;
-        const cleanTitle = this.formatCleanPageTitle(
-          block.page_title || block.metadata?.concept_group || fallbackTitle,
-          fallbackTitle
-        );
         if (!pageMap[pageNum]) {
           pageMap[pageNum] = {
             pageNum,
-            pageTitle: cleanTitle,
-            conceptGroup: cleanTitle,
             layoutTemplate: block.metadata?.layout_template || 'DiscoveryLayout',
             blocks: [],
           };
@@ -80,7 +81,32 @@ export class PageGroupingService {
         pageMap[pageNum].blocks.push(block);
       });
 
-      return Object.values(pageMap).sort((a, b) => a.pageNum - b.pageNum);
+      const pages = Object.values(pageMap).sort((a, b) => a.pageNum - b.pageNum);
+
+      // Check if backend page_title values are redundant (e.g. all pages share the same topic title)
+      const rawPageTitles = pages.map((p) => {
+        const firstWithPageTitle = p.blocks.find((b) => b.page_title && b.page_title.trim());
+        return firstWithPageTitle ? firstWithPageTitle.page_title.trim() : null;
+      }).filter(Boolean);
+      const isRedundantPageTitle = rawPageTitles.length > 0 && new Set(rawPageTitles).size <= 1;
+
+      pages.forEach((page) => {
+        const primaryBlock = page.blocks.find((b) => !MEDIA_TYPES.has((b.block_type || '').toLowerCase())) || page.blocks[0];
+        const fallbackTitle = primaryBlock?.title || `Part ${page.pageNum}`;
+        
+        let chosenTitle = '';
+        if (isRedundantPageTitle) {
+          chosenTitle = primaryBlock?.title || primaryBlock?.page_title || fallbackTitle;
+        } else {
+          chosenTitle = primaryBlock?.page_title || primaryBlock?.metadata?.concept_group || primaryBlock?.title || fallbackTitle;
+        }
+
+        const cleanTitle = this.formatCleanPageTitle(chosenTitle, `Part ${page.pageNum}`);
+        page.pageTitle = cleanTitle;
+        page.conceptGroup = cleanTitle;
+      });
+
+      return pages;
     }
 
     // 2. Adaptive Multi-Card Fallback (when backend has <= 1 distinct page number)
@@ -97,12 +123,7 @@ export class PageGroupingService {
 
     sortedBlocks.forEach((block) => {
       const bt = (block.block_type || '').toLowerCase();
-      const isMedia = [
-        'image', 'diagram', 'video', 'youtube', 'gif',
-        'suggested_diagram', 'suggested_image', 'suggested_video',
-        'image_placeholder', 'diagram_placeholder', 'video_ref',
-        'repository_asset', 'simulation_placeholder'
-      ].includes(bt);
+      const isMedia = MEDIA_TYPES.has(bt);
 
       const shouldBreak = currentBlocks.length > 0 && !isMedia && (
         BREAK_TRIGGER_TYPES.has(bt) ||
@@ -110,10 +131,10 @@ export class PageGroupingService {
       );
 
       if (shouldBreak) {
-        const firstBlock = currentBlocks[0];
+        const primaryBlock = currentBlocks.find((b) => !MEDIA_TYPES.has((b.block_type || '').toLowerCase())) || currentBlocks[0];
         const pageNum = pages.length + 1;
         const pageTitle = this.formatCleanPageTitle(
-          firstBlock?.page_title || firstBlock?.metadata?.concept_group || firstBlock?.title || `Part ${pageNum}`,
+          primaryBlock?.title || primaryBlock?.page_title || primaryBlock?.metadata?.concept_group || `Part ${pageNum}`,
           `Part ${pageNum}`
         );
         pages.push({
@@ -131,10 +152,10 @@ export class PageGroupingService {
     });
 
     if (currentBlocks.length > 0) {
-      const firstBlock = currentBlocks[0];
+      const primaryBlock = currentBlocks.find((b) => !MEDIA_TYPES.has((b.block_type || '').toLowerCase())) || currentBlocks[0];
       const pageNum = pages.length + 1;
       const pageTitle = this.formatCleanPageTitle(
-        firstBlock?.page_title || firstBlock?.metadata?.concept_group || firstBlock?.title || `Part ${pageNum}`,
+        primaryBlock?.title || primaryBlock?.page_title || primaryBlock?.metadata?.concept_group || `Part ${pageNum}`,
         `Part ${pageNum}`
       );
       pages.push({

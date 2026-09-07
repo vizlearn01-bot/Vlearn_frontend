@@ -40,7 +40,7 @@ function getAttachMode(assetType) {
  * MediaSlot — renders a single LessonAsset as an actionable placeholder.
  * When attached, renders a preview of the media instead of the placeholder.
  */
-export function MediaSlot({ asset, lessonId, blockId, onAssetUpdated }) {
+export function MediaSlot({ asset, lessonId, blockId, onAssetUpdated, onDeleteBlock }) {
     const [expanded, setExpanded] = useState(asset.status === 'pending');
     const [mode, setMode] = useState(asset.asset_type === 'repository_asset' ? 'repository' : null); // 'upload' | 'url' | 'youtube' | 'repository'
     const [urlInput, setUrlInput] = useState('');
@@ -194,6 +194,38 @@ export function MediaSlot({ asset, lessonId, blockId, onAssetUpdated }) {
                     <StatusIcon size={11} />
                     {statusMeta.label}
                 </div>
+                {onDeleteBlock ? (
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onDeleteBlock(blockId);
+                        }}
+                        className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors ml-1"
+                        title="Delete visualization component"
+                    >
+                        <Trash2 size={15} />
+                    </button>
+                ) : asset.id ? (
+                    <button
+                        type="button"
+                        onClick={async (e) => {
+                            e.stopPropagation();
+                            if (window.confirm('Remove this attached media from the card?')) {
+                                try {
+                                    await apiClient.delete(`/api/curriculum/lesson-assets/${asset.id}/`);
+                                    onAssetUpdated();
+                                } catch {
+                                    setError('Failed to remove asset.');
+                                }
+                            }
+                        }}
+                        className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors ml-1"
+                        title="Remove attached visual"
+                    >
+                        <Trash2 size={15} />
+                    </button>
+                ) : null}
                 {expanded ? <ChevronUp size={16} className="text-gray-400" /> : <ChevronDown size={16} className="text-gray-400" />}
             </div>
 
@@ -220,7 +252,7 @@ export function MediaSlot({ asset, lessonId, blockId, onAssetUpdated }) {
 
                     {/* Action bar */}
                     {asset.status !== 'attached' && !mode && (
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                             {attachModes.includes('upload') && (
                                 <label className="cursor-pointer px-3 py-2 text-xs font-semibold rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 flex items-center gap-1.5">
                                     <Upload size={12} />
@@ -258,6 +290,16 @@ export function MediaSlot({ asset, lessonId, blockId, onAssetUpdated }) {
                             >
                                 Add Later
                             </button>
+                            {onDeleteBlock && (
+                                <button
+                                    type="button"
+                                    onClick={() => onDeleteBlock(blockId)}
+                                    className="px-3 py-2 text-xs font-semibold rounded-lg border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 flex items-center gap-1.5 ml-auto"
+                                    title="Delete this visualization slot completely"
+                                >
+                                    <Trash2 size={12} /> Remove Visual Slot
+                                </button>
+                            )}
                         </div>
                     )}
 
@@ -303,9 +345,9 @@ export function MediaSlot({ asset, lessonId, blockId, onAssetUpdated }) {
                         <div className="text-xs text-gray-500 animate-pulse">Uploading...</div>
                     )}
 
-                    {/* Replace button if already attached */}
+                    {/* Replace / Remove buttons if already attached */}
                     {asset.status === 'attached' && (
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                             <label className="cursor-pointer px-3 py-1.5 text-xs font-semibold rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 flex items-center gap-1.5">
                                 <Upload size={11} /> Replace
                                 <input type="file" className="hidden" onChange={handleFileUpload} />
@@ -326,13 +368,42 @@ export function MediaSlot({ asset, lessonId, blockId, onAssetUpdated }) {
                                         });
                                         onAssetUpdated();
                                     } catch {
-                                        setError('Failed to remove media.');
+                                        setError('Failed to clear media.');
                                     }
                                 }}
-                                className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-red-200 text-red-600 hover:bg-red-50 flex items-center gap-1.5"
+                                className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 flex items-center gap-1.5"
+                                title="Clear media back to empty placeholder"
                             >
-                                <Trash2 size={11} /> Remove
+                                Clear Media
                             </button>
+                            {onDeleteBlock ? (
+                                <button
+                                    type="button"
+                                    onClick={() => onDeleteBlock(blockId)}
+                                    className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 flex items-center gap-1.5 ml-auto"
+                                    title="Delete this visual block from the lesson card"
+                                >
+                                    <Trash2 size={11} /> Delete Visual Block
+                                </button>
+                            ) : asset.id ? (
+                                <button
+                                    type="button"
+                                    onClick={async () => {
+                                        if (window.confirm('Remove this attached visual from the card?')) {
+                                            try {
+                                                await apiClient.delete(`/api/curriculum/lesson-assets/${asset.id}/`);
+                                                onAssetUpdated();
+                                            } catch {
+                                                setError('Failed to remove visual.');
+                                            }
+                                        }
+                                    }}
+                                    className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 flex items-center gap-1.5 ml-auto"
+                                    title="Remove this attached visual from the card"
+                                >
+                                    <Trash2 size={11} /> Remove Visual
+                                </button>
+                            ) : null}
                         </div>
                     )}
 

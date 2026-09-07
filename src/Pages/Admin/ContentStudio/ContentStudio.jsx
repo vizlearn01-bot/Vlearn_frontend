@@ -7,6 +7,7 @@ import ConceptComposer, { mapBlockTypeToAssetType } from './composer/ConceptComp
 import QualityBar from './composer/QualityBar';
 import PublishGate from './composer/PublishGate';
 import AIReviewPanel from './composer/AIReviewPanel';
+import { useGeneration } from '../../../Context/GenerationContext';
 import {
     ArrowLeft, Eye, Edit, CheckCircle, AlertCircle, X,
     Loader2, Sparkles, RotateCcw, PenTool, Save
@@ -24,12 +25,17 @@ export default function ContentStudio() {
 
     // ── UI state ──────────────────────────────────────────────────────────────
     const [isPreview, setIsPreview] = useState(false);
-    const [isGenerating, setIsGenerating] = useState(false);
     const [isCreatingManual, setIsCreatingManual] = useState(false);
+    const [isStartingGeneration, setIsStartingGeneration] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [jobStep, setJobStep] = useState(null);
+    const [regeneratingBlockId, setRegeneratingBlockId] = useState(null);
     const [showPublishGate, setShowPublishGate] = useState(false);
     const [showRegenerateConfirm, setShowRegenerateConfirm] = useState(false);
+
+    // ── Generation state from global context ──────────────────────────────────
+    const { startGeneration, isGeneratingUnit, getJobForUnit, setIsMonitorOpen } = useGeneration();
+    const isThisUnitGenerating = isGeneratingUnit(learningUnitId);
+    const activeUnitJob = getJobForUnit(learningUnitId);
 
     // ── Notification ──────────────────────────────────────────────────────────
     const [notification, setNotification] = useState(null);
@@ -114,23 +120,40 @@ export default function ContentStudio() {
         if (learningUnitId) fetchAll();
     }, [learningUnitId, fetchAll]);
 
+    // ── Listen for background generation completion ──────────────────────────
+    useEffect(() => {
+        const handleLessonGenerated = (e) => {
+            if (String(e.detail?.learningUnitId) === String(learningUnitId)) {
+                fetchAll();
+                showNotification('success', 'Lesson generated! Updated content loaded.');
+            }
+        };
+        window.addEventListener('vlearn:lesson-generated', handleLessonGenerated);
+        return () => {
+            window.removeEventListener('vlearn:lesson-generated', handleLessonGenerated);
+        };
+    }, [learningUnitId, fetchAll]);
+
     // ─────────────────────────────────────────────────────────────────────────
     // Generation
     // ─────────────────────────────────────────────────────────────────────────
 
     const handleGenerateFullLesson = async () => {
-        setIsGenerating(true);
-        setJobStep('Starting generation pipeline...');
+        setIsStartingGeneration(true);
         try {
-            const response = await apiClient.post(
-                `/api/curriculum/learning-units/${learningUnitId}/generate_lesson/`,
-                { mode: 'learning_experience_planner' }
+            await startGeneration({
+                learningUnitId,
+                unitTitle: lesson?.title || `Learning Unit ${learningUnitId}`,
+                mode: 'learning_experience_planner',
+            });
+            showNotification('success', 'Lesson generation started in background. You can track progress or continue working.');
+        } catch (error) {
+            showNotification(
+                'error',
+                error.response?.data?.error || error.response?.data?.detail || error.message || 'Failed to start lesson generation.'
             );
-            pollJob(response.data.job_id);
-        } catch {
-            showNotification('error', 'Failed to start lesson generation.');
-            setIsGenerating(false);
-            setJobStep(null);
+        } finally {
+            setIsStartingGeneration(false);
         }
     };
 
@@ -147,54 +170,32 @@ export default function ContentStudio() {
     };
 
     const handleRegenerateBlock = async (blockId) => {
-        setIsGenerating(true);
-        setJobStep('Regenerating component...');
+        setRegeneratingBlockId(blockId);
+        showNotification('success', 'Regenerating component in background...');
         try {
             const response = await apiClient.post(
                 `/api/curriculum/lesson-blocks/${blockId}/regenerate/`
             );
-            pollJob(response.data.job_id);
+            pollBlockJob(response.data.job_id);
         } catch {
             showNotification('error', 'Failed to start component regeneration.');
-            setIsGenerating(false);
-            setJobStep(null);
+            setRegeneratingBlockId(null);
         }
     };
 
-    const GENERATION_STEPS = [
-        'Retrieving knowledge chunks...',
-        'Building prompt...',
-        'Generating content...',
-        'Saving lesson blocks...',
-        'Finalising...',
-    ];
-
-    const pollJob = (jobId) => {
-        let stepIdx = 0;
-        const stepTimer = setInterval(() => {
-            stepIdx = Math.min(stepIdx + 1, GENERATION_STEPS.length - 1);
-            setJobStep(GENERATION_STEPS[stepIdx]);
-        }, 3000);
-
+    const pollBlockJob = (jobId) => {
         const poll = setInterval(async () => {
             try {
                 const jobResponse = await apiClient.get(`/api/curriculum/generation-jobs/${jobId}/`);
                 if (jobResponse.data.status === 'completed') {
                     clearInterval(poll);
-                    clearInterval(stepTimer);
+                    setRegeneratingBlockId(null);
                     await fetchAll();
-                    setIsGenerating(false);
-                    setJobStep(null);
-                    showNotification('success', 'Content generated successfully.');
+                    showNotification('success', 'Component regenerated successfully.');
                 } else if (jobResponse.data.status === 'failed') {
                     clearInterval(poll);
-                    clearInterval(stepTimer);
-                    showNotification(
-                        'error',
-                        `We couldn't complete the lesson generation.\nNo lesson content was lost.\nYou can retry generation once the AI service becomes available.`
-                    );
-                    setIsGenerating(false);
-                    setJobStep(null);
+                    setRegeneratingBlockId(null);
+                    showNotification('error', 'Component regeneration failed. Please try again.');
                 }
             } catch { /* transient polling errors */ }
         }, 2000);
@@ -433,63 +434,108 @@ export default function ContentStudio() {
         );
     }
 
-    if (!lesson && !isGenerating) {
+    if (!lesson) {
         return (
-            <div className="flex flex-col h-screen items-center justify-center bg-gray-50">
-                <div className="bg-white p-10 rounded-2xl shadow-sm border border-gray-200 text-center max-w-md w-full">
-                    <div className="text-5xl mb-4">✨</div>
-                    <h2 className="text-xl font-bold text-gray-800 mb-2">Create Lesson</h2>
-                    <p className="text-gray-500 text-sm mb-6">
-                        No lesson exists for this learning unit yet. Select how you would like to create it.
-                    </p>
-                    <div className="space-y-3">
-                        <button
-                            onClick={handleGenerateFullLesson}
-                            className="w-full py-3 bg-custom-blue text-white rounded-xl font-bold hover:opacity-90 transition flex items-center justify-center gap-2 text-sm shadow-sm"
-                        >
-                            <Sparkles size={18} /> Generate with AI
-                        </button>
-                        <button
-                            onClick={handleCreateManualLesson}
-                            disabled={isCreatingManual}
-                            className="w-full py-3 bg-white text-gray-800 border border-gray-300 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2 text-sm shadow-sm disabled:opacity-50"
-                        >
-                            {isCreatingManual ? (
-                                <Loader2 className="animate-spin text-gray-500" size={18} />
-                            ) : (
-                                <PenTool className="text-custom-orange" size={18} />
-                            )}
-                            Create Manually
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
+            <div className="flex flex-col h-screen items-center justify-center bg-gray-50 p-4">
+                <div className="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-gray-200 text-center max-w-md w-full relative">
+                    <button
+                        onClick={() => navigate('/admin-dashboard/curriculum-builder')}
+                        className="absolute top-4 left-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                        title="Back to Curriculum"
+                    >
+                        <ArrowLeft size={18} />
+                    </button>
 
-    if (isGenerating) {
-        return (
-            <div className="flex flex-col h-screen items-center justify-center bg-gray-50 gap-4">
-                <Loader2 className="animate-spin text-custom-blue" size={40} />
-                <p className="text-xl font-bold text-gray-700">Generating Lesson</p>
-                <p className="text-gray-500 text-sm animate-pulse">{jobStep || 'Processing...'}</p>
-                <div className="flex gap-2 mt-4">
-                    {['Retrieve', 'Prompt', 'Generate', 'Save'].map((step, i) => (
-                        <div key={step} className="flex items-center gap-1 text-xs text-gray-400">
-                            <span className={`w-2 h-2 rounded-full ${
-                                jobStep && i <= Math.floor((['Retrieve','Prompt','Generate','Save'].indexOf(
-                                    step
-                                ) / 3) * 4) ? 'bg-custom-blue' : 'bg-gray-200'
-                            }`} />
-                            {step}
+                    {isThisUnitGenerating ? (
+                        <div className="space-y-4 pt-2">
+                            <div className="w-16 h-16 rounded-2xl bg-blue-50 text-custom-blue flex items-center justify-center mx-auto shadow-inner">
+                                <Loader2 className="animate-spin text-custom-blue" size={32} />
+                            </div>
+                            <div>
+                                <h2 className="text-lg font-bold text-gray-800">Generating Lesson</h2>
+                                <p className="text-gray-500 text-xs mt-1 animate-pulse min-h-[1.25rem]">
+                                    {activeUnitJob?.step || 'Synthesizing pedagogical structure...'}
+                                </p>
+                            </div>
+
+                            {/* Progress bar */}
+                            <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                                <div
+                                    className="bg-custom-blue h-2 rounded-full transition-all duration-500"
+                                    style={{ width: `${activeUnitJob?.progressPercent || 35}%` }}
+                                />
+                            </div>
+
+                            <p className="text-[11px] text-gray-400 leading-relaxed">
+                                You can safely navigate away to work on other topics. Generation will proceed in the background.
+                            </p>
+
+                            <div className="pt-2 flex flex-col gap-2">
+                                <button
+                                    onClick={() => setIsMonitorOpen(true)}
+                                    className="w-full py-2.5 bg-blue-50 text-custom-blue rounded-xl font-semibold hover:bg-blue-100 transition text-xs border border-blue-200"
+                                >
+                                    View Generation Monitor
+                                </button>
+                                <button
+                                    onClick={() => navigate('/admin-dashboard/curriculum-builder')}
+                                    className="w-full py-2.5 text-gray-500 hover:text-gray-700 rounded-xl font-medium transition text-xs"
+                                >
+                                    Back to Curriculum
+                                </button>
+                            </div>
                         </div>
-                    ))}
+                    ) : (
+                        <div>
+                            <div className="text-5xl mb-4">✨</div>
+                            <h2 className="text-xl font-bold text-gray-800 mb-2">Create Lesson</h2>
+                            <p className="text-gray-500 text-sm mb-6">
+                                No lesson exists for this learning unit yet. Select how you would like to create it.
+                            </p>
+
+                            {activeUnitJob?.status === 'failed' && (
+                                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-left text-xs text-red-700">
+                                    <p className="font-semibold mb-1">Previous Generation Failed</p>
+                                    <p className="text-red-600 mb-2">{activeUnitJob.errorMessage || 'Unknown error occurred.'}</p>
+                                    <p className="text-gray-500">You can retry generation or create manually.</p>
+                                </div>
+                            )}
+
+                            <div className="space-y-3">
+                                <button
+                                    onClick={handleGenerateFullLesson}
+                                    disabled={isStartingGeneration || isThisUnitGenerating}
+                                    className="w-full py-3 bg-custom-blue text-white rounded-xl font-bold hover:opacity-90 transition flex items-center justify-center gap-2 text-sm shadow-sm disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed"
+                                >
+                                    {isStartingGeneration ? (
+                                        <>
+                                            <Loader2 size={18} className="animate-spin" /> Starting Generation...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Sparkles size={18} /> Generate with AI
+                                        </>
+                                    )}
+                                </button>
+                                <button
+                                    onClick={handleCreateManualLesson}
+                                    disabled={isCreatingManual}
+                                    className="w-full py-3 bg-white text-gray-800 border border-gray-300 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2 text-sm shadow-sm disabled:opacity-50"
+                                >
+                                    {isCreatingManual ? (
+                                        <Loader2 className="animate-spin text-gray-500" size={18} />
+                                    ) : (
+                                        <PenTool className="text-custom-orange" size={18} />
+                                    )}
+                                    Create Manually
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         );
     }
-
-
 
     return (
         <div className="flex flex-col h-screen bg-gray-50 text-gray-800 font-sans overflow-hidden">
@@ -509,6 +555,30 @@ export default function ContentStudio() {
                     <button onClick={() => setNotification(null)} className="flex-shrink-0 opacity-60 hover:opacity-100">
                         <X size={16} />
                     </button>
+                </div>
+            )}
+
+            {/* ── Background generation banner ───────────────────────────── */}
+            {isThisUnitGenerating && (
+                <div className="bg-blue-600 text-white px-4 py-2 text-xs flex items-center justify-between shadow-sm z-30">
+                    <div className="flex items-center gap-2">
+                        <Loader2 className="animate-spin w-3.5 h-3.5 shrink-0" />
+                        <span className="font-medium">
+                            Regenerating lesson in background: {activeUnitJob?.step || 'Synthesizing pedagogical structure...'}
+                        </span>
+                        <span className="bg-blue-700/80 px-2 py-0.5 rounded-full text-[10px]">
+                            {activeUnitJob?.progressPercent || 30}%
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <span className="hidden sm:inline text-blue-200 text-[11px]">You can continue editing or leave this page safely.</span>
+                        <button
+                            onClick={() => setIsMonitorOpen(true)}
+                            className="underline hover:text-blue-100 font-semibold"
+                        >
+                            View Monitor
+                        </button>
+                    </div>
                 </div>
             )}
 
@@ -540,11 +610,16 @@ export default function ContentStudio() {
                             <div className="flex items-center gap-1.5">
                                 <button
                                     onClick={() => setShowRegenerateConfirm(true)}
-                                    disabled={isGenerating}
-                                    title="Regenerate full lesson"
+                                    disabled={isThisUnitGenerating}
+                                    title={isThisUnitGenerating ? "Generation in progress" : "Regenerate full lesson"}
                                     className="px-2.5 py-1.5 flex items-center gap-1 rounded-lg text-xs font-semibold transition-all bg-orange-50 text-custom-orange hover:bg-orange-100 disabled:opacity-40"
                                 >
-                                    <RotateCcw size={12} /> Regenerate
+                                    {isThisUnitGenerating ? (
+                                        <Loader2 size={12} className="animate-spin" />
+                                    ) : (
+                                        <RotateCcw size={12} />
+                                    )}
+                                    {isThisUnitGenerating ? 'Generating...' : 'Regenerate'}
                                 </button>
                                 <button
                                     onClick={handleSaveDraft}
@@ -702,12 +777,20 @@ function cleanConceptTitle(raw, fallback) {
         .replace(/^-\s*/, '')
         .replace(/^(?:Stage|Card|Part|Module|Concept|Step)\s*\d+[\s:\-–—\.]*/i, '')
         .replace(/^\d+[\s:\-–—\.]+/i, '')
+        .replace(/\s+(?:Visual|Diagram|Visualization|Video)\s*(?:Card|Slot)?$/i, '')
         .trim();
     return clean || fallback;
 }
 
 function groupBlocksIntoConcepts(blocks = [], assets = []) {
     if (!blocks || blocks.length === 0) return [];
+
+    const MEDIA_TYPES = new Set([
+        'image', 'diagram', 'video', 'youtube', 'gif', 'visualization',
+        'suggested_diagram', 'suggested_image', 'suggested_video',
+        'image_placeholder', 'diagram_placeholder', 'video_ref',
+        'repository_asset', 'simulation_placeholder'
+    ]);
 
     // 1. Check if backend already assigned distinct page_number values (>= 2 pages)
     const distinctBackendPages = new Set(
@@ -723,10 +806,8 @@ function groupBlocksIntoConcepts(blocks = [], assets = []) {
         blocks.forEach((block) => {
             const pageNum = block.page_number || 1;
             if (!pagesMap[pageNum]) {
-                const fallback = block.title || `Part ${pageNum}`;
                 pagesMap[pageNum] = {
                     pageNum,
-                    pageTitle: cleanConceptTitle(block.page_title || block.metadata?.concept_group || fallback, fallback),
                     blocks: [],
                     isV1: false,
                     goal: '',
@@ -737,7 +818,25 @@ function groupBlocksIntoConcepts(blocks = [], assets = []) {
             pagesMap[pageNum].blocks.push(block);
         });
 
-        pagesList = pageOrder.sort((a, b) => (typeof a === 'number' && typeof b === 'number' ? a - b : 0)).map((k) => pagesMap[k]);
+        const pages = pageOrder.sort((a, b) => (typeof a === 'number' && typeof b === 'number' ? a - b : 0)).map((k) => pagesMap[k]);
+
+        // Check if page_title is redundant across all pages
+        const rawPageTitles = pages.map((p) => {
+            const firstWithPageTitle = p.blocks.find((b) => b.page_title && b.page_title.trim());
+            return firstWithPageTitle ? firstWithPageTitle.page_title.trim() : null;
+        }).filter(Boolean);
+        const isRedundantPageTitle = rawPageTitles.length > 0 && new Set(rawPageTitles).size <= 1;
+
+        pages.forEach((page) => {
+            const primaryBlock = page.blocks.find((b) => !MEDIA_TYPES.has((b.block_type || '').toLowerCase())) || page.blocks[0];
+            const fallback = primaryBlock?.title || `Part ${page.pageNum}`;
+            const chosenTitle = isRedundantPageTitle
+                ? (primaryBlock?.title || primaryBlock?.page_title || fallback)
+                : (primaryBlock?.page_title || primaryBlock?.metadata?.concept_group || primaryBlock?.title || fallback);
+            page.pageTitle = cleanConceptTitle(chosenTitle, fallback);
+        });
+
+        pagesList = pages;
     } else {
         // 2. Adaptive Multi-Card Fallback (when backend has <= 1 distinct page number)
         const pages = [];
@@ -752,12 +851,7 @@ function groupBlocksIntoConcepts(blocks = [], assets = []) {
 
         blocks.forEach((block) => {
             const bt = (block.block_type || '').toLowerCase();
-            const isMedia = [
-                'image', 'diagram', 'video', 'youtube', 'gif',
-                'suggested_diagram', 'suggested_image', 'suggested_video',
-                'image_placeholder', 'diagram_placeholder', 'video_ref',
-                'repository_asset', 'simulation_placeholder'
-            ].includes(bt);
+            const isMedia = MEDIA_TYPES.has(bt);
 
             const shouldBreak = currentBlocks.length > 0 && !isMedia && (
                 BREAK_TRIGGER_TYPES.has(bt) ||
@@ -765,10 +859,10 @@ function groupBlocksIntoConcepts(blocks = [], assets = []) {
             );
 
             if (shouldBreak) {
-                const firstBlock = currentBlocks[0];
+                const primaryBlock = currentBlocks.find((b) => !MEDIA_TYPES.has((b.block_type || '').toLowerCase())) || currentBlocks[0];
                 const pageNum = pages.length + 1;
                 const pageTitle = cleanConceptTitle(
-                    firstBlock?.page_title || firstBlock?.metadata?.concept_group || firstBlock?.title || `Part ${pageNum}`,
+                    primaryBlock?.title || primaryBlock?.page_title || primaryBlock?.metadata?.concept_group || `Part ${pageNum}`,
                     `Part ${pageNum}`
                 );
                 pages.push({
@@ -786,10 +880,10 @@ function groupBlocksIntoConcepts(blocks = [], assets = []) {
         });
 
         if (currentBlocks.length > 0) {
-            const firstBlock = currentBlocks[0];
+            const primaryBlock = currentBlocks.find((b) => !MEDIA_TYPES.has((b.block_type || '').toLowerCase())) || currentBlocks[0];
             const pageNum = pages.length + 1;
             const pageTitle = cleanConceptTitle(
-                firstBlock?.page_title || firstBlock?.metadata?.concept_group || firstBlock?.title || `Part ${pageNum}`,
+                primaryBlock?.title || primaryBlock?.page_title || primaryBlock?.metadata?.concept_group || `Part ${pageNum}`,
                 `Part ${pageNum}`
             );
             pages.push({

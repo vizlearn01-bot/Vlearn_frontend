@@ -480,7 +480,10 @@ function PaginatedViewer({ lesson, topicId, isPreview, userId }) {
                     const presentationContext = presentation.getPresentationContext(pageIndex);
                     const layoutKey = currentPage?.resolvedLayoutKey || currentPage?.layoutTemplate || 'DiscoveryLayout';
                     const StrategyComponent = LayoutSelectionService.getStrategyComponent(layoutKey);
-                    const rawTitle = currentPage?.pageTitle || currentPage?.title || lesson.title;
+                    const primaryBlock = currentPage?.blocks?.find(b => !['image', 'diagram', 'video', 'youtube', 'gif', 'suggested_diagram', 'suggested_image', 'suggested_video', 'image_placeholder', 'diagram_placeholder', 'video_ref', 'simulation_placeholder'].includes((b.block_type || '').toLowerCase())) || currentPage?.blocks?.[0];
+                    const rawTitle = (currentPage?.pageTitle && currentPage.pageTitle !== lesson.title)
+                        ? currentPage.pageTitle
+                        : (primaryBlock?.title || currentPage?.pageTitle || currentPage?.title || lesson.title);
                     const formatCleanTitle = (str, fallback) => {
                         if (!str || str === '---' || str.startsWith('---')) return fallback;
                         let text = str
@@ -490,6 +493,7 @@ function PaginatedViewer({ lesson, topicId, isPreview, userId }) {
                             .replace(/^Module\s*\d+(\.\d+)?:\s*/i, '')
                             .replace(/^(Core|Key)?\s*Concept\s*(\d+|one|two|three|four|five)?[.:\s\-]*/i, '')
                             .replace(/^(Section|Part|Unit|Phase|Step)\s*\d+[.:\s\-]+/i, '')
+                            .replace(/\s+(?:Visual|Diagram|Visualization|Video)\s*(?:Card|Slot)?$/i, '')
                             .trim();
                         return text || fallback;
                     };

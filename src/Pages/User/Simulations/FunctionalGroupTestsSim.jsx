@@ -127,7 +127,7 @@ export default function FunctionalGroupTestsSim({ config = {}, onTelemetry }) {
           isPositive: true,
           reactionType: 'co2_effervescence',
           reactionObserved: 'Rapid CO₂ effervescence! Vigorous bubbling and gas evolution observed in the test tube.',
-          scientificExplanation: `Carboxylic acids (Ka ≈ 10⁻⁵) are stronger acids than carbonic acid. They react with sodium hydrogen carbonate to produce carbon dioxide gas:\n${sample.formula} + NaHCO₃ → ${sample.name === 'Ethanoic Acid' ? 'CH₃COONa' : 'C₃H₇COONa'} + H₂O + CO₂(g) ↑`,
+          scientificExplanation: `Carboxylic acids (Ka ≈ 10⁻⁵) are stronger acids than carbonic acid. They react with sodium hydrogen carbonate to produce carbon dioxide gas:n${sample.formula} + NaHCO₃ → ${sample.name === 'Ethanoic Acid' ? 'CH₃COONa' : 'C₃H₇COONa'} + H₂O + CO₂(g) ↑`,
           whatTellsUs: 'Definitively distinguishes carboxylic acids from alcohols. Only carboxylic acids liberate CO₂ gas with sodium bicarbonate.',
           functionalGroupIdentified: 'Carboxyl group (-COOH) / Carboxylic Acid',
           realWorld: sample.realWorld

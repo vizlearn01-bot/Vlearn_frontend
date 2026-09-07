@@ -167,9 +167,11 @@ export const studentCurriculumService = {
           if (tLower.includes('rate') || tLower.includes('reversible') || tLower.includes('equilibrium')) return simTopic.includes('rate') || simTitle.includes('rate') || simTitle.includes('collision') || simTitle.includes('haber') || simTitle.includes('equilibrium');
           if (tLower.includes('electro') || tLower.includes('redox')) return simTopic.includes('electro') || simTitle.includes('electrolysis') || simTitle.includes('plating') || simTitle.includes('discharge') || simTitle.includes('voltaic') || simTitle.includes('electrode');
           if (tLower.includes('metal')) return simTopic.includes('metal') || simTitle.includes('reactivity');
+          if (tLower.includes('circular motion')) return simTopic.includes('circular') || simTitle.includes('circular') || simTitle.includes('angular') || simTitle.includes('centripetal') || simTopic.includes('centripetal');
+          if (tLower.includes('linear motion') || tLower.includes('freefall')) return simTopic.includes('linear') || simTitle.includes('freefall') || simTopic.includes('freefall');
           if (tLower.includes('circuit') || tLower.includes('electric')) return simTopic.includes('circuit') || simTitle.includes('circuit');
-          if (tLower.includes('kinematic') || tLower.includes('motion') || tLower.includes('gravity')) return simTopic.includes('kinematic') || simTitle.includes('freefall');
-          if (tLower.includes('lens') || tLower.includes('optics') || tLower.includes('light')) return simTopic.includes('optic') || simTitle.includes('optic') || simTitle.includes('lens');
+          if (tLower.includes('kinematic') || tLower.includes('gravity')) return simTopic.includes('kinematic') || simTitle.includes('freefall');
+          if (tLower.includes('lens') || tLower.includes('optics') || tLower.includes('light')) return simTopic.includes('optic') || simTitle.includes('optic') || simTitle.includes('lens') || simTopic.includes('lens');
           return simTopic.includes(tLower) || tLower.includes(simTopic) || simTitle.includes(tLower);
         });
       }

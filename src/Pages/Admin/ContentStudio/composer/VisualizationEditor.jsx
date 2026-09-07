@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Wand2, Loader2, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
+import { Wand2, Loader2, CheckCircle, AlertCircle, RefreshCw, Trash2, RotateCcw } from 'lucide-react';
 
 const API_BASE = '/api/curriculum';
 
@@ -14,12 +14,15 @@ const API_BASE = '/api/curriculum';
  * 2. POSTs to POST /api/curriculum/lesson-blocks/{id}/generate-visual/
  * 3. Polls GET /api/curriculum/visual-generation-jobs/{id}/ until done.
  * 4. Renders the generated SVG/Mermaid inline on completion.
+ * 5. Allows removing/clearing the visual or deleting the visualization component.
  */
-export default function VisualizationEditor({ block, onChange, onSave }) {
+export default function VisualizationEditor({ block, onChange, onSave, onDelete }) {
     const [prompt, setPrompt] = useState(
         block.content?.prompt || ''
     );
-    const [status, setStatus] = useState('idle'); // idle | generating | completed | failed
+    const [status, setStatus] = useState(
+        block.content?.generated_code ? 'completed' : 'idle'
+    ); // idle | generating | completed | failed
     const [errorMsg, setErrorMsg] = useState('');
     const [generatedCode, setGeneratedCode] = useState(
         block.content?.generated_code || ''
@@ -107,17 +110,47 @@ export default function VisualizationEditor({ block, onChange, onSave }) {
         setErrorMsg('');
     };
 
+    const handleClearGraphic = () => {
+        setGeneratedCode('');
+        setVisualFormat('');
+        setStatus('idle');
+        const updated = {
+            ...block,
+            content: {
+                ...block.content,
+                generated_code: '',
+                visual_format: '',
+                visual_job_id: null,
+            }
+        };
+        onChange(updated);
+        onSave(updated);
+    };
+
     return (
         <div className="space-y-4">
             {/* Header */}
-            <div className="flex items-center gap-2 pb-3 border-b border-indigo-100">
-                <span className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
-                    <Wand2 size={16} className="text-indigo-600" />
-                </span>
-                <div>
-                    <p className="text-xs font-bold text-indigo-700 uppercase tracking-wide">AI Visualization</p>
-                    <p className="text-xs text-gray-500">Describe the visual — AI will generate an SVG or Mermaid diagram.</p>
+            <div className="flex items-center justify-between pb-3 border-b border-indigo-100">
+                <div className="flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+                        <Wand2 size={16} className="text-indigo-600" />
+                    </span>
+                    <div>
+                        <p className="text-xs font-bold text-indigo-700 uppercase tracking-wide">AI Visualization</p>
+                        <p className="text-xs text-gray-500">Describe the visual — AI will generate an SVG or Mermaid diagram.</p>
+                    </div>
                 </div>
+                {onDelete && (
+                    <button
+                        type="button"
+                        onClick={() => onDelete(block.id)}
+                        className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center gap-1 text-xs font-medium"
+                        title="Delete visualization component"
+                    >
+                        <Trash2 size={14} />
+                        <span className="hidden sm:inline">Delete</span>
+                    </button>
+                )}
             </div>
 
             {/* Prompt input */}
@@ -133,25 +166,49 @@ export default function VisualizationEditor({ block, onChange, onSave }) {
                 />
             </div>
 
-            {/* Action button */}
+            {/* Action buttons */}
             {status !== 'generating' && (
-                <button
-                    onClick={status === 'completed' ? handleRetry : handleGenerate}
-                    disabled={!prompt.trim()}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors
-                        ${!prompt.trim()
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : status === 'completed'
-                                ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                : 'bg-indigo-600 text-white hover:bg-indigo-700'
-                        }`}
-                >
-                    {status === 'completed' ? (
-                        <><RefreshCw size={14} /> Regenerate</>
-                    ) : (
-                        <><Wand2 size={14} /> Generate Visual</>
+                <div className="flex items-center gap-2 flex-wrap">
+                    <button
+                        onClick={status === 'completed' ? handleRetry : handleGenerate}
+                        disabled={!prompt.trim()}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                            ${!prompt.trim()
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                : status === 'completed'
+                                    ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                            }`}
+                    >
+                        {status === 'completed' ? (
+                            <><RefreshCw size={14} /> Regenerate</>
+                        ) : (
+                            <><Wand2 size={14} /> Generate Visual</>
+                        )}
+                    </button>
+
+                    {status === 'completed' && (
+                        <button
+                            type="button"
+                            onClick={handleClearGraphic}
+                            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium border border-gray-200 text-gray-600 hover:bg-gray-100 transition-colors"
+                            title="Clear generated graphic without deleting component"
+                        >
+                            <RotateCcw size={14} /> Clear Graphic
+                        </button>
                     )}
-                </button>
+
+                    {onDelete && (
+                        <button
+                            type="button"
+                            onClick={() => onDelete(block.id)}
+                            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors ml-auto"
+                            title="Delete this visualization component from the lesson"
+                        >
+                            <Trash2 size={14} /> Delete Visualization
+                        </button>
+                    )}
+                </div>
             )}
 
             {/* Generating spinner */}

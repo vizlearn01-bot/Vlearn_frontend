@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router';
 import { ChevronRight, Plus, FolderTree, BookOpen, Layers, Target, Library, UploadCloud, Loader2, AlertCircle, Image as ImageIcon, PenTool, Trash2, Sparkles } from 'lucide-react';
 import apiClient from '../../config/apiClient';
 import KnowledgePackReviewModal from '../../Components/Admin/KnowledgePackReviewModal';
+import { useGeneration } from '../../Context/GenerationContext';
 
 export default function CurriculumBuilder() {
     const navigate = useNavigate();
+    const { isGeneratingUnit, getJobForUnit, setIsMonitorOpen, startGeneration } = useGeneration();
+    const [startingUnitGen, setStartingUnitGen] = useState(false);
 
     // Data states
     const [curricula, setCurricula] = useState([]);
@@ -84,6 +87,39 @@ export default function CurriculumBuilder() {
             setUnitLesson(null);
         }
     }, [selectedUnit]);
+
+    // Reload lesson when background generation completes for selected unit
+    useEffect(() => {
+        const handleLessonGenerated = (e) => {
+            if (selectedUnit && String(e.detail?.learningUnitId) === String(selectedUnit.id)) {
+                apiClient.get(`/api/curriculum/lessons/?learning_unit=${selectedUnit.id}`)
+                    .then(res => {
+                        const lessons = res.data.results || res.data || [];
+                        setUnitLesson(lessons.length > 0 ? lessons[0] : null);
+                    })
+                    .catch(err => console.error(err));
+            }
+        };
+        window.addEventListener('vlearn:lesson-generated', handleLessonGenerated);
+        return () => window.removeEventListener('vlearn:lesson-generated', handleLessonGenerated);
+    }, [selectedUnit]);
+
+    const handleGenerateInCurriculumBuilder = async () => {
+        if (!selectedUnit) return;
+        setStartingUnitGen(true);
+        try {
+            await startGeneration({
+                learningUnitId: selectedUnit.id,
+                unitTitle: selectedUnit.name,
+                mode: 'learning_experience_planner',
+            });
+        } catch (err) {
+            console.error("Failed to start generation:", err);
+            alert(err.response?.data?.error || err.message || "Failed to start lesson generation.");
+        } finally {
+            setStartingUnitGen(false);
+        }
+    };
 
     const handleCreateManualInCurriculumBuilder = async () => {
         if (!selectedUnit) return;
@@ -301,6 +337,12 @@ export default function CurriculumBuilder() {
                         }`}
                     >
                         <span className="truncate flex-1">{item.name}</span>
+                        {type === 'unit' && isGeneratingUnit(item.id) && (
+                            <span className="flex items-center gap-1 text-[10px] text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded-full mr-1 animate-pulse font-medium shrink-0">
+                                <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                                Gen
+                            </span>
+                        )}
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button 
                                 onClick={(e) => { e.stopPropagation(); handleDelete(type, item.id, item.name); }}
@@ -628,7 +670,39 @@ export default function CurriculumBuilder() {
                                         )}
                                     </div>
                                     
-                                    {loadingLesson ? (
+                                    {isGeneratingUnit(selectedUnit.id) ? (
+                                        <div className="mt-6 pt-4 border-t border-gray-200">
+                                            <div className="p-3.5 bg-blue-50 border border-blue-200 rounded-xl space-y-2.5">
+                                                <div className="flex items-center gap-2 text-custom-blue font-semibold text-xs">
+                                                    <Loader2 className="w-4 h-4 animate-spin text-custom-blue shrink-0" />
+                                                    <span>AI Generation Running</span>
+                                                </div>
+                                                <p className="text-xs text-blue-700 font-medium line-clamp-2">
+                                                    {getJobForUnit(selectedUnit.id)?.step || 'Synthesizing pedagogical lesson structure...'}
+                                                </p>
+                                                <div className="w-full bg-blue-200/60 rounded-full h-1.5 overflow-hidden">
+                                                    <div
+                                                        className="bg-custom-blue h-1.5 rounded-full transition-all duration-300"
+                                                        style={{ width: `${getJobForUnit(selectedUnit.id)?.progressPercent || 35}%` }}
+                                                    />
+                                                </div>
+                                                <div className="pt-1 flex gap-2">
+                                                    <button
+                                                        onClick={() => navigate(`/admin-dashboard/content-studio/${selectedUnit.id}`)}
+                                                        className="flex-1 py-1.5 px-2 bg-custom-blue text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition"
+                                                    >
+                                                        View in Studio
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setIsMonitorOpen(true)}
+                                                        className="py-1.5 px-3 bg-white border border-blue-300 text-custom-blue rounded-lg text-xs font-semibold hover:bg-blue-50 transition"
+                                                    >
+                                                        Monitor
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : loadingLesson ? (
                                         <div className="mt-6 text-center text-xs text-gray-500 flex items-center justify-center gap-2 py-2">
                                             <Loader2 className="w-4 h-4 animate-spin text-custom-blue" />
                                             Checking lesson status...
@@ -645,11 +719,28 @@ export default function CurriculumBuilder() {
                                         <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
                                             <div className="text-xs font-semibold text-gray-700 mb-2">Lesson Actions:</div>
                                             <button 
-                                                onClick={() => navigate(`/admin-dashboard/content-studio/${selectedUnit.id}`)}
-                                                className="w-full flex items-center justify-center gap-2 bg-custom-blue text-white py-2.5 rounded shadow hover:bg-blue-700 transition-all font-medium text-sm"
+                                                onClick={handleGenerateInCurriculumBuilder}
+                                                disabled={startingUnitGen || isGeneratingUnit(selectedUnit.id)}
+                                                className="w-full flex items-center justify-center gap-2 bg-custom-blue text-white py-2.5 rounded shadow hover:bg-blue-700 transition-all font-medium text-sm disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed"
                                             >
-                                                <Sparkles className="w-4 h-4" />
-                                                Generate with AI
+                                                {startingUnitGen ? (
+                                                    <>
+                                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                                        Starting Generation...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Sparkles className="w-4 h-4" />
+                                                        Generate with AI
+                                                    </>
+                                                )}
+                                            </button>
+                                            <button 
+                                                onClick={() => navigate(`/admin-dashboard/content-studio/${selectedUnit.id}`)}
+                                                className="w-full flex items-center justify-center gap-2 bg-gray-50 text-gray-700 border border-gray-200 py-2 rounded hover:bg-gray-100 transition-all font-medium text-xs"
+                                            >
+                                                <PenTool className="w-3.5 h-3.5 text-gray-500" />
+                                                Open in Content Studio
                                             </button>
                                             <button 
                                                 onClick={handleCreateManualInCurriculumBuilder}

@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import {
     Target, FileText, Lightbulb, HelpCircle, Star,
     AlertCircle, Info, Zap, Globe, Edit3, Eye,
-    ChevronDown, ChevronUp
+    ChevronDown, ChevronUp, Trash2
 } from 'lucide-react';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
@@ -814,7 +814,7 @@ export function TableEditor({ block, onChange, onSave }) {
 // ──────────────────────────────────────────────────────────
 // EDITOR: Image
 // ──────────────────────────────────────────────────────────
-export function ImageEditor({ block, onChange, onSave }) {
+export function ImageEditor({ block, onChange, onSave, onDelete }) {
     const c = parseContent(block.content);
     const [urlInput, setUrlInput] = useState(c.url || '');
 
@@ -824,13 +824,42 @@ export function ImageEditor({ block, onChange, onSave }) {
         onSave(updated);
     };
 
+    const handleClear = () => {
+        setUrlInput('');
+        save('', c.caption || '');
+    };
+
     return (
         <div className="space-y-4">
-            <div className="flex items-center gap-2 pb-3 border-b border-cyan-100">
-                <span className="w-8 h-8 rounded-lg bg-cyan-100 flex items-center justify-center text-cyan-600 font-bold text-sm">🖼</span>
-                <div>
-                    <p className="text-xs font-bold text-cyan-700 uppercase tracking-wide">Image</p>
-                    <p className="text-xs text-gray-500">Embed an image by URL.</p>
+            <div className="flex items-center justify-between pb-3 border-b border-cyan-100">
+                <div className="flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-lg bg-cyan-100 flex items-center justify-center text-cyan-600 font-bold text-sm">🖼</span>
+                    <div>
+                        <p className="text-xs font-bold text-cyan-700 uppercase tracking-wide">Image</p>
+                        <p className="text-xs text-gray-500">Embed an image by URL.</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-1">
+                    {urlInput && (
+                        <button
+                            type="button"
+                            onClick={handleClear}
+                            className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
+                            title="Clear image URL"
+                        >
+                            Clear Image
+                        </button>
+                    )}
+                    {onDelete && (
+                        <button
+                            type="button"
+                            onClick={() => onDelete(block.id)}
+                            className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete image component"
+                        >
+                            <Trash2 size={15} />
+                        </button>
+                    )}
                 </div>
             </div>
             <div>
@@ -871,7 +900,7 @@ export function ImageEditor({ block, onChange, onSave }) {
 // ──────────────────────────────────────────────────────────
 // EDITOR: YouTube
 // ──────────────────────────────────────────────────────────
-export function YouTubeEditor({ block, onChange, onSave }) {
+export function YouTubeEditor({ block, onChange, onSave, onDelete }) {
     const c = parseContent(block.content);
     const [urlInput, setUrlInput] = useState(c.youtube_url || '');
 
@@ -890,15 +919,46 @@ export function YouTubeEditor({ block, onChange, onSave }) {
         onSave(updated);
     };
 
+    const handleClear = () => {
+        setUrlInput('');
+        const updated = { ...block, content: { ...c, youtube_url: '', video_id: '' } };
+        onChange(updated);
+        onSave(updated);
+    };
+
     const videoId = c.video_id || extractVideoId(urlInput);
 
     return (
         <div className="space-y-4">
-            <div className="flex items-center gap-2 pb-3 border-b border-red-100">
-                <span className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center text-red-600 font-bold text-sm">▶</span>
-                <div>
-                    <p className="text-xs font-bold text-red-700 uppercase tracking-wide">YouTube Video</p>
-                    <p className="text-xs text-gray-500">Embed a YouTube video by URL.</p>
+            <div className="flex items-center justify-between pb-3 border-b border-red-100">
+                <div className="flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center text-red-600 font-bold text-sm">▶</span>
+                    <div>
+                        <p className="text-xs font-bold text-red-700 uppercase tracking-wide">YouTube Video</p>
+                        <p className="text-xs text-gray-500">Embed a YouTube video by URL.</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-1">
+                    {urlInput && (
+                        <button
+                            type="button"
+                            onClick={handleClear}
+                            className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
+                            title="Clear YouTube video"
+                        >
+                            Clear Video
+                        </button>
+                    )}
+                    {onDelete && (
+                        <button
+                            type="button"
+                            onClick={() => onDelete(block.id)}
+                            className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete video component"
+                        >
+                            <Trash2 size={15} />
+                        </button>
+                    )}
                 </div>
             </div>
             <div>
@@ -939,7 +999,7 @@ export function YouTubeEditor({ block, onChange, onSave }) {
 // ──────────────────────────────────────────────────────────
 // EDITOR: Video (hosted / direct link)
 // ──────────────────────────────────────────────────────────
-export function VideoEditor({ block, onChange, onSave }) {
+export function VideoEditor({ block, onChange, onSave, onDelete }) {
     const c = parseContent(block.content);
     const [urlInput, setUrlInput] = useState(c.video_url || '');
 
@@ -949,13 +1009,44 @@ export function VideoEditor({ block, onChange, onSave }) {
         onSave(updated);
     };
 
+    const handleClear = () => {
+        setUrlInput('');
+        const updated = { ...block, content: { ...c, video_url: '' } };
+        onChange(updated);
+        onSave(updated);
+    };
+
     return (
         <div className="space-y-4">
-            <div className="flex items-center gap-2 pb-3 border-b border-violet-100">
-                <span className="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold text-sm">🎬</span>
-                <div>
-                    <p className="text-xs font-bold text-violet-700 uppercase tracking-wide">Video</p>
-                    <p className="text-xs text-gray-500">Direct link to a hosted video file (MP4, WebM, etc.).</p>
+            <div className="flex items-center justify-between pb-3 border-b border-violet-100">
+                <div className="flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold text-sm">🎬</span>
+                    <div>
+                        <p className="text-xs font-bold text-violet-700 uppercase tracking-wide">Video</p>
+                        <p className="text-xs text-gray-500">Direct link to a hosted video file (MP4, WebM, etc.).</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-1">
+                    {urlInput && (
+                        <button
+                            type="button"
+                            onClick={handleClear}
+                            className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
+                            title="Clear video URL"
+                        >
+                            Clear Video
+                        </button>
+                    )}
+                    {onDelete && (
+                        <button
+                            type="button"
+                            onClick={() => onDelete(block.id)}
+                            className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete video component"
+                        >
+                            <Trash2 size={15} />
+                        </button>
+                    )}
                 </div>
             </div>
             <div>

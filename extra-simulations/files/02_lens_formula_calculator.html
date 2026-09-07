@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lens Formula Verification</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --card:#121a2e; --card2:#0f1626; --border:rgba(255,255,255,0.08);
+    --text:#e6ebf5; --dim:#8a94ad; --cyan:#22d3ee; --amber:#fbbf24; --purple:#a855f7; --green:#34d399;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:radial-gradient(circle at 80% 0%, #0f1b2e 0%, var(--bg) 45%);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;padding:28px 20px 60px;}
+  .page{max-width:1080px;margin:0 auto;}
+  .badges{display:flex;gap:8px;margin-bottom:12px;}
+  .badge{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border);}
+  .badge-blue{background:rgba(59,130,246,.12);color:#93c5fd;}
+  .badge-green{background:rgba(52,211,153,.12);color:#6ee7b7;}
+  h1{font-size:26px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px;}
+  .subtitle{color:var(--dim);font-size:13.5px;margin-bottom:26px;}
+  .top-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+  @media(max-width:860px){.top-grid{grid-template-columns:1fr;}}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.3);}
+  .card-title{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--dim);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .card-title .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);}
+  .preset-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;}
+  .preset{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;transition:.2s;}
+  .preset:hover{border-color:rgba(34,211,238,.4);}
+  .preset.active{border-color:var(--cyan);background:rgba(34,211,238,.1);}
+  .preset .p-title{font-weight:700;font-size:13px;margin-bottom:2px;}
+  .preset .p-sub{font-size:10.5px;color:var(--dim);}
+  .action-row{display:flex;gap:10px;}
+  .btn-primary{flex:1;background:linear-gradient(135deg,#22d3ee,#0891b2);color:#04141a;border:none;border-radius:10px;padding:13px;font-weight:700;font-size:14px;cursor:pointer;transition:.2s;box-shadow:0 8px 20px rgba(34,211,238,.25);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+  .btn-secondary{background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:13px 16px;font-weight:600;font-size:13px;cursor:pointer;}
+  .formula-box{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:16px;text-align:center;font-family:'Courier New',monospace;}
+  .formula-main{font-size:19px;font-weight:700;color:var(--cyan);margin-bottom:10px;}
+  .formula-steps{text-align:left;font-size:13px;color:var(--dim);line-height:2;min-height:60px;}
+  .formula-steps .line{opacity:0;transform:translateY(4px);transition:.4s;}
+  .formula-steps .line.show{opacity:1;transform:translateY(0);}
+  .formula-steps b{color:var(--text);}
+  canvas{width:100%;height:auto;display:block;}
+  .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+  .result{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+  .result-label{font-size:10.5px;color:var(--dim);font-weight:700;letter-spacing:.5px;margin-bottom:6px;text-transform:uppercase;}
+  .result-value{font-size:18px;font-weight:700;color:var(--amber);font-family:'Courier New',monospace;}
+  .conclusion{background:linear-gradient(135deg,rgba(34,211,238,.1),rgba(168,85,247,.08));border:1px solid rgba(34,211,238,.3);border-radius:14px;padding:16px 20px;font-size:13.5px;line-height:1.6;opacity:0;transform:translateY(6px);transition:.5s;}
+  .conclusion.show{opacity:1;transform:translateY(0);}
+  .conclusion b{color:var(--cyan);}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="badges">
+    <span class="badge badge-blue">📘 Interactive Simulation</span>
+    <span class="badge badge-green">● Live Lab Model</span>
+  </div>
+  <h1>Verifying the Lens Formula</h1>
+  <div class="subtitle">Topic 1 · Thin Lenses · Learning Unit 1.2 — 1/f = 1/u + 1/v</div>
+
+  <div class="top-grid">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>1 · CHOOSE OBJECT SETUP</div>
+      <div class="preset-grid" id="presetGrid"></div>
+      <div class="action-row">
+        <button class="btn-primary" id="runBtn">▶ Run & Verify</button>
+        <button class="btn-secondary" id="resetBtn">↺ Reset</button>
+      </div>
+      <div class="formula-box">
+        <div class="formula-main">1/f = 1/u + 1/v</div>
+        <div class="formula-steps" id="steps">
+          <div class="line" id="l1">1/<b id="fVal">15</b> = 1/<b id="uVal">30</b> + 1/v</div>
+          <div class="line" id="l2">1/v = 1/<b id="fVal2">15</b> − 1/<b id="uVal2">30</b> = <b id="invV">0.0333</b></div>
+          <div class="line" id="l3">v = <b id="vResult">30.00</b> cm</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--amber)"></span>LIVE GRAPH · 1/v vs 1/u</div>
+      <canvas id="graph" width="440" height="320"></canvas>
+      <div style="font-size:11px;color:var(--dim);text-align:center;margin-top:8px;">Gradient of the line = 1 (theoretical) · intercept = 1/f</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card-title"><span class="dot" style="background:var(--green)"></span>RESULTS</div>
+    <div class="results-grid">
+      <div class="result"><div class="result-label">Image distance (v)</div><div class="result-value" id="valV">—</div></div>
+      <div class="result"><div class="result-label">Magnification (m)</div><div class="result-value" id="valM">—</div></div>
+      <div class="result"><div class="result-label">Image height</div><div class="result-value" id="valH">—</div></div>
+      <div class="result"><div class="result-label">1/f (gradient check)</div><div class="result-value" id="valGrad">—</div></div>
+    </div>
+  </div>
+
+  <div class="conclusion" id="conclusion"></div>
+</div>
+
+<script>
+const F=15, objH=5;
+const presets=[
+ {id:'camera',title:'Camera Setup',sub:'u = 40 cm',u:40},
+ {id:'projector',title:'Projector Setup',sub:'u = 22 cm',u:22},
+ {id:'twof',title:'At 2F',sub:'u = 30 cm',u:30},
+ {id:'magnifier',title:'Magnifier Setup',sub:'u = 9 cm',u:9},
+];
+let active=presets[2], running=false;
+
+const grid=document.getElementById('presetGrid');
+presets.forEach(p=>{
+  const el=document.createElement('div');
+  el.className='preset'+(p.id===active.id?' active':'');
+  el.innerHTML=`<div class="p-title">${p.title}</div><div class="p-sub">${p.sub}</div>`;
+  el.onclick=()=>{if(running)return; active=p; document.querySelectorAll('.preset').forEach(x=>x.classList.remove('active')); el.classList.add('active'); reset();};
+  grid.appendChild(el);
+});
+document.querySelectorAll('.preset')[2].classList.add('active');
+
+function calc(u){
+  const v=(F*u)/(u-F);
+  const m=-v/u;
+  const h=objH*m;
+  return {v,m,h};
+}
+function easeOutCubic(t){return 1-Math.pow(1-t,3);}
+
+// GRAPH
+const g=document.getElementById('graph'), gctx=g.getContext('2d');
+const pad=42, gw=g.width-2*pad, gh=g.height-2*pad;
+const maxInv=0.14;
+function toPx(invU,invV){return {x:pad+(invU/maxInv)*gw, y:g.height-pad-(invV/maxInv)*gh};}
+
+function drawGraph(progress){
+  gctx.clearRect(0,0,g.width,g.height);
+  gctx.strokeStyle='rgba(255,255,255,.12)'; gctx.lineWidth=1;
+  for(let i=0;i<=7;i++){
+    const invU=maxInv*i/7;
+    const p1=toPx(invU,0), p2=toPx(invU,maxInv);
+    gctx.beginPath();gctx.moveTo(p1.x,g.height-pad);gctx.lineTo(p1.x,pad);gctx.stroke();
+    gctx.beginPath();gctx.moveTo(pad,p1.y===undefined?0:toPx(0,invU).y);gctx.stroke();
+  }
+  // axes
+  gctx.strokeStyle='rgba(255,255,255,.35)'; gctx.lineWidth=1.5;
+  gctx.beginPath();gctx.moveTo(pad,g.height-pad);gctx.lineTo(g.width-pad,g.height-pad);gctx.stroke();
+  gctx.beginPath();gctx.moveTo(pad,g.height-pad);gctx.lineTo(pad,pad);gctx.stroke();
+  gctx.fillStyle='#8a94ad'; gctx.font='11px Segoe UI'; gctx.textAlign='center';
+  gctx.fillText('1/u (cm⁻¹)',g.width/2,g.height-10);
+  gctx.save();gctx.translate(14,g.height/2);gctx.rotate(-Math.PI/2);gctx.fillText('1/v (cm⁻¹)',0,0);gctx.restore();
+
+  // theoretical line 1/v = 1/f - 1/u, drawn progressively
+  gctx.strokeStyle='rgba(251,191,36,.55)'; gctx.lineWidth=2; gctx.setLineDash([5,4]);
+  gctx.beginPath();
+  let started=false;
+  for(let i=0;i<=100;i++){
+    const invU=maxInv*i/100;
+    const invV=1/F-invU;
+    if(invV<0) continue;
+    const p=toPx(invU,invV);
+    if(!started){gctx.moveTo(p.x,p.y);started=true;} else gctx.lineTo(p.x,p.y);
+  }
+  gctx.stroke(); gctx.setLineDash([]);
+
+  // point animated
+  if(progress>0){
+    const u=active.u, invU=1/u, invV=1/F-invU;
+    const cp=toPx(Math.min(invU,maxInv), Math.max(0,invV));
+    const easedX=pad+(cp.x-pad)*easeOutCubic(progress);
+    const easedY=(g.height-pad)+(cp.y-(g.height-pad))*easeOutCubic(progress);
+    gctx.fillStyle='#22d3ee';
+    gctx.beginPath();gctx.arc(easedX,easedY,7,0,7);gctx.fill();
+    gctx.strokeStyle='#0a0e1a'; gctx.lineWidth=2; gctx.stroke();
+  }
+}
+drawGraph(0);
+
+function animateValue(id,end,suffix,decimals=2){
+  const el=document.getElementById(id);
+  const dur=700, t0=performance.now();
+  function step(ts){
+    const p=Math.min(1,(ts-t0)/dur);
+    const val=end*easeOutCubic(p);
+    el.textContent=val.toFixed(decimals)+suffix;
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function runAnimation(){
+  const u=active.u; const {v,m,h}=calc(u);
+  document.getElementById('fVal').textContent=F;
+  document.getElementById('fVal2').textContent=F;
+  document.getElementById('uVal').textContent=u;
+  document.getElementById('uVal2').textContent=u;
+
+  const invV=(1/F-1/u);
+  document.getElementById('invV').textContent=invV.toFixed(4);
+  document.getElementById('vResult').textContent=v.toFixed(2);
+
+  const t0=performance.now(); const dur=1800;
+  function frame(ts){
+    const el=ts-t0; const p=Math.min(1,el/dur);
+    drawGraph(p);
+    if(p>0.15) document.getElementById('l1').classList.add('show');
+    if(p>0.45) document.getElementById('l2').classList.add('show');
+    if(p>0.75) document.getElementById('l3').classList.add('show');
+    if(p<1) requestAnimationFrame(frame);
+    else finish(u,v,m,h);
+  }
+  requestAnimationFrame(frame);
+}
+
+function finish(u,v,m,h){
+  running=false;
+  document.getElementById('runBtn').disabled=false;
+  animateValue('valV',v,' cm');
+  animateValue('valM',m,'',2);
+  animateValue('valH',h,' cm');
+  animateValue('valGrad',1/F,' cm⁻¹',4);
+
+  const c=document.getElementById('conclusion');
+  c.innerHTML=`The measured point lands exactly on the theoretical line, confirming <b>1/f = 1/u + 1/v</b>. For this setup, v = <b>${v.toFixed(1)} cm</b>, giving a magnification of <b>${m.toFixed(2)}</b> — the image is ${m<0?'inverted':'upright'} and ${Math.abs(m)<1?'diminished':Math.abs(m)===1?'the same size':'magnified'}. In an experiment, plotting several (u, v) pairs this way produces a straight line whose <b>intercepts equal 1/f</b> — a reliable way to determine focal length from data.`;
+  c.classList.add('show');
+}
+
+document.getElementById('runBtn').onclick=()=>{
+  if(running) return;
+  running=true;
+  document.getElementById('runBtn').disabled=true;
+  ['l1','l2','l3'].forEach(id=>document.getElementById(id).classList.remove('show'));
+  document.getElementById('conclusion').classList.remove('show');
+  runAnimation();
+};
+
+function reset(){
+  running=false;
+  document.getElementById('runBtn').disabled=false;
+  ['l1','l2','l3'].forEach(id=>document.getElementById(id).classList.remove('show'));
+  document.getElementById('conclusion').classList.remove('show');
+  ['valV','valM','valH','valGrad'].forEach(id=>document.getElementById(id).textContent='—');
+  document.getElementById('fVal').textContent=F;
+  document.getElementById('fVal2').textContent=F;
+  document.getElementById('uVal').textContent=active.u;
+  document.getElementById('uVal2').textContent=active.u;
+  document.getElementById('invV').textContent='0.0000';
+  document.getElementById('vResult').textContent='0.00';
+  drawGraph(0);
+}
+document.getElementById('resetBtn').onclick=reset;
+reset();
+</script>
+</body>
+</html>

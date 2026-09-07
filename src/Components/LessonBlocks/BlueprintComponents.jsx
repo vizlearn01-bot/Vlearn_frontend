@@ -863,7 +863,7 @@ export const SuggestedMediaBlock = ({ block }) => {
           />
           {block.title && (
             <figcaption className="text-gray-700 mt-3 sm:mt-4 text-sm sm:text-base text-center font-medium font-sans">
-              {block.title}
+              {block.title.replace(/\s+(?:Visual|Diagram|Visualization|Video)\s*(?:Card|Slot)?$/i, '')}
             </figcaption>
           )}
         </figure>
@@ -914,7 +914,7 @@ export const SuggestedMediaBlock = ({ block }) => {
           )}
           {block.title && (
             <figcaption className="text-gray-600 mt-4 text-base text-center font-medium font-sans">
-              {block.title}
+              {block.title.replace(/\s+(?:Visual|Diagram|Visualization|Video)\s*(?:Card|Slot)?$/i, '')}
             </figcaption>
           )}
           {hasAttribution && (
@@ -941,7 +941,8 @@ export const SuggestedMediaBlock = ({ block }) => {
   if (resolvedUrl && isVideo) {
     const isYouTube = resolvedUrl.includes('youtube.com') || resolvedUrl.includes('youtu.be') || /^[a-zA-Z0-9_-]{11}$/.test(resolvedUrl);
     const description = c?.description || c?.text || c?.instruction || c?.purpose || '';
-    const videoTitle = block.title || (isYouTube ? 'Demonstration Video' : 'Laboratory Experiment');
+    const videoTitle = (block.title || (isYouTube ? 'Demonstration Video' : 'Laboratory Experiment'))
+      .replace(/\s+(?:Visual|Diagram|Visualization|Video)\s*(?:Card|Slot)?$/i, '');
 
     let videoElement = null;
 
@@ -1030,14 +1031,8 @@ export const SuggestedMediaBlock = ({ block }) => {
     );
   }
 
-  return (
-    <div className={`my-12 ${bg} rounded-3xl p-6 md:p-8 border border-blue-100/40 shadow-xs`}>
-      <BlockHeader icon={cfg.icon} label={cfg.label} colorClass={iconColor} />
-      <div className="text-gray-500 text-base md:text-lg font-medium font-sans mt-4 flex items-center gap-2">
-        <span>Interactive visual coming soon! ✨</span>
-      </div>
-    </div>
-  );
+  // If no media is resolved, suppress empty placeholder card in preview / student view
+  return null;
 };
 
 // ─── Concept Completion Card ──────────────────────────────────────────────────
@@ -1497,8 +1492,8 @@ export const PhotoelectricSimulationSandbox = ({ block }) => {
 };
 
 export const InteractiveSimulationBlock = ({ block }) => {
-  const title = block?.title || '';
   const content = parseContent(block?.content);
+  const title = block?.title || content?.title || '';
   const metadata = block?.metadata || {};
   const asset = block?.assets && block.assets.length > 0 ? block.assets[0] : null;
 
@@ -1511,27 +1506,120 @@ export const InteractiveSimulationBlock = ({ block }) => {
     if (combinedText.includes('lens') || combinedText.includes('optics') || combinedText.includes('ray tracing') || combinedText.includes('refraction')) {
       simKey = 'optics';
       archetype = 'optics';
+    } else if (combinedText.includes('thomson') || combinedText.includes('specific charge') || combinedText.includes('e/m') || combinedText.includes('velocity selector')) {
+      simKey = 'thomson_specific_charge_em';
+      archetype = 'thomson_specific_charge_em';
+    } else if (combinedText.includes('cro waveform') || combinedText.includes('waveform diagnostics') || combinedText.includes('oscilloscope waveform') || combinedText.includes('time-base') || combinedText.includes('y-gain')) {
+      simKey = 'cro_waveform_diagnostics';
+      archetype = 'cro_waveform_diagnostics';
+    } else if (combinedText.includes('magnetic deflection') || combinedText.includes('maltese cross') || combinedText.includes('paddle wheel')) {
+      simKey = 'magnetic_deflection_cathode_rays';
+      archetype = 'magnetic_deflection_cathode_rays';
     } else if (combinedText.includes('crt') || combinedText.includes('cathode ray') || combinedText.includes('oscilloscope') || combinedText.includes('electron gun')) {
       simKey = 'crt';
       archetype = 'crt';
+    } else if (combinedText.includes('bragg') || combinedText.includes('diffraction') || combinedText.includes('crystal diffraction')) {
+      simKey = 'braggs_law_crystal_diffraction';
+      archetype = 'braggs_law_crystal_diffraction';
+    } else if (combinedText.includes('radiography') || combinedText.includes('half-value layer') || (combinedText.includes('attenuation') && combinedText.includes('x-ray'))) {
+      simKey = 'xray_attenuation_radiography';
+      archetype = 'xray_attenuation_radiography';
+    } else if (combinedText.includes('hardness') || combinedText.includes('intensity vs hardness') || combinedText.includes('spectra control')) {
+      simKey = 'xray_intensity_vs_hardness_control';
+      archetype = 'xray_intensity_vs_hardness_control';
     } else if (combinedText.includes('x-ray') || combinedText.includes('xray') || combinedText.includes('coolidge')) {
       simKey = 'x_ray';
       archetype = 'x_ray';
-    } else if (combinedText.includes('photoelectric') || combinedText.includes('photon') || combinedText.includes('work function') || combinedText.includes('stopping potential')) {
+    } else if (combinedText.includes('stopping potential') || combinedText.includes('planck') || combinedText.includes('millikan')) {
+      simKey = 'stopping_potential_planck_graph';
+      archetype = 'stopping_potential_planck_graph';
+    } else if (combinedText.includes('photocell') || combinedText.includes('burglar alarm') || combinedText.includes('solar cell')) {
+      simKey = 'photocell_circuit_applications';
+      archetype = 'photocell_circuit_applications';
+    } else if (combinedText.includes('photocurrent') || combinedText.includes('photon flux') || combinedText.includes('intensity vs current')) {
+      simKey = 'photon_intensity_vs_current';
+      archetype = 'photon_intensity_vs_current';
+    } else if (combinedText.includes('photoelectric') || combinedText.includes('work function') || combinedText.includes('threshold frequency')) {
       simKey = 'photoelectric';
       archetype = 'photoelectric';
-    } else if (combinedText.includes('decay') || combinedText.includes('half-life') || combinedText.includes('radioactivity')) {
-      simKey = 'chem_radioactive_decay_half_life';
-      archetype = 'radioactive_decay_half_life';
-    } else if (combinedText.includes('fission') || combinedText.includes('fusion') || combinedText.includes('nuclear chain')) {
-      simKey = 'chem_nuclear_fission_chain_reaction';
+    } else if (combinedText.includes('spectral band') || combinedText.includes('spectrum analyzer') || combinedText.includes('electromagnetic spectrum')) {
+      simKey = 'em_spectrum_analyzer_bands';
+      archetype = 'em_spectrum_analyzer_bands';
+    } else if (combinedText.includes('speed of light') || combinedText.includes('fizeau') || combinedText.includes('toothed wheel')) {
+      simKey = 'speed_of_light_experiments';
+      archetype = 'speed_of_light_experiments';
+    } else if (combinedText.includes('generator') || combinedText.includes('slip ring') || combinedText.includes('dynamo') || combinedText.includes('alternator')) {
+      simKey = 'ac_generator_slip_rings';
+      archetype = 'ac_generator_slip_rings';
+    } else if (combinedText.includes('transformer') || combinedText.includes('mutual induction') || combinedText.includes('turns ratio') || combinedText.includes('step-up') || combinedText.includes('step-down')) {
+      simKey = 'transformer_mutual_induction';
+      archetype = 'transformer_mutual_induction';
+    } else if (combinedText.includes('electrical safety') || combinedText.includes('fuse') || combinedText.includes('earthing') || combinedText.includes('circuit breaker') || combinedText.includes('mcb') || combinedText.includes('earth wire') || combinedText.includes('mains safety')) {
+      simKey = 'electrical_safety_fuses_earthing';
+      archetype = 'electrical_safety_fuses_earthing';
+    } else if (combinedText.includes('domestic wiring') || combinedText.includes('ring main') || combinedText.includes('three-pin plug') || combinedText.includes('three pin plug')) {
+      simKey = 'domestic_wiring_ring_main';
+      archetype = 'domestic_wiring_ring_main';
+    } else if (combinedText.includes('energy consumption') || combinedText.includes('costing') || combinedText.includes('utility billing') || combinedText.includes('metering') || combinedText.includes('kwh')) {
+      simKey = 'energy_consumption_costing_meter';
+      archetype = 'energy_consumption_costing_meter';
+    } else if (combinedText.includes('grid transmission') || combinedText.includes('high-voltage power loss') || combinedText.includes('national grid')) {
+      simKey = 'high_voltage_grid_transmission';
+      archetype = 'high_voltage_grid_transmission';
+    } else if (combinedText.includes('faraday') || combinedText.includes('magnetic flux')) {
+      simKey = 'faradays_law_magnetic_flux';
+      archetype = 'faradays_law_magnetic_flux';
+    } else if (combinedText.includes('lenz') || combinedText.includes('eddy') || combinedText.includes('induction sandbox') || combinedText.includes('flux linkage') || combinedText.includes('electromagnetic induction')) {
+      simKey = 'lenzs_law_eddy_currents';
+      archetype = 'lenzs_law_eddy_currents';
+    } else if (combinedText.includes('orthogonal field') || combinedText.includes('em wave') || combinedText.includes('electromagnetic wave')) {
+      simKey = 'em_wave_orthogonal_fields';
+      archetype = 'em_wave_orthogonal_fields';
+    } else if (combinedText.includes('radiation hazard') || combinedText.includes('shielding') && combinedText.includes('hazard')) {
+      simKey = 'em_radiation_attenuation_hazards';
+      archetype = 'em_radiation_attenuation_hazards';
+    } else if (combinedText.includes('deflection') || combinedText.includes('alpha, beta, gamma') || combinedText.includes('alpha beta gamma') || (combinedText.includes('shielding') && combinedText.includes('radiation'))) {
+      simKey = 'radiation_deflection_shielding_alpha_beta_gamma';
+      archetype = 'radiation_deflection_shielding_alpha_beta_gamma';
+    } else if (combinedText.includes('binding energy') || combinedText.includes('mass defect') || combinedText.includes('iron-56')) {
+      simKey = 'binding_energy_per_nucleon_curve';
+      archetype = 'binding_energy_per_nucleon_curve';
+    } else if (combinedText.includes('fission') || combinedText.includes('nuclear chain') || combinedText.includes('reactor core')) {
+      simKey = 'nuclear_fission_chain_reaction';
       archetype = 'nuclear_fission_chain_reaction';
-    } else if (combinedText.includes('circular motion') || combinedText.includes('centripetal')) {
-      simKey = 'freefall';
-      archetype = 'freefall';
-    } else if (combinedText.includes('buoyancy') || combinedText.includes('archimedes') || combinedText.includes('floatation')) {
-      simKey = 'salt_solubility_precipitation';
-      archetype = 'salt_solubility_precipitation';
+    } else if (combinedText.includes('decay') || combinedText.includes('half-life') || combinedText.includes('radioactivity')) {
+      simKey = 'radioactive_decay_half_life';
+      archetype = 'radioactive_decay_half_life';
+    } else if (combinedText.includes('half adder') || combinedText.includes('full adder') || combinedText.includes('binary adder') || combinedText.includes('adder')) {
+      simKey = 'combinational_logic_half_adder';
+      archetype = 'combinational_logic_half_adder';
+    } else if (combinedText.includes('transistor') || combinedText.includes('transistor switch') || combinedText.includes('base-emitter')) {
+      simKey = 'transistor_switch_sensor_circuit';
+      archetype = 'transistor_switch_sensor_circuit';
+    } else if (combinedText.includes('logic gate') || combinedText.includes('truth table') || combinedText.includes('boolean')) {
+      simKey = 'digital_logic_gates_truth_tables';
+      archetype = 'digital_logic_gates_truth_tables';
+    } else if (combinedText.includes('rectification') || combinedText.includes('diode') || combinedText.includes('bridge rectifier') || combinedText.includes('p-n junction') || combinedText.includes('semiconductor')) {
+      simKey = 'pn_junction_diode_rectification';
+      archetype = 'pn_junction_diode_rectification';
+    } else if (combinedText.includes('banked') || combinedText.includes('banking') || combinedText.includes('conical pendulum')) {
+      simKey = 'banked_track_dynamics';
+      archetype = 'banked_track_dynamics';
+    } else if (combinedText.includes('circular motion') || combinedText.includes('centripetal') || combinedText.includes('angular velocity')) {
+      simKey = 'circular_motion_angular_quantities';
+      archetype = 'circular_motion_angular_quantities';
+    } else if (combinedText.includes('hydrometer') || combinedText.includes('lactometer')) {
+      simKey = 'hydrometer_calibration_density';
+      archetype = 'hydrometer_calibration_density';
+    } else if (combinedText.includes('submarine') || combinedText.includes('balloon') || combinedText.includes('aerostatic')) {
+      simKey = 'balloons_and_submarines_buoyancy';
+      archetype = 'balloons_and_submarines_buoyancy';
+    } else if (combinedText.includes('floatation') || combinedText.includes('flotation') || combinedText.includes('plimsoll')) {
+      simKey = 'law_of_floatation_equilibrium';
+      archetype = 'law_of_floatation_equilibrium';
+    } else if (combinedText.includes('buoyancy') || combinedText.includes('archimedes') || combinedText.includes('upthrust')) {
+      simKey = 'archimedes_principle_buoyancy';
+      archetype = 'archimedes_principle_buoyancy';
     } else {
       simKey = 'optics';
       archetype = 'optics';

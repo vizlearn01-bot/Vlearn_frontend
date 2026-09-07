@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lens Power & Diopters</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --card:#121a2e; --card2:#0f1626; --border:rgba(255,255,255,0.08);
+    --text:#e6ebf5; --dim:#8a94ad; --amber:#fbbf24; --orange:#fb923c; --cyan:#22d3ee; --green:#34d399;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:radial-gradient(circle at 85% 5%, #241708 0%, var(--bg) 45%);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;padding:28px 20px 60px;}
+  .page{max-width:1080px;margin:0 auto;}
+  .badges{display:flex;gap:8px;margin-bottom:12px;}
+  .badge{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border);}
+  .badge-blue{background:rgba(59,130,246,.12);color:#93c5fd;}
+  .badge-green{background:rgba(52,211,153,.12);color:#6ee7b7;}
+  h1{font-size:26px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px;}
+  .subtitle{color:var(--dim);font-size:13.5px;margin-bottom:26px;}
+  .stage-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 20px 50px rgba(0,0,0,.35);}
+  .stage-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+  .stage-title{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--dim);display:flex;align-items:center;gap:8px;}
+  .stage-title .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);}
+  .pill{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:rgba(251,191,36,.12);color:#fde68a;}
+  canvas{width:100%;height:auto;display:block;}
+  .spectrum{margin-top:16px;background:#0b1120;border:1px solid var(--border);border-radius:12px;padding:16px;}
+  .spectrum-bar{position:relative;height:14px;border-radius:7px;background:linear-gradient(90deg,#c62828,#ef5350,#f48fb1,#334155,#93c5fd,#4dd0e1,#00838f);margin:20px 0 8px;}
+  .spectrum-marker{position:absolute;top:-9px;width:4px;height:32px;background:#fff;border-radius:2px;box-shadow:0 0 12px rgba(255,255,255,.7);transition:left .15s;}
+  .spectrum-labels{display:flex;justify-content:space-between;font-size:10.5px;color:var(--dim);}
+  .panels{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin-bottom:18px;}
+  @media(max-width:820px){.panels{grid-template-columns:1fr;}}
+  .panel-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;}
+  .panel-title{font-size:11.5px;font-weight:700;letter-spacing:1px;color:var(--dim);margin-bottom:14px;}
+  .preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+  .preset{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:12px 8px;cursor:pointer;transition:.2s;text-align:center;}
+  .preset:hover{border-color:rgba(251,191,36,.4);}
+  .preset.active{border-color:var(--amber);background:rgba(251,191,36,.1);}
+  .preset .p-icon{font-size:20px;margin-bottom:4px;}
+  .preset .p-title{font-weight:700;font-size:12px;margin-bottom:2px;}
+  .preset .p-sub{font-size:10px;color:var(--dim);}
+  .action-row{display:flex;gap:10px;}
+  .btn-primary{flex:1;background:linear-gradient(135deg,#fbbf24,#d97706);color:#1c1300;border:none;border-radius:10px;padding:13px;font-weight:700;font-size:14px;cursor:pointer;transition:.2s;box-shadow:0 8px 20px rgba(251,191,36,.25);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+  .btn-secondary{background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:13px 16px;font-weight:600;font-size:13px;cursor:pointer;}
+  .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .result{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+  .result-label{font-size:10.5px;color:var(--dim);font-weight:700;letter-spacing:.5px;margin-bottom:6px;text-transform:uppercase;}
+  .result-value{font-size:18px;font-weight:700;color:var(--amber);font-family:'Courier New',monospace;}
+  .conclusion{background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(34,211,238,.08));border:1px solid rgba(251,191,36,.3);border-radius:14px;padding:16px 20px;font-size:13.5px;line-height:1.6;opacity:0;transform:translateY(6px);transition:.5s;}
+  .conclusion.show{opacity:1;transform:translateY(0);}
+  .conclusion b{color:var(--amber);}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="badges">
+    <span class="badge badge-blue">📘 Interactive Simulation</span>
+    <span class="badge badge-green">● Live Optics Model</span>
+  </div>
+  <h1>Lens Power &amp; Diopters</h1>
+  <div class="subtitle">Topic 1 · Thin Lenses · Learning Unit 1.2 — P = 1/f</div>
+
+  <div class="stage-card">
+    <div class="stage-header">
+      <div class="stage-title"><span class="dot"></span>LIGHT BENDING STRENGTH</div>
+      <span class="pill" id="powerPill">Select a lens →</span>
+    </div>
+    <canvas id="stage" width="900" height="220"></canvas>
+    <div class="spectrum">
+      <div class="spectrum-bar"><div class="spectrum-marker" id="marker" style="left:50%;"></div></div>
+      <div class="spectrum-labels"><span>−10D Diverging</span><span>0D</span><span>+10D Converging</span></div>
+    </div>
+  </div>
+
+  <div class="panels">
+    <div class="panel-card">
+      <div class="panel-title">1 · CHOOSE A LENS</div>
+      <div class="preset-grid" id="presetGrid"></div>
+      <div class="action-row">
+        <button class="btn-primary" id="runBtn">▶ Run Simulation</button>
+        <button class="btn-secondary" id="resetBtn">↺ Reset</button>
+      </div>
+    </div>
+    <div class="panel-card">
+      <div class="panel-title">2 · RESULTS</div>
+      <div class="results-grid">
+        <div class="result"><div class="result-label">Focal length</div><div class="result-value" id="valF">—</div></div>
+        <div class="result"><div class="result-label">Power P = 1/f</div><div class="result-value" id="valP">—</div></div>
+        <div class="result"><div class="result-label">Lens type</div><div class="result-value" id="valType" style="font-size:15px;">—</div></div>
+        <div class="result"><div class="result-label">Typical use</div><div class="result-value" id="valUse" style="font-size:13px;">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conclusion" id="conclusion"></div>
+</div>
+
+<script>
+const lenses=[
+ {id:'weakdiv',icon:'👓',title:'Weak Diverging',sub:'−1.0 D',f:-100,use:'Mild myopia correction'},
+ {id:'strongdiv',icon:'👓',title:'Strong Diverging',sub:'−5.0 D',f:-20,use:'Severe myopia'},
+ {id:'weakconv',icon:'👓',title:'Weak Converging',sub:'+1.0 D',f:100,use:'Mild hyperopia'},
+ {id:'reading',icon:'📖',title:'Reading Glass',sub:'+4.0 D',f:25,use:'Near-vision aid'},
+ {id:'magnifier',icon:'🔍',title:'Magnifier',sub:'+10.0 D',f:10,use:'Detailed inspection'},
+ {id:'microscope',icon:'🔬',title:'Microscope',sub:'+40.0 D',f:2.5,use:'High magnification'},
+];
+let active=lenses[3], running=false;
+
+const grid=document.getElementById('presetGrid');
+lenses.forEach(l=>{
+  const el=document.createElement('div');
+  el.className='preset'+(l.id===active.id?' active':'');
+  el.innerHTML=`<div class="p-icon">${l.icon}</div><div class="p-title">${l.title}</div><div class="p-sub">${l.sub}</div>`;
+  el.onclick=()=>{if(running)return; active=l; document.querySelectorAll('.preset').forEach(x=>x.classList.remove('active')); el.classList.add('active'); reset();};
+  grid.appendChild(el);
+});
+
+function easeOutCubic(t){return 1-Math.pow(1-t,3);}
+
+const canvas=document.getElementById('stage'), ctx=canvas.getContext('2d');
+function drawStage(progress){
+  const W=canvas.width,H=canvas.height,cy=H/2,lensX=W/2;
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='rgba(255,255,255,.1)'; ctx.setLineDash([5,5]);
+  ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();ctx.setLineDash([]);
+
+  const converging = active.f>0;
+  const strength = Math.min(1, 100/Math.abs(active.f)); // stronger = more bending, closer f => higher strength
+
+  // lens shape
+  ctx.strokeStyle= converging ? '#34d399':'#f87171'; ctx.lineWidth=4;
+  const bow = 20+60*strength;
+  if(converging){
+    ctx.beginPath();ctx.arc(lensX-6,cy,bow,-Math.PI/2,Math.PI/2);ctx.stroke();
+    ctx.beginPath();ctx.arc(lensX+6,cy,bow,-Math.PI/2,Math.PI/2);ctx.stroke();
+  } else {
+    ctx.beginPath();ctx.arc(lensX+bow*0.6,cy,bow,-Math.PI/2,Math.PI/2);ctx.stroke();
+    ctx.beginPath();ctx.arc(lensX-bow*0.6,cy,bow,-Math.PI/2,Math.PI/2);ctx.stroke();
+  }
+  ctx.beginPath();ctx.moveTo(lensX,cy-95);ctx.lineTo(lensX,cy+95);ctx.strokeStyle='rgba(255,255,255,.15)';ctx.lineWidth=1;ctx.stroke();
+
+  // incoming parallel rays bending according to strength, animated
+  const nRays=5;
+  for(let i=0;i<nRays;i++){
+    const startY = cy-80+ i*40;
+    const bendAmount = converging? (cy-startY)*strength : (startY-cy)*strength*-1;
+    const midX=lensX;
+    const endX=W-10;
+    const endY = converging ? startY + (cy-startY)*strength*2*easeOutCubic(progress) : startY + (startY-cy)*strength*2*easeOutCubic(progress)*-1;
+    ctx.strokeStyle=`rgba(251,191,36,${0.35+0.5*progress})`;
+    ctx.lineWidth=1.8;
+    ctx.beginPath();
+    ctx.moveTo(10,startY);
+    ctx.lineTo(midX,startY);
+    const dx=endX-midX;
+    const py = startY + (endY-startY)*easeOutCubic(progress);
+    ctx.lineTo(midX+dx*easeOutCubic(progress), startY + (py-startY));
+    ctx.stroke();
+  }
+
+  ctx.fillStyle='#8a94ad'; ctx.font='11px Segoe UI'; ctx.textAlign='center';
+  ctx.fillText(converging?'Converging Lens':'Diverging Lens', lensX, 20);
+}
+drawStage(0);
+
+function animateValue(id,end,suffix,decimals=2){
+  const el=document.getElementById(id);
+  const dur=700, t0=performance.now();
+  function step(ts){
+    const p=Math.min(1,(ts-t0)/dur);
+    const val=end*easeOutCubic(p);
+    el.textContent=(decimals===0?Math.round(val):val.toFixed(decimals))+suffix;
+    if(p<1) requestAnimationFrame(step);
+    else el.textContent=(decimals===0?end:end.toFixed(decimals))+suffix;
+  }
+  requestAnimationFrame(step);
+}
+
+function runAnimation(){
+  const f=active.f, fm=f/100, P=1/fm;
+  const t0=performance.now(); const dur=1600;
+  function frame(ts){
+    const p=Math.min(1,(ts-t0)/dur);
+    drawStage(p);
+    const markerPos = 50 + (P/10)*50; // -10..10 => 0..100
+    document.getElementById('marker').style.left = Math.max(2,Math.min(98,markerPos*easeOutCubic(p)+50*(1-easeOutCubic(p))))+'%';
+    if(p<1) requestAnimationFrame(frame);
+    else finish(f,P);
+  }
+  requestAnimationFrame(frame);
+}
+
+function finish(f,P){
+  running=false; document.getElementById('runBtn').disabled=false;
+  const pill=document.getElementById('powerPill');
+  pill.textContent = (P>0?'+':'')+P.toFixed(1)+' D · '+(P>0?'Converging':'Diverging');
+
+  animateValue('valF', f, ' cm', 1);
+  animateValue('valP', P, ' D', 2);
+  document.getElementById('valType').textContent = P>0?'Converging (convex)':'Diverging (concave)';
+  document.getElementById('valUse').textContent = active.use;
+
+  const c=document.getElementById('conclusion');
+  c.innerHTML=`With a focal length of <b>${f} cm</b> (${(f/100).toFixed(3)} m), the power is <b>P = 1/f = ${P.toFixed(2)} D</b>. ${Math.abs(P)>8?'This is a strong lens — notice how sharply the rays bend.':'This is a gentle lens — the rays bend only slightly.'} Opticians always quote power in <b>dioptres</b> rather than focal length, because dioptre values <b>add directly</b> when lenses are combined (P = P₁ + P₂).`;
+  c.classList.add('show');
+}
+
+document.getElementById('runBtn').onclick=()=>{
+  if(running) return;
+  running=true; document.getElementById('runBtn').disabled=true;
+  document.getElementById('conclusion').classList.remove('show');
+  runAnimation();
+};
+
+function reset(){
+  running=false; document.getElementById('runBtn').disabled=false;
+  document.getElementById('powerPill').textContent='Select a lens →';
+  document.getElementById('marker').style.left='50%';
+  ['valF','valP'].forEach(id=>document.getElementById(id).textContent='—');
+  document.getElementById('valType').textContent='—';
+  document.getElementById('valUse').textContent='—';
+  document.getElementById('conclusion').classList.remove('show');
+  drawStage(0);
+}
+document.getElementById('resetBtn').onclick=reset;
+reset();
+</script>
+</body>
+</html>

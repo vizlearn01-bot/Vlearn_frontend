@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diverging Lens — Always Virtual</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --card:#121a2e; --card2:#0f1626; --border:rgba(255,255,255,0.08);
+    --text:#e6ebf5; --dim:#8a94ad; --red:#f87171; --green:#34d399; --cyan:#22d3ee;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:radial-gradient(circle at 15% 0%, #240f0f 0%, var(--bg) 45%);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;padding:28px 20px 60px;}
+  .page{max-width:1080px;margin:0 auto;}
+  .badges{display:flex;gap:8px;margin-bottom:12px;}
+  .badge{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border);}
+  .badge-blue{background:rgba(59,130,246,.12);color:#93c5fd;}
+  .badge-green{background:rgba(52,211,153,.12);color:#6ee7b7;}
+  h1{font-size:26px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px;}
+  .subtitle{color:var(--dim);font-size:13.5px;margin-bottom:26px;}
+  .stage-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 20px 50px rgba(0,0,0,.35);}
+  .stage-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+  .stage-title{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--dim);display:flex;align-items:center;gap:8px;}
+  .stage-title .dot{width:7px;height:7px;border-radius:50%;background:var(--red);}
+  .pill{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:rgba(52,211,153,.14);color:#6ee7b7;}
+  canvas{width:100%;height:auto;display:block;}
+  .legend{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;font-size:11.5px;color:var(--dim);}
+  .legend span{display:flex;align-items:center;gap:6px;}
+  .legend i{width:16px;height:2px;display:inline-block;border-radius:1px;}
+  .panels{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin-bottom:18px;}
+  @media(max-width:820px){.panels{grid-template-columns:1fr;}}
+  .panel-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;}
+  .panel-title{font-size:11.5px;font-weight:700;letter-spacing:1px;color:var(--dim);margin-bottom:14px;}
+  .preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+  .preset{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:12px 10px;cursor:pointer;transition:.2s;text-align:center;}
+  .preset:hover{border-color:rgba(248,113,113,.4);}
+  .preset.active{border-color:var(--red);background:rgba(248,113,113,.1);}
+  .preset .p-title{font-weight:700;font-size:13px;margin-bottom:2px;}
+  .preset .p-sub{font-size:10.5px;color:var(--dim);}
+  .action-row{display:flex;gap:10px;}
+  .btn-primary{flex:1;background:linear-gradient(135deg,#f87171,#dc2626);color:#fff;border:none;border-radius:10px;padding:13px;font-weight:700;font-size:14px;cursor:pointer;transition:.2s;box-shadow:0 8px 20px rgba(248,113,113,.25);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+  .btn-secondary{background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:13px 16px;font-weight:600;font-size:13px;cursor:pointer;}
+  .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .result{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+  .result-label{font-size:10.5px;color:var(--dim);font-weight:700;letter-spacing:.5px;margin-bottom:6px;text-transform:uppercase;}
+  .result-value{font-size:17px;font-weight:700;color:var(--green);font-family:'Courier New',monospace;}
+  .invariant-banner{grid-column:1/-1;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:10px;padding:10px 14px;font-size:12.5px;color:#6ee7b7;text-align:center;font-weight:600;}
+  .conclusion{background:linear-gradient(135deg,rgba(248,113,113,.1),rgba(52,211,153,.08));border:1px solid rgba(248,113,113,.3);border-radius:14px;padding:16px 20px;font-size:13.5px;line-height:1.6;opacity:0;transform:translateY(6px);transition:.5s;}
+  .conclusion.show{opacity:1;transform:translateY(0);}
+  .conclusion b{color:var(--red);}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="badges">
+    <span class="badge badge-blue">📘 Interactive Simulation</span>
+    <span class="badge badge-green">● Live Ray Tracer</span>
+  </div>
+  <h1>Diverging Lens: Always Virtual</h1>
+  <div class="subtitle">Topic 1 · Thin Lenses · Learning Unit 1.1 — Concave Lens Behaviour</div>
+
+  <div class="stage-card">
+    <div class="stage-header">
+      <div class="stage-title"><span class="dot"></span>CONCAVE LENS RAY DIAGRAM</div>
+      <span class="pill" id="natureBadge">f = −15 cm (fixed)</span>
+    </div>
+    <canvas id="stage" width="900" height="380"></canvas>
+    <div class="legend">
+      <span><i style="background:#f87171"></i>Ray parallel → appears from F</span>
+      <span><i style="background:#22d3ee"></i>Ray through optical centre</span>
+      <span><i style="background:#34d399"></i>Ray toward F → emerges parallel</span>
+    </div>
+  </div>
+
+  <div class="panels">
+    <div class="panel-card">
+      <div class="panel-title">1 · MOVE THE OBJECT</div>
+      <div class="preset-grid" id="presetGrid"></div>
+      <div class="action-row">
+        <button class="btn-primary" id="runBtn">▶ Run Simulation</button>
+        <button class="btn-secondary" id="resetBtn">↺ Reset</button>
+      </div>
+    </div>
+    <div class="panel-card">
+      <div class="panel-title">2 · RESULTS</div>
+      <div class="results-grid">
+        <div class="result"><div class="result-label">Image distance v</div><div class="result-value" id="valV">—</div></div>
+        <div class="result"><div class="result-label">Magnification m</div><div class="result-value" id="valM">—</div></div>
+        <div class="invariant-banner">Virtual · Upright · Diminished — <b>every time</b>, no matter where the object is</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conclusion" id="conclusion"></div>
+</div>
+
+<script>
+const F=15, objH=5;
+const presets=[
+ {id:'near',title:'Object Near',sub:'u = 8 cm',u:8},
+ {id:'mid',title:'Object Middle',sub:'u = 20 cm',u:20},
+ {id:'far',title:'Object Far',sub:'u = 45 cm',u:45},
+];
+let active=presets[1], running=false;
+
+const grid=document.getElementById('presetGrid');
+presets.forEach(p=>{
+  const el=document.createElement('div');
+  el.className='preset'+(p.id===active.id?' active':'');
+  el.innerHTML=`<div class="p-title">${p.title}</div><div class="p-sub">${p.sub}</div>`;
+  el.onclick=()=>{if(running)return; active=p; document.querySelectorAll('.preset').forEach(x=>x.classList.remove('active')); el.classList.add('active'); reset();};
+  grid.appendChild(el);
+});
+
+function calc(u){
+  const f=-F;
+  const v=(f*u)/(u-f);
+  const m=-v/u;
+  return {v,m};
+}
+function easeOutCubic(t){return 1-Math.pow(1-t,3);}
+function drawPartialPath(ctx,pts,s,color,width){
+  if(s<=0) return;
+  ctx.save();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();
+  let total=0,lens=[];
+  for(let i=0;i<pts.length-1;i++){const d=Math.hypot(pts[i+1].x-pts[i].x,pts[i+1].y-pts[i].y);lens.push(d);total+=d;}
+  let target=s*total, acc=0, started=false;
+  for(let i=0;i<lens.length;i++){
+    if(!started){ctx.moveTo(pts[i].x,pts[i].y);started=true;}
+    if(target>=acc+lens[i]){ctx.lineTo(pts[i+1].x,pts[i+1].y);}
+    else{const t=Math.max(0,(target-acc)/lens[i]);ctx.lineTo(pts[i].x+(pts[i+1].x-pts[i].x)*t,pts[i].y+(pts[i+1].y-pts[i].y)*t);break;}
+    acc+=lens[i];
+  }
+  ctx.stroke();ctx.restore();
+}
+
+const canvas=document.getElementById('stage'), ctx=canvas.getContext('2d');
+const W=canvas.width,H=canvas.height,cy=H/2,scale=8.2,lensX=280;
+
+function drawScene(progress){
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='rgba(255,255,255,.12)'; ctx.setLineDash([5,5]);
+  ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();ctx.setLineDash([]);
+
+  const u=active.u; const {v,m}=calc(u);
+  const objX=lensX-u*scale, objTopY=cy-objH*scale;
+  const imgH=objH*m, imgX=lensX+v*scale, imgTopY=cy-imgH*scale;
+
+  ctx.fillStyle='#f59e0b';
+  [lensX-F*scale,lensX+F*scale].forEach(x=>{ctx.beginPath();ctx.arc(x,cy,3.5,0,7);ctx.fill();});
+  ctx.fillStyle='#64748b'; ctx.font='11px Segoe UI'; ctx.textAlign='center';
+  ctx.fillText('F',lensX-F*scale,cy+18); ctx.fillText('F',lensX+F*scale,cy+18);
+
+  // concave lens
+  ctx.strokeStyle='#f87171'; ctx.lineWidth=3.5;
+  ctx.beginPath();ctx.arc(lensX-14,cy-55,55,-0.55,0.55);ctx.stroke();
+  ctx.beginPath();ctx.arc(lensX+14,cy+55,55,Math.PI-0.55,Math.PI+0.55);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(lensX,cy-100);ctx.lineTo(lensX,cy+100);ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=1;ctx.stroke();
+
+  const pObj=Math.min(1,progress/0.14);
+  const pRay1=Math.max(0,Math.min(1,(progress-0.12)/0.16));
+  const pRay2=Math.max(0,Math.min(1,(progress-0.28)/0.16));
+  const pRay3=Math.max(0,Math.min(1,(progress-0.44)/0.16));
+  const pImg=Math.max(0,Math.min(1,(progress-0.62)/0.22));
+
+  if(pObj>0){
+    const curTop=cy-(cy-objTopY)*easeOutCubic(pObj);
+    ctx.strokeStyle='#e6ebf5'; ctx.fillStyle='#e6ebf5'; ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.moveTo(objX,cy);ctx.lineTo(objX,curTop);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(objX,curTop);ctx.lineTo(objX-5,curTop+8);ctx.lineTo(objX+5,curTop+8);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#94a3b8'; ctx.font='12px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText('Object',objX,cy+20);
+  }
+
+  const ray1=[{x:objX,y:objTopY},{x:lensX,y:objTopY},{x:lensX+600,y:objTopY-(objTopY-cy)/(F*scale)*600*-1}];
+  drawPartialPath(ctx,ray1,pRay1,'#f87171',2.2);
+
+  const slope2=(cy-objTopY)/(lensX-objX);
+  const ray2=[{x:objX,y:objTopY},{x:lensX+600,y:objTopY+slope2*(lensX+600-objX)}];
+  drawPartialPath(ctx,ray2,pRay2,'#22d3ee',2.2);
+
+  const ray3=[{x:objX,y:objTopY},{x:lensX-F*scale,y:cy},{x:lensX+600,y:cy-(objTopY-cy)/(2)}];
+  drawPartialPath(ctx,ray3,pRay3,'#34d399',2.2);
+
+  if(pImg>0){
+    const curTop=cy-(cy-imgTopY)*easeOutCubic(pImg);
+    ctx.strokeStyle='#34d399'; ctx.fillStyle='#34d399'; ctx.lineWidth=2.5; ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.moveTo(imgX,cy);ctx.lineTo(imgX,curTop);ctx.stroke();ctx.setLineDash([]);
+    ctx.beginPath();ctx.moveTo(imgX,curTop);ctx.lineTo(imgX-5,curTop+8);ctx.lineTo(imgX+5,curTop+8);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#94a3b8'; ctx.font='12px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText('Virtual Image', imgX, cy-Math.abs(imgH*scale)-14);
+  }
+}
+
+function animateValue(id,end,suffix,decimals=2){
+  const el=document.getElementById(id);
+  const dur=700, t0=performance.now();
+  function step(ts){
+    const p=Math.min(1,(ts-t0)/dur);
+    const val=end*easeOutCubic(p);
+    el.textContent=val.toFixed(decimals)+suffix;
+    if(p<1) requestAnimationFrame(step);
+    else el.textContent=end.toFixed(decimals)+suffix;
+  }
+  requestAnimationFrame(step);
+}
+
+function runAnimation(){
+  const t0=performance.now(); const dur=2400;
+  function frame(ts){
+    const p=Math.min(1,(ts-t0)/dur);
+    drawScene(p);
+    if(p<1) requestAnimationFrame(frame); else finish();
+  }
+  requestAnimationFrame(frame);
+}
+
+function finish(){
+  running=false; document.getElementById('runBtn').disabled=false;
+  const {v,m}=calc(active.u);
+  animateValue('valV', v, ' cm');
+  animateValue('valM', m, '', 2);
+  const c=document.getElementById('conclusion');
+  c.innerHTML=`Even with the object <b>${active.sub.replace('u = ','at ')}</b>, the diverging lens still produces a <b>virtual, upright, diminished</b> image between the lens and its focal point. Unlike a convex lens, a diverging lens can <b>never</b> form a real image — this is why it's used in <b>door peepholes</b> and to correct <b>myopia</b>, always giving a safe, reduced, upright view.`;
+  c.classList.add('show');
+}
+
+document.getElementById('runBtn').onclick=()=>{
+  if(running) return;
+  running=true; document.getElementById('runBtn').disabled=true;
+  document.getElementById('conclusion').classList.remove('show');
+  runAnimation();
+};
+
+function reset(){
+  running=false; document.getElementById('runBtn').disabled=false;
+  drawScene(0);
+  ['valV','valM'].forEach(id=>document.getElementById(id).textContent='—');
+  document.getElementById('conclusion').classList.remove('show');
+}
+document.getElementById('resetBtn').onclick=reset;
+reset();
+</script>
+</body>
+</html>

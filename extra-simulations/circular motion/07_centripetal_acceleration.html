@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centripetal Acceleration</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --card:#121a2e; --card2:#0f1626; --border:rgba(255,255,255,0.08);
+    --text:#e6ebf5; --dim:#8a94ad; --red:#f87171; --green:#34d399; --amber:#fbbf24;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:radial-gradient(circle at 15% 0%, #241209 0%, var(--bg) 45%);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;padding:28px 20px 60px;}
+  .page{max-width:1080px;margin:0 auto;}
+  .badges{display:flex;gap:8px;margin-bottom:12px;}
+  .badge{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border);}
+  .badge-blue{background:rgba(59,130,246,.12);color:#93c5fd;}
+  .badge-green{background:rgba(52,211,153,.12);color:#6ee7b7;}
+  h1{font-size:26px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px;}
+  .subtitle{color:var(--dim);font-size:13.5px;margin-bottom:26px;}
+  .stage-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 20px 50px rgba(0,0,0,.35);}
+  .stage-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+  .stage-title{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--dim);display:flex;align-items:center;gap:8px;}
+  .stage-title .dot{width:7px;height:7px;border-radius:50%;background:var(--red);}
+  .pill{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:rgba(248,113,113,.12);color:#fca5a5;}
+  .stage-body{display:grid;grid-template-columns:1fr 200px;gap:16px;}
+  @media(max-width:780px){.stage-body{grid-template-columns:1fr;}}
+  canvas{width:100%;height:auto;display:block;border-radius:10px;}
+  #road{background:#12351f;}
+  .dash{display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;}
+  .gauge-box{text-align:center;}
+  #speedGauge,#compassGauge{width:170px;height:110px;}
+  #compassGauge{height:170px;}
+  .gauge-label{font-size:10.5px;color:var(--dim);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-top:4px;}
+  .legend{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;font-size:11.5px;color:var(--dim);justify-content:center;}
+  .legend span{display:flex;align-items:center;gap:6px;}
+  .legend i{width:16px;height:2px;display:inline-block;border-radius:1px;}
+  .panels{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin-bottom:18px;}
+  @media(max-width:820px){.panels{grid-template-columns:1fr;}}
+  .panel-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;}
+  .panel-title{font-size:11.5px;font-weight:700;letter-spacing:1px;color:var(--dim);margin-bottom:14px;}
+  .preset-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:10px;margin-bottom:16px;}
+  .preset{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:.2s;}
+  .preset:hover{border-color:rgba(248,113,113,.4);}
+  .preset.active{border-color:var(--red);background:rgba(248,113,113,.1);}
+  .preset .p-title{font-weight:700;font-size:13.5px;}
+  .preset .p-sub{font-size:10.5px;color:var(--dim);margin-top:2px;}
+  .action-row{display:flex;gap:10px;}
+  .btn-primary{flex:1;background:linear-gradient(135deg,#f87171,#dc2626);color:#fff;border:none;border-radius:10px;padding:13px;font-weight:700;font-size:14px;cursor:pointer;transition:.2s;box-shadow:0 8px 20px rgba(248,113,113,.25);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+  .btn-secondary{background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:13px 16px;font-weight:600;font-size:13px;cursor:pointer;}
+  .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .result{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+  .result-label{font-size:10.5px;color:var(--dim);font-weight:700;letter-spacing:.5px;margin-bottom:6px;text-transform:uppercase;}
+  .result-value{font-size:17px;font-weight:700;color:var(--amber);font-family:'Courier New',monospace;}
+  .conclusion{background:linear-gradient(135deg,rgba(248,113,113,.1),rgba(52,211,153,.08));border:1px solid rgba(248,113,113,.3);border-radius:14px;padding:16px 20px;font-size:13.5px;line-height:1.6;opacity:0;transform:translateY(6px);transition:.5s;}
+  .conclusion.show{opacity:1;transform:translateY(0);}
+  .conclusion b{color:var(--red);}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="badges">
+    <span class="badge badge-blue">📘 Interactive Simulation</span>
+    <span class="badge badge-green">● Live Vector Model</span>
+  </div>
+  <h1>Centripetal Acceleration: Why Direction Matters</h1>
+  <div class="subtitle">Topic 2 · Uniform Circular Motion · Learning Unit 2 — a = v²/r (always points inward)</div>
+
+  <div class="stage-card">
+    <div class="stage-header">
+      <div class="stage-title"><span class="dot"></span>CAR TAKING A CIRCULAR BEND</div>
+      <span class="pill" id="scenarioPill">Choose a scenario →</span>
+    </div>
+    <div class="stage-body">
+      <canvas id="road" width="700" height="380"></canvas>
+      <div class="dash">
+        <div class="gauge-box"><canvas id="speedGauge" width="170" height="110"></canvas><div class="gauge-label">Speed — stays constant</div></div>
+        <div class="gauge-box"><canvas id="compassGauge" width="170" height="170"></canvas><div class="gauge-label">Direction — keeps rotating</div></div>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i style="background:#34d399"></i>Velocity (forward) — constant magnitude</span>
+      <span><i style="background:#f87171"></i>Acceleration (toward centre)</span>
+    </div>
+  </div>
+
+  <div class="panels">
+    <div class="panel-card">
+      <div class="panel-title">1 · CHOOSE A SCENARIO</div>
+      <div class="preset-grid" id="presetGrid"></div>
+      <div class="action-row">
+        <button class="btn-primary" id="runBtn">▶ Run Simulation</button>
+        <button class="btn-secondary" id="resetBtn">↺ Reset</button>
+      </div>
+    </div>
+    <div class="panel-card">
+      <div class="panel-title">2 · CALCULATED VALUES</div>
+      <div class="results-grid">
+        <div class="result"><div class="result-label">Radius (r)</div><div class="result-value" id="valR">—</div></div>
+        <div class="result"><div class="result-label">Speed (v)</div><div class="result-value" id="valV">—</div></div>
+        <div class="result"><div class="result-label">Centripetal accel. a=v²/r</div><div class="result-value" id="valA">—</div></div>
+        <div class="result"><div class="result-label">Centripetal force F=ma</div><div class="result-value" id="valFo">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conclusion" id="conclusion"></div>
+</div>
+
+<script>
+const presets=[
+ {id:'car',title:'Car Cornering',sub:'r = 25 m, v = 15 m/s, m = 1200 kg',r:25,v:15,m:1200},
+ {id:'track',title:'Athlete on a Bend',sub:'r = 36 m, v = 8 m/s, m = 70 kg',r:36,v:8,m:70},
+ {id:'ride',title:'Fairground Ride',sub:'r = 5 m, v = 6 m/s, m = 60 kg',r:5,v:6,m:60},
+];
+let active=presets[0], running=false;
+
+const grid=document.getElementById('presetGrid');
+presets.forEach(p=>{
+  const el=document.createElement('div');
+  el.className='preset'+(p.id===active.id?' active':'');
+  el.innerHTML=`<div><div class="p-title">${p.title}</div><div class="p-sub">${p.sub}</div></div>`;
+  el.onclick=()=>{if(running)return; active=p; document.querySelectorAll('.preset').forEach(x=>x.classList.remove('active')); el.classList.add('active'); reset();};
+  grid.appendChild(el);
+});
+document.querySelectorAll('.preset')[0].classList.add('active');
+
+function calc(p){
+  const a=(p.v*p.v)/p.r;
+  const F=p.m*a;
+  return {a,F};
+}
+
+const cv=document.getElementById('road'), ctx=cv.getContext('2d');
+const W=cv.width,H=cv.height,cx=W/2,cy=H/2+10,R=120;
+
+function drawRoadScene(angle){
+  ctx.clearRect(0,0,W,H);
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#0d2015'); g.addColorStop(1,'#0a1a10');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+  // road (thick grey ring)
+  ctx.strokeStyle='#3a3f4a'; ctx.lineWidth=52;
+  ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke();
+  // lane dashes
+  ctx.strokeStyle='rgba(255,255,255,.6)'; ctx.lineWidth=3; ctx.setLineDash([14,14]);
+  ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke(); ctx.setLineDash([]);
+  // inner/outer edge lines
+  ctx.strokeStyle='rgba(255,255,255,.25)'; ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(cx,cy,R-26,0,7);ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,R+26,0,7);ctx.stroke();
+
+  // centre marker (pole/flag = turn centre)
+  ctx.strokeStyle='#94a3b8'; ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx,cy-14);ctx.stroke();
+  ctx.fillStyle='#f87171';
+  ctx.beginPath();ctx.moveTo(cx,cy-14);ctx.lineTo(cx+14,cy-9);ctx.lineTo(cx,cy-4);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#94a3b8'; ctx.font='10.5px Segoe UI'; ctx.textAlign='center';
+  ctx.fillText('centre of turn', cx, cy+14);
+
+  const px=cx+R*Math.cos(angle), py=cy+R*Math.sin(angle);
+  const heading=angle+Math.PI/2;
+
+  // acceleration arrow (toward centre) drawn first so car sits on top
+  drawArrow(ctx,px,py, px+50*Math.cos(angle+Math.PI), py+50*Math.sin(angle+Math.PI), '#f87171',3);
+
+  // car sprite (rotated rounded rect)
+  ctx.save();
+  ctx.translate(px,py);
+  ctx.rotate(heading);
+  ctx.fillStyle='#facc15';
+  roundRect(ctx,-20,-11,40,22,6); ctx.fill();
+  ctx.strokeStyle='#78350f'; ctx.lineWidth=1.5; roundRect(ctx,-20,-11,40,22,6); ctx.stroke();
+  ctx.fillStyle='#1e293b';
+  roundRect(ctx,2,-8,12,16,3); ctx.fill();
+  ctx.fillStyle='#111827';
+  ctx.fillRect(-16,-13,10,4); ctx.fillRect(-16,9,10,4);
+  ctx.fillRect(6,-13,10,4); ctx.fillRect(6,9,10,4);
+  ctx.restore();
+
+  // velocity arrow (forward direction)
+  const vx=px+55*Math.cos(heading), vy=py+55*Math.sin(heading);
+  drawArrow(ctx,px,py,vx,vy,'#34d399',3);
+
+  let deg=((heading*180/Math.PI)%360+360)%360;
+  updateGauges(active.v, deg);
+}
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function drawArrow(ctx,x1,y1,x2,y2,color,width){
+  ctx.strokeStyle=color; ctx.lineWidth=width; ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const angle=Math.atan2(y2-y1,x2-x1); const ah=9;
+  ctx.beginPath();
+  ctx.moveTo(x2,y2);ctx.lineTo(x2-ah*Math.cos(angle-0.4),y2-ah*Math.sin(angle-0.4));
+  ctx.moveTo(x2,y2);ctx.lineTo(x2-ah*Math.cos(angle+0.4),y2-ah*Math.sin(angle+0.4));
+  ctx.stroke();
+}
+
+// speedometer gauge (semi-circle, needle fixed once running)
+const sg=document.getElementById('speedGauge'), sgx=sg.getContext('2d');
+function drawSpeedGauge(v,maxV){
+  const w=sg.width,h=sg.height,gcx=w/2,gcy=h-14,rr=70;
+  sgx.clearRect(0,0,w,h);
+  sgx.strokeStyle='rgba(255,255,255,.15)'; sgx.lineWidth=10; sgx.lineCap='round';
+  sgx.beginPath();sgx.arc(gcx,gcy,rr,Math.PI,0);sgx.stroke();
+  const frac=Math.min(1,v/maxV);
+  sgx.strokeStyle='#34d399'; sgx.lineWidth=10; sgx.lineCap='round';
+  sgx.beginPath();sgx.arc(gcx,gcy,rr,Math.PI,Math.PI+frac*Math.PI);sgx.stroke();
+  const needleA=Math.PI+frac*Math.PI;
+  sgx.strokeStyle='#e6ebf5'; sgx.lineWidth=2.5;
+  sgx.beginPath();sgx.moveTo(gcx,gcy);sgx.lineTo(gcx+ (rr-16)*Math.cos(needleA), gcy+(rr-16)*Math.sin(needleA));sgx.stroke();
+  sgx.fillStyle='#e6ebf5'; sgx.beginPath();sgx.arc(gcx,gcy,4,0,7);sgx.fill();
+  sgx.fillStyle='#94a3b8'; sgx.font='bold 13px Segoe UI'; sgx.textAlign='center';
+  sgx.fillText(v.toFixed(1)+' m/s', gcx, gcy-16);
+}
+
+// compass gauge (full circle, needle rotates with heading)
+const cg=document.getElementById('compassGauge'), cgx=cg.getContext('2d');
+function drawCompassGauge(deg){
+  const w=cg.width,h=cg.height,gcx=w/2,gcy=h/2,rr=68;
+  cgx.clearRect(0,0,w,h);
+  cgx.strokeStyle='rgba(255,255,255,.2)'; cgx.lineWidth=2;
+  cgx.beginPath();cgx.arc(gcx,gcy,rr,0,7);cgx.stroke();
+  cgx.fillStyle='#8a94ad'; cgx.font='11px Segoe UI'; cgx.textAlign='center'; cgx.textBaseline='middle';
+  const dirs=[['N',0],['E',90],['S',180],['W',270]];
+  dirs.forEach(([lab,d])=>{
+    const a=(d-90)*Math.PI/180;
+    cgx.fillText(lab, gcx+(rr-14)*Math.cos(a), gcy+(rr-14)*Math.sin(a));
+  });
+  const a=(deg-90)*Math.PI/180;
+  cgx.strokeStyle='#f87171'; cgx.lineWidth=3; cgx.lineCap='round';
+  cgx.beginPath();cgx.moveTo(gcx,gcy);cgx.lineTo(gcx+(rr-22)*Math.cos(a),gcy+(rr-22)*Math.sin(a));cgx.stroke();
+  cgx.fillStyle='#f87171'; cgx.beginPath();cgx.arc(gcx,gcy,5,0,7);cgx.fill();
+  cgx.fillStyle='#e6ebf5'; cgx.font='bold 13px Segoe UI';
+  cgx.fillText(deg.toFixed(0)+'°', gcx, gcy+rr+16);
+}
+
+function updateGauges(v,deg){
+  drawSpeedGauge(v, 20);
+  drawCompassGauge(deg);
+}
+
+drawRoadScene(-Math.PI/2);
+
+function animateValue(id,end,suffix,decimals=2){
+  const el=document.getElementById(id);
+  const dur=700, t0=performance.now();
+  function step(ts){
+    const p=Math.min(1,(ts-t0)/dur);
+    const val=end*(1-Math.pow(1-p,3));
+    el.textContent=val.toFixed(decimals)+suffix;
+    if(p<1) requestAnimationFrame(step);
+    else el.textContent=end.toFixed(decimals)+suffix;
+  }
+  requestAnimationFrame(step);
+}
+
+function runAnimation(){
+  document.getElementById('scenarioPill').textContent=active.title;
+  const revolutions=1.5, dur=3400;
+  const t0=performance.now();
+  function frame(ts){
+    const el=ts-t0; const p=Math.min(1,el/dur);
+    const angle=-Math.PI/2 + p*revolutions*2*Math.PI;
+    drawRoadScene(angle);
+    if(p<1) requestAnimationFrame(frame);
+    else finish();
+  }
+  requestAnimationFrame(frame);
+}
+
+function finish(){
+  running=false; document.getElementById('runBtn').disabled=false;
+  const {a,F}=calc(active);
+  animateValue('valR',active.r,' m',1);
+  animateValue('valV',active.v,' m/s',1);
+  animateValue('valA',a,' m/s²',2);
+  animateValue('valFo',F,' N',0);
+
+  const c=document.getElementById('conclusion');
+  c.innerHTML=`Watch the two gauges: the <b>speedometer needle never moves</b> — the car's speed stays fixed at ${active.v} m/s. But the <b>compass needle keeps rotating</b> as the car goes around the bend. Since velocity is speed <i>and</i> direction, a changing direction means a changing velocity — i.e. an <b>acceleration</b>, always pointing toward the centre, with magnitude <b>a = v²/r = ${a.toFixed(2)} m/s²</b>. For a mass of ${active.m} kg this needs a net inward force of <b>F = ma = ${F.toFixed(0)} N</b>. This is why <b>constant speed does NOT mean zero acceleration</b> in circular motion.`;
+  c.classList.add('show');
+}
+
+document.getElementById('runBtn').onclick=()=>{
+  if(running) return;
+  running=true; document.getElementById('runBtn').disabled=true;
+  document.getElementById('conclusion').classList.remove('show');
+  runAnimation();
+};
+
+function reset(){
+  running=false; document.getElementById('runBtn').disabled=false;
+  document.getElementById('scenarioPill').textContent='Choose a scenario →';
+  drawRoadScene(-Math.PI/2);
+  ['valR','valV','valA','valFo'].forEach(id=>document.getElementById(id).textContent='—');
+  document.getElementById('conclusion').classList.remove('show');
+}
+document.getElementById('resetBtn').onclick=reset;
+reset();
+</script>
+</body>
+</html>

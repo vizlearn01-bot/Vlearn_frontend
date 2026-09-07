@@ -38,6 +38,7 @@ import SubscriptionPlan from "./Components/SubscriptionPlan";
 import { BillingAndPaymentsRoutes } from "./component-library/account-management/routes/BillingAndPayments";
 import SubscriptionRestricted from "./component-library/billing-and-payments/subscriptions/SubscriptionRestricted";
 import SubscriptionContextProvider from "./component-library/billing-and-payments/subscriptions/SubscriptionContextProvider";
+import { GenerationProvider } from "./Context/GenerationContext";
 import ProtectedRoute from "./component-library/account-management/authentication/ProtectedRoute";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import AdminDashboardOutlet from "./Pages/Admin/AdminDashboardOutlet";
@@ -281,7 +282,9 @@ function App() {
             path: "/",
             element: (
                 <SubscriptionContextProvider>
-                    <Outlet />
+                    <GenerationProvider>
+                        <Outlet />
+                    </GenerationProvider>
                 </SubscriptionContextProvider>
             ),
             errorElement: <NotFound />,

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convex Lens Image Formation</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0d1424; --card:#121a2e; --card2:#0f1626;
+    --border:rgba(255,255,255,0.08); --text:#e6ebf5; --dim:#8a94ad;
+    --purple:#a855f7; --cyan:#22d3ee; --green:#34d399; --amber:#fbbf24; --red:#f87171;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:radial-gradient(circle at 20% 0%, #131b30 0%, var(--bg) 45%);
+    color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; padding:28px 20px 60px;
+  }
+  .page{max-width:1080px;margin:0 auto;}
+  .badges{display:flex;gap:8px;margin-bottom:12px;}
+  .badge{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;display:flex;align-items:center;gap:6px;border:1px solid var(--border);}
+  .badge-blue{background:rgba(59,130,246,.12);color:#93c5fd;}
+  .badge-green{background:rgba(52,211,153,.12);color:#6ee7b7;}
+  h1{font-size:26px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px;}
+  .subtitle{color:var(--dim);font-size:13.5px;margin-bottom:26px;}
+  .stage-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;box-shadow:0 20px 50px rgba(0,0,0,.35);}
+  .stage-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+  .stage-title{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--dim);display:flex;align-items:center;gap:8px;}
+  .stage-title .dot{width:7px;height:7px;border-radius:50%;background:var(--purple);}
+  .stage-badges{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border);}
+  .pill-purple{background:rgba(168,85,247,.12);color:#d8b4fe;}
+  .pill-cyan{background:rgba(34,211,238,.12);color:#67e8f9;transition:.3s;}
+  canvas{width:100%;height:auto;display:block;border-radius:10px;background:#0b1120;}
+  .panels{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;margin-bottom:18px;}
+  @media(max-width:820px){.panels{grid-template-columns:1fr;}}
+  .panel-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;}
+  .panel-title{font-size:11.5px;font-weight:700;letter-spacing:1px;color:var(--dim);margin-bottom:14px;}
+  .preset-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:18px;}
+  .preset{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:12px 10px;cursor:pointer;transition:.2s;text-align:left;}
+  .preset:hover{border-color:rgba(168,85,247,.4);}
+  .preset.active{border-color:var(--purple);background:rgba(168,85,247,.12);box-shadow:0 0 0 1px rgba(168,85,247,.3);}
+  .preset .p-title{font-weight:700;font-size:13.5px;margin-bottom:3px;}
+  .preset .p-sub{font-size:11px;color:var(--dim);}
+  .action-row{display:flex;gap:10px;}
+  .btn-primary{flex:1;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;border:none;border-radius:10px;padding:13px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s;box-shadow:0 8px 20px rgba(168,85,247,.25);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(168,85,247,.4);}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+  .btn-secondary{background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:13px 16px;font-weight:600;font-size:13.5px;cursor:pointer;transition:.2s;}
+  .btn-secondary:hover{border-color:rgba(255,255,255,.25);}
+  .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .result{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+  .result-label{font-size:10.5px;color:var(--dim);font-weight:700;letter-spacing:.5px;margin-bottom:6px;text-transform:uppercase;}
+  .result-value{font-size:19px;font-weight:700;color:var(--cyan);font-family:'Courier New',monospace;}
+  .conclusion{background:linear-gradient(135deg,rgba(168,85,247,.1),rgba(34,211,238,.08));border:1px solid rgba(168,85,247,.3);border-radius:14px;padding:16px 20px;font-size:13.5px;line-height:1.6;opacity:0;transform:translateY(6px);transition:.5s;}
+  .conclusion.show{opacity:1;transform:translateY(0);}
+  .conclusion b{color:var(--purple);}
+  .legend{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;font-size:11.5px;color:var(--dim);}
+  .legend span{display:flex;align-items:center;gap:6px;}
+  .legend i{width:16px;height:2px;display:inline-block;border-radius:1px;}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="badges">
+    <span class="badge badge-blue">📘 Interactive Simulation</span>
+    <span class="badge badge-green">● Live Ray Tracer</span>
+  </div>
+  <h1>Convex Lens Image Formation</h1>
+  <div class="subtitle">Topic 1 · Thin Lenses · Learning Unit 1.1 — Ray Construction</div>
+
+  <div class="stage-card">
+    <div class="stage-header">
+      <div class="stage-title"><span class="dot"></span>PRINCIPAL RAY DIAGRAM</div>
+      <div class="stage-badges">
+        <span class="pill pill-purple">f = 15 cm (fixed)</span>
+        <span class="pill pill-cyan" id="natureBadge">Choose a scenario →</span>
+      </div>
+    </div>
+    <canvas id="stage" width="900" height="380"></canvas>
+    <div class="legend">
+      <span><i style="background:#f87171"></i>Ray 1 · parallel → through F</span>
+      <span><i style="background:#22d3ee"></i>Ray 2 · through optical centre</span>
+      <span><i style="background:#34d399"></i>Ray 3 · through F → parallel</span>
+    </div>
+  </div>
+
+  <div class="panels">
+    <div class="panel-card">
+      <div class="panel-title">1 · CHOOSE OBJECT POSITION</div>
+      <div class="preset-grid" id="presetGrid"></div>
+      <div class="action-row">
+        <button class="btn-primary" id="runBtn">▶ Run Simulation</button>
+        <button class="btn-secondary" id="resetBtn">↺ Reset</button>
+      </div>
+    </div>
+    <div class="panel-card">
+      <div class="panel-title">2 · LIVE RESULTS</div>
+      <div class="results-grid">
+        <div class="result"><div class="result-label">Image distance v</div><div class="result-value" id="valV">—</div></div>
+        <div class="result"><div class="result-label">Magnification m</div><div class="result-value" id="valM">—</div></div>
+        <div class="result"><div class="result-label">Image height</div><div class="result-value" id="valH">—</div></div>
+        <div class="result"><div class="result-label">Image type</div><div class="result-value" id="valType" style="font-size:15px;">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conclusion" id="conclusion"></div>
+</div>
+
+<script>
+const canvas=document.getElementById('stage'),ctx=canvas.getContext('2d');
+const W=canvas.width,H=canvas.height,cy=H/2,scale=8.2,lensX=280;
+const F=15;
+const presets=[
+ {id:'beyond2f',title:'Beyond 2F',sub:'📷 Camera lens',u:44},
+ {id:'at2f',title:'At 2F',sub:'⚖️ Same size',u:30},
+ {id:'between',title:'F to 2F',sub:'📽️ Projector',u:22},
+ {id:'atf',title:'At F',sub:'☀️ Rays parallel',u:15.01},
+ {id:'insidef',title:'Inside F',sub:'🔍 Magnifier',u:9},
+];
+let active=presets[0], animT=null, running=false, done=false;
+const objH=5;
+
+function calc(u){
+  const v=(F*u)/(u-F);
+  const m=-v/u;
+  const h=objH*m;
+  return {v,m,h};
+}
+
+// build preset buttons
+const grid=document.getElementById('presetGrid');
+presets.forEach(p=>{
+  const el=document.createElement('div');
+  el.className='preset'+(p.id===active.id?' active':'');
+  el.innerHTML=`<div class="p-title">${p.title}</div><div class="p-sub">${p.sub}</div>`;
+  el.onclick=()=>{ if(running) return; active=p; document.querySelectorAll('.preset').forEach(x=>x.classList.remove('active')); el.classList.add('active'); resetView(); };
+  grid.appendChild(el);
+});
+document.querySelectorAll('.preset')[0].classList.add('active');
+
+function easeOutCubic(t){return 1-Math.pow(1-t,3);}
+function pathPoint(pts,s){
+  let lens=[],total=0;
+  for(let i=0;i<pts.length-1;i++){const d=Math.hypot(pts[i+1].x-pts[i].x,pts[i+1].y-pts[i].y);lens.push(d);total+=d;}
+  let target=s*total, acc=0;
+  for(let i=0;i<lens.length;i++){
+    if(acc+lens[i]>=target || i===lens.length-1){
+      const local=lens[i]===0?0:(target-acc)/lens[i];
+      const t=Math.max(0,Math.min(1,local));
+      return {x:pts[i].x+(pts[i+1].x-pts[i].x)*t, y:pts[i].y+(pts[i+1].y-pts[i].y)*t};
+    }
+    acc+=lens[i];
+  }
+  return pts[pts.length-1];
+}
+function drawPartialPath(pts,s,color,width,dash){
+  if(s<=0) return;
+  ctx.save();
+  ctx.strokeStyle=color; ctx.lineWidth=width; ctx.lineCap='round'; ctx.lineJoin='round';
+  if(dash) ctx.setLineDash(dash);
+  ctx.beginPath();
+  let total=0,lens=[];
+  for(let i=0;i<pts.length-1;i++){const d=Math.hypot(pts[i+1].x-pts[i].x,pts[i+1].y-pts[i].y);lens.push(d);total+=d;}
+  let target=s*total, acc=0, started=false;
+  for(let i=0;i<lens.length;i++){
+    const segFrac = lens[i]===0?1:Math.min(1,(target-acc)/lens[i]);
+    if(!started){ctx.moveTo(pts[i].x,pts[i].y);started=true;}
+    if(target>=acc+lens[i]){
+      ctx.lineTo(pts[i+1].x,pts[i+1].y);
+    } else if(segFrac>0){
+      const t=Math.max(0,segFrac);
+      ctx.lineTo(pts[i].x+(pts[i+1].x-pts[i].x)*t, pts[i].y+(pts[i+1].y-pts[i].y)*t);
+      break;
+    } else break;
+    acc+=lens[i];
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawScene(progress){
+  ctx.clearRect(0,0,W,H);
+  // axis
+  ctx.strokeStyle='rgba(255,255,255,.12)'; ctx.setLineDash([5,5]); ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();ctx.setLineDash([]);
+
+  const u=active.u;
+  const {v,m,h}=calc(u);
+  const objX=lensX-u*scale;
+  const objTopY=cy-objH*scale;
+
+  // focal points
+  ctx.fillStyle='#f59e0b';
+  [lensX-F*scale,lensX+F*scale].forEach(x=>{ctx.beginPath();ctx.arc(x,cy,3.5,0,7);ctx.fill();});
+  ctx.fillStyle='#64748b'; ctx.font='11px Segoe UI'; ctx.textAlign='center';
+  ctx.fillText('F',lensX-F*scale,cy+18); ctx.fillText('F',lensX+F*scale,cy+18);
+  ctx.fillText('2F',lensX-2*F*scale,cy+18); ctx.fillText('2F',lensX+2*F*scale,cy+18);
+
+  // lens
+  ctx.strokeStyle='#a855f7'; ctx.lineWidth=3.5;
+  ctx.beginPath();ctx.moveTo(lensX,cy-115);ctx.lineTo(lensX,cy+115);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(lensX-8,cy-108);ctx.lineTo(lensX,cy-118);ctx.lineTo(lensX+8,cy-108);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(lensX-8,cy+108);ctx.lineTo(lensX,cy+118);ctx.lineTo(lensX+8,cy+108);ctx.stroke();
+
+  // phases
+  const pObj=Math.min(1,progress/0.14);
+  const pRay1=Math.max(0,Math.min(1,(progress-0.12)/0.16));
+  const pRay2=Math.max(0,Math.min(1,(progress-0.28)/0.16));
+  const pRay3=Math.max(0,Math.min(1,(progress-0.44)/0.16));
+  const pImg=Math.max(0,Math.min(1,(progress-0.62)/0.22));
+  const pLabel=Math.max(0,Math.min(1,(progress-0.85)/0.15));
+
+  // object arrow
+  if(pObj>0){
+    ctx.strokeStyle='#e6ebf5'; ctx.fillStyle='#e6ebf5'; ctx.lineWidth=2.5;
+    const oy=cy-(objTopY-cy===0?0:(cy-objTopY))*pObj*-1; // simplify below
+    const curTop=cy-(cy-objTopY)*easeOutCubic(pObj);
+    ctx.beginPath();ctx.moveTo(objX,cy);ctx.lineTo(objX,curTop);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(objX,curTop);ctx.lineTo(objX-5,curTop+8);ctx.lineTo(objX+5,curTop+8);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#94a3b8'; ctx.font='12px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText('Object',objX,cy+20);
+  }
+
+  // rays
+  const ray1=[{x:objX,y:objTopY},{x:lensX,y:objTopY},{x:lensX+F*scale,y:cy},{x:lensX+700,y:cy-(700-F*scale)*(objTopY-cy)/(F*scale)*-0}];
+  // simplify ray1 continuation direction toward image/away
+  const dirSlope1=(cy-objTopY)/(F*scale); // slope after bending through F
+  const ray1pts=[{x:objX,y:objTopY},{x:lensX,y:objTopY},{x:lensX+600,y:objTopY-dirSlope1*600}];
+  drawPartialPath(ray1pts,pRay1,'#f87171',2.2,null);
+
+  const slope2=(cy-objTopY)/(lensX-objX);
+  const ray2pts=[{x:objX,y:objTopY},{x:lensX+600,y:objTopY+slope2*(lensX+600-objX)}];
+  drawPartialPath(ray2pts,pRay2,'#22d3ee',2.2,null);
+
+  const ray3pts=[{x:objX,y:objTopY},{x:lensX-F*scale,y:cy},{x:lensX+600,y:cy-(objTopY-cy)}];
+  drawPartialPath(ray3pts,pRay3,'#34d399',2.2,null);
+
+  // image
+  if(pImg>0 && Math.abs(v)<400){
+    const imgX=lensX+v*scale;
+    const imgTopY=cy-h*scale;
+    const curTop=cy-(cy-imgTopY)*easeOutCubic(pImg);
+    const real=v>0;
+    ctx.strokeStyle= real? '#fbbf24':'#34d399';
+    ctx.fillStyle=ctx.strokeStyle;
+    ctx.lineWidth=2.5;
+    if(!real) ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.moveTo(imgX,cy);ctx.lineTo(imgX,curTop);ctx.stroke();
+    ctx.setLineDash([]);
+    const dir=curTop<cy?-1:1;
+    ctx.beginPath();ctx.moveTo(imgX,curTop);ctx.lineTo(imgX-5,curTop-8*dir*-1+ (dir>0?-8:8));ctx.closePath();
+    ctx.beginPath();ctx.moveTo(imgX,curTop);ctx.lineTo(imgX-5,curTop+ (h*scale>0? -8:8) * (real?1:1) );ctx.lineTo(imgX+5,curTop+ (h*scale>0? -8:8));ctx.closePath();ctx.fill();
+    if(pLabel>0){
+      ctx.globalAlpha=pLabel;
+      ctx.fillStyle='#94a3b8'; ctx.font='12px Segoe UI'; ctx.textAlign='center';
+      ctx.fillText(real?'Real Image':'Virtual Image', imgX, cy+ (real? 22: -Math.abs(h*scale)-14));
+      ctx.globalAlpha=1;
+    }
+  }
+}
+
+function animate(ts){
+  if(animT===null) animT=ts;
+  const elapsed=ts-animT;
+  const dur=2400;
+  const raw=Math.min(1,elapsed/dur);
+  drawScene(raw);
+  if(raw<1){
+    requestAnimationFrame(animate);
+  } else {
+    running=false; done=true;
+    document.getElementById('runBtn').disabled=false;
+    showResults();
+  }
+}
+
+function showResults(){
+  const {v,m,h}=calc(active.u);
+  const real=v>0;
+  const badge=document.getElementById('natureBadge');
+  badge.textContent = real? '✓ Real & Inverted Image':'✓ Virtual & Upright Image';
+  badge.style.color = real? '#fde68a':'#6ee7b7';
+  badge.style.background = real? 'rgba(251,191,36,.14)':'rgba(52,211,153,.14)';
+
+  animateValue('valV', v, ' cm');
+  animateValue('valM', m, '', 2);
+  animateValue('valH', h, ' cm');
+  document.getElementById('valType').textContent = real? 'Real, Inverted':'Virtual, Upright';
+
+  const c=document.getElementById('conclusion');
+  let text='';
+  if(active.id==='beyond2f') text=`With the object <b>beyond 2F</b>, the lens forms a <b>real, inverted, diminished</b> image between F and 2F — exactly how a <b>camera</b> captures a scene onto film or sensor.`;
+  else if(active.id==='at2f') text=`At <b>exactly 2F</b>, the image forms at <b>2F on the other side</b> — same size as the object, real and inverted (magnification = −1).`;
+  else if(active.id==='between') text=`Between <b>F and 2F</b>, the image is <b>real, inverted, and magnified</b> — this is the working principle of a <b>projector</b>.`;
+  else if(active.id==='atf') text=`With the object <b>at the focal point</b>, refracted rays emerge <b>parallel</b> — the image forms at infinity. No image is projected.`;
+  else text=`With the object <b>inside F</b>, rays diverge after the lens and never meet — the eye traces them backward to form a <b>virtual, upright, magnified</b> image. This is exactly how a <b>magnifying glass</b> works.`;
+  c.innerHTML=text;
+  c.classList.add('show');
+}
+
+function animateValue(id,end,suffix,decimals=2){
+  const el=document.getElementById(id);
+  const start=0, dur=800, t0=performance.now();
+  function step(ts){
+    const p=Math.min(1,(ts-t0)/dur);
+    const val=start+(end-start)*easeOutCubic(p);
+    el.textContent=(val>=0&&suffix!==''&&id!=='valM'?'':'')+val.toFixed(decimals)+suffix;
+    if(p<1) requestAnimationFrame(step);
+    else el.textContent=end.toFixed(decimals)+suffix;
+  }
+  requestAnimationFrame(step);
+}
+
+function resetView(){
+  running=false; done=false; animT=null;
+  drawScene(0);
+  document.getElementById('natureBadge').textContent='Choose a scenario →';
+  document.getElementById('natureBadge').style.background='rgba(34,211,238,.12)';
+  document.getElementById('natureBadge').style.color='#67e8f9';
+  ['valV','valM','valH'].forEach(id=>document.getElementById(id).textContent='—');
+  document.getElementById('valType').textContent='—';
+  document.getElementById('conclusion').classList.remove('show');
+  document.getElementById('runBtn').disabled=false;
+}
+
+document.getElementById('runBtn').onclick=()=>{
+  if(running) return;
+  running=true; animT=null;
+  document.getElementById('runBtn').disabled=true;
+  document.getElementById('conclusion').classList.remove('show');
+  requestAnimationFrame(animate);
+};
+document.getElementById('resetBtn').onclick=resetView;
+
+resetView();
+</script>
+</body>
+</html>

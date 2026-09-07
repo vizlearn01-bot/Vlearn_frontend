@@ -229,7 +229,7 @@ export default function PhotoelectricSim({ config = {}, onTelemetry }) {
           {/* Target Metal Selector */}
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
             <span className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
-              1. Cathode Metal Surface ($\Phi$):
+              1. Cathode Metal Surface (Φ):
             </span>
             <div className="grid grid-cols-1 gap-1.5 text-xs">
               {Object.keys(METALS).map((key) => {
@@ -262,7 +262,7 @@ export default function PhotoelectricSim({ config = {}, onTelemetry }) {
             {/* Wavelength Slider */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs">
-                <span className="text-slate-400">Wavelength ($\lambda$):</span>
+                <span className="text-slate-400">Wavelength (λ):</span>
                 <span className="font-mono font-bold" style={{ color: lightColor }}>{wavelength} nm</span>
               </div>
               <input
@@ -296,7 +296,7 @@ export default function PhotoelectricSim({ config = {}, onTelemetry }) {
             {/* Retarding Potential Slider */}
             <div className="space-y-1.5 pt-2 border-t border-slate-800">
               <div className="flex justify-between text-xs">
-                <span className="text-slate-400">Retarding Potential ($V$):</span>
+                <span className="text-slate-400">Retarding Potential (V):</span>
                 <span className={`font-mono font-bold ${retardingVoltage < 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
                   {retardingVoltage > 0 ? '+' : ''}{retardingVoltage.toFixed(1)} V
                 </span>
@@ -320,11 +320,11 @@ export default function PhotoelectricSim({ config = {}, onTelemetry }) {
             </h3>
             <div className="grid grid-cols-2 gap-2 font-mono">
               <div className="bg-slate-950 p-2 rounded-xl border border-slate-800">
-                <span className="text-slate-500 block text-[10px]">Photon Energy ($E$)</span>
+                <span className="text-slate-500 block text-[10px]">Photon Energy (E)</span>
                 <span className="text-amber-400 font-bold">{photonEnergyEV.toFixed(2)} eV</span>
               </div>
               <div className="bg-slate-950 p-2 rounded-xl border border-slate-800">
-                <span className="text-slate-500 block text-[10px]">Work Function ($\Phi$)</span>
+                <span className="text-slate-500 block text-[10px]">Work Function (Φ)</span>
                 <span className="text-white font-bold">{workFunctionEV} eV</span>
               </div>
               <div className="bg-slate-950 p-2 rounded-xl border border-slate-800">

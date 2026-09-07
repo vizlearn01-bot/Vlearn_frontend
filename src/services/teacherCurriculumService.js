@@ -125,7 +125,60 @@ const COMPREHENSIVE_SIMULATIONS = [
     title: "Titration Lab — Volumetric Analysis",
     subject: "CHEMISTRY",
     topic: "The Mole: Formulae and Chemical Equations",
+    status: "ACTIVE"
+  },
+  {
+    id: "chem_titration_volumetric_analysis",
+    key: "chem_titration_volumetric_analysis",
+    title: "Titration Lab — Volumetric Analysis",
+    subject: "CHEMISTRY",
+    topic: "The Mole: Formulae and Chemical Equations",
     description: "Virtual volumetric analysis lab simulating direct acid-base, back titration, and redox titrations with real-time burette dropwise manipulation, stoichiometry, and equivalence detection.",
+    status: "ACTIVE"
+  },
+  {
+    id: "convex_lens_image_formation",
+    key: "convex_lens_image_formation",
+    title: "Convex Lens: Principal Ray Diagrams & Image Formation",
+    subject: "PHYSICS",
+    topic: "Thin Lenses & Optical Instruments",
+    description: "Interactive ray tracer for convex lenses with live construction of parallel, optical centre, and focal rays across 5 standard KCSE object distances.",
+    status: "ACTIVE"
+  },
+  {
+    id: "lens_formula_calculator",
+    key: "lens_formula_calculator",
+    title: "Verification of the Lens Formula (1/f = 1/u + 1/v)",
+    subject: "PHYSICS",
+    topic: "Thin Lenses & Optical Instruments",
+    description: "Step-by-step algebraic substitution of the thin lens formula alongside dynamic 1/v against 1/u linear graph plotting.",
+    status: "ACTIVE"
+  },
+  {
+    id: "eye_defects_simulator",
+    key: "eye_defects_simulator",
+    title: "Eye Defects: Ray Diagnosis & Spectacle Lens Correction",
+    subject: "PHYSICS",
+    topic: "Thin Lenses & Optical Instruments",
+    description: "Dual-eye anatomical ray tracing comparing uncorrected vision vs spectacle-corrected sight for Myopia, Hypermetropia, and Presbyopia.",
+    status: "ACTIVE"
+  },
+  {
+    id: "lens_power_diopters",
+    key: "lens_power_diopters",
+    title: "Lens Power in Diopters (P = 1/f)",
+    subject: "PHYSICS",
+    topic: "Thin Lenses & Optical Instruments",
+    description: "Calculates optical power in dioptres P = 1/f with dynamic ray refraction bending angles and continuous focal power spectrum.",
+    status: "ACTIVE"
+  },
+  {
+    id: "diverging_lens_simulator",
+    key: "diverging_lens_simulator",
+    title: "Diverging Lens: The Virtual Invariant Law",
+    subject: "PHYSICS",
+    topic: "Thin Lenses & Optical Instruments",
+    description: "Concave lens ray tracer demonstrating the invariant formation of virtual, upright, and diminished images regardless of object position.",
     status: "ACTIVE"
   }
 ];
@@ -485,8 +538,10 @@ const teacherCurriculumService = {
           if (tLower.includes('rate') || tLower.includes('reversible') || tLower.includes('equilibrium')) return simTopic.includes('rate') || simTitle.includes('rate') || simTitle.includes('collision') || simTitle.includes('haber') || simTitle.includes('equilibrium');
           if (tLower.includes('electro') || tLower.includes('redox')) return simTopic.includes('electro') || simTitle.includes('electrolysis') || simTitle.includes('plating') || simTitle.includes('discharge') || simTitle.includes('voltaic') || simTitle.includes('electrode');
           if (tLower.includes('metal')) return simTopic.includes('metal') || simTitle.includes('reactivity');
+          if (tLower.includes('circular motion')) return simTopic.includes('circular') || simTitle.includes('circular') || simTitle.includes('angular') || simTitle.includes('centripetal') || simTopic.includes('centripetal');
+          if (tLower.includes('linear motion') || tLower.includes('freefall')) return simTopic.includes('linear') || simTitle.includes('freefall') || simTopic.includes('freefall');
           if (tLower.includes('circuit') || tLower.includes('electric')) return simTopic.includes('circuit') || simTitle.includes('circuit');
-          if (tLower.includes('kinematic') || tLower.includes('motion') || tLower.includes('gravity')) return simTopic.includes('kinematic') || simTitle.includes('freefall');
+          if (tLower.includes('kinematic') || tLower.includes('gravity')) return simTopic.includes('kinematic') || simTitle.includes('freefall');
           if (tLower.includes('lens') || tLower.includes('optics') || tLower.includes('light')) return simTopic.includes('optic') || simTitle.includes('optic') || simTitle.includes('lens');
           return simTopic.includes(tLower) || tLower.includes(simTopic) || simTitle.includes(tLower);
         });

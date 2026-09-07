@@ -449,6 +449,7 @@ function ComponentWrapper({
                             lessonId={lessonId}
                             blockId={block.id}
                             onAssetUpdated={onAssetUpdated}
+                            onDeleteBlock={onDelete}
                         />
                     ) : (
                         blockAssets.map((asset) => (
@@ -458,6 +459,7 @@ function ComponentWrapper({
                                 lessonId={lessonId}
                                 blockId={block.id}
                                 onAssetUpdated={onAssetUpdated}
+                                onDeleteBlock={onDelete}
                             />
                         ))
                     )}
@@ -468,6 +470,7 @@ function ComponentWrapper({
                         block={block}
                         onChange={onBlockChange}
                         onSave={onSave}
+                        onDelete={onDelete}
                     />
                 )
             )}

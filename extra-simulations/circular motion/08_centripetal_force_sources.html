@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Provides the Centripetal Force?</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --card:#121a2e; --card2:#0f1626; --border:rgba(255,255,255,0.08);
+    --text:#e6ebf5; --dim:#8a94ad; --green:#34d399; --amber:#fbbf24; --purple:#a855f7; --orange:#fb923c; --cyan:#22d3ee;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:radial-gradient(circle at 85% 5%, #0c1f18 0%, var(--bg) 45%);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;padding:28px 20px 60px;}
+  .page{max-width:1080px;margin:0 auto;}
+  .badges{display:flex;gap:8px;margin-bottom:12px;}
+  .badge{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border);}
+  .badge-blue{background:rgba(59,130,246,.12);color:#93c5fd;}
+  .badge-green{background:rgba(52,211,153,.12);color:#6ee7b7;}
+  h1{font-size:26px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px;}
+  .subtitle{color:var(--dim);font-size:13.5px;margin-bottom:26px;}
+  .stage-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 20px 50px rgba(0,0,0,.35);}
+  .stage-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+  .stage-title{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--dim);display:flex;align-items:center;gap:8px;}
+  .stage-title .dot{width:7px;height:7px;border-radius:50%;background:var(--green);}
+  .pill{font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid var(--border);}
+  canvas{width:100%;height:auto;display:block;border-radius:10px;}
+  .panels{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin-bottom:18px;}
+  @media(max-width:820px){.panels{grid-template-columns:1fr;}}
+  .panel-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;}
+  .panel-title{font-size:11.5px;font-weight:700;letter-spacing:1px;color:var(--dim);margin-bottom:14px;}
+  .preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+  .preset{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:12px 8px;cursor:pointer;transition:.2s;text-align:center;}
+  .preset:hover{border-color:rgba(52,211,153,.4);}
+  .preset.active{border-color:var(--green);background:rgba(52,211,153,.1);}
+  .preset .p-icon{font-size:20px;margin-bottom:4px;}
+  .preset .p-title{font-weight:700;font-size:12px;margin-bottom:2px;}
+  .preset .p-sub{font-size:9.5px;color:var(--dim);}
+  .action-row{display:flex;gap:10px;}
+  .btn-primary{flex:1;background:linear-gradient(135deg,#34d399,#059669);color:#04140e;border:none;border-radius:10px;padding:13px;font-weight:700;font-size:14px;cursor:pointer;transition:.2s;box-shadow:0 8px 20px rgba(52,211,153,.25);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+  .btn-secondary{background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:13px 16px;font-weight:600;font-size:13px;cursor:pointer;}
+  .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .result{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+  .result-label{font-size:10.5px;color:var(--dim);font-weight:700;letter-spacing:.5px;margin-bottom:6px;text-transform:uppercase;}
+  .result-value{font-size:16px;font-weight:700;color:var(--amber);font-family:'Courier New',monospace;}
+  .conclusion{background:linear-gradient(135deg,rgba(52,211,153,.1),rgba(34,211,238,.08));border:1px solid rgba(52,211,153,.3);border-radius:14px;padding:16px 20px;font-size:13.5px;line-height:1.6;opacity:0;transform:translateY(6px);transition:.5s;}
+  .conclusion.show{opacity:1;transform:translateY(0);}
+  .conclusion b{color:var(--green);}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="badges">
+    <span class="badge badge-blue">📘 Interactive Simulation</span>
+    <span class="badge badge-green">● Live Force Model</span>
+  </div>
+  <h1>What Provides the Centripetal Force?</h1>
+  <div class="subtitle">Topic 2 · Uniform Circular Motion · Learning Unit 2 — F = mv²/r in real situations</div>
+
+  <div class="stage-card">
+    <div class="stage-header">
+      <div class="stage-title"><span class="dot"></span>FORCE SOURCE ACTING TOWARD THE CENTRE</div>
+      <span class="pill" id="forcePill" style="background:rgba(148,163,184,.12);color:var(--dim);">Choose a scenario →</span>
+    </div>
+    <canvas id="stage" width="900" height="400"></canvas>
+  </div>
+
+  <div class="panels">
+    <div class="panel-card">
+      <div class="panel-title">1 · CHOOSE A SITUATION</div>
+      <div class="preset-grid" id="presetGrid"></div>
+      <div class="action-row">
+        <button class="btn-primary" id="runBtn">▶ Run Simulation</button>
+        <button class="btn-secondary" id="resetBtn">↺ Reset</button>
+      </div>
+    </div>
+    <div class="panel-card">
+      <div class="panel-title">2 · FORCE CALCULATION</div>
+      <div class="results-grid">
+        <div class="result"><div class="result-label">Force source</div><div class="result-value" id="valSource" style="font-size:14px;">—</div></div>
+        <div class="result"><div class="result-label">F = mv²/r</div><div class="result-value" id="valForce">—</div></div>
+        <div class="result"><div class="result-label">Mass (m)</div><div class="result-value" id="valMass">—</div></div>
+        <div class="result"><div class="result-label">Radius (r)</div><div class="result-value" id="valRad">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conclusion" id="conclusion"></div>
+</div>
+
+<script>
+const scenarios=[
+ {id:'car',icon:'🚗',title:'Car Turning',sub:'Friction',color:'#fb923c',r:20,v:12,m:1000,source:'Friction (tyres on road)'},
+ {id:'string',icon:'🪀',title:'Mass on String',sub:'Tension',color:'#22d3ee',r:0.8,v:4,m:0.3,source:'Tension in the string'},
+ {id:'moon',icon:'🌕',title:'Moon Orbiting Earth',sub:'Gravity',color:'#a855f7',r:384400000,v:1022,m:7.35e22,source:'Gravitational pull'},
+];
+let active=scenarios[0], running=false;
+
+const grid=document.getElementById('presetGrid');
+scenarios.forEach(s=>{
+  const el=document.createElement('div');
+  el.className='preset'+(s.id===active.id?' active':'');
+  el.innerHTML=`<div class="p-icon">${s.icon}</div><div class="p-title">${s.title}</div><div class="p-sub">${s.sub}</div>`;
+  el.onclick=()=>{if(running)return; active=s; document.querySelectorAll('.preset').forEach(x=>x.classList.remove('active')); el.classList.add('active'); reset();};
+  grid.appendChild(el);
+});
+document.querySelectorAll('.preset')[0].classList.add('active');
+
+function calc(s){ return (s.m*s.v*s.v)/s.r; }
+
+const cv=document.getElementById('stage'), ctx=cv.getContext('2d');
+const W=cv.width,H=cv.height,cx=W/2,cy=H/2+10;
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
+}
+function drawArrow(x1,y1,x2,y2,color,width){
+  ctx.strokeStyle=color; ctx.lineWidth=width; ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const angle=Math.atan2(y2-y1,x2-x1); const ah=9;
+  ctx.beginPath();
+  ctx.moveTo(x2,y2);ctx.lineTo(x2-ah*Math.cos(angle-0.4),y2-ah*Math.sin(angle-0.4));
+  ctx.moveTo(x2,y2);ctx.lineTo(x2-ah*Math.cos(angle+0.4),y2-ah*Math.sin(angle+0.4));
+  ctx.stroke();
+}
+
+/* --- SCENE 1: Car cornering on a road, top-down --- */
+function drawCarScene(angle){
+  const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#0d2015'); g.addColorStop(1,'#0a1a10');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  const R=125;
+  ctx.strokeStyle='#3a3f4a'; ctx.lineWidth=48;
+  ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,.55)'; ctx.lineWidth=3; ctx.setLineDash([14,14]);
+  ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke(); ctx.setLineDash([]);
+
+  const px=cx+R*Math.cos(angle), py=cy+R*Math.sin(angle);
+  const heading=angle+Math.PI/2;
+
+  drawArrow(px,py, px+55*Math.cos(angle+Math.PI), py+55*Math.sin(angle+Math.PI), active.color,3.4);
+  // skid marks (friction texture) under tires
+  ctx.strokeStyle='rgba(0,0,0,.35)'; ctx.lineWidth=3;
+  for(let d=-1;d<=1;d+=2){
+    const ox=13*d, oy=0;
+    ctx.save();ctx.translate(px,py);ctx.rotate(heading);
+    ctx.beginPath();ctx.moveTo(-16,ox);ctx.lineTo(16,ox);ctx.stroke();
+    ctx.restore();
+  }
+
+  ctx.save(); ctx.translate(px,py); ctx.rotate(heading);
+  ctx.fillStyle='#facc15'; roundRect(ctx,-20,-11,40,22,6); ctx.fill();
+  ctx.strokeStyle='#78350f'; ctx.lineWidth=1.5; roundRect(ctx,-20,-11,40,22,6); ctx.stroke();
+  ctx.fillStyle='#1e293b'; roundRect(ctx,2,-8,12,16,3); ctx.fill();
+  ctx.restore();
+
+  ctx.fillStyle=active.color; ctx.font='bold 13px Segoe UI'; ctx.textAlign='center';
+  ctx.fillText('Friction', cx+(px-cx)*0.55, cy+(py-cy)*0.55-10);
+}
+
+/* --- SCENE 2: Mass swinging on a string (conical pendulum, side view) --- */
+function drawStringScene(angle){
+  const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#14202e'); g.addColorStop(1,'#0a1220');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+  const pivotX=cx, pivotY=cy-140;
+  // pivot / hand
+  ctx.fillStyle='#94a3b8'; roundRect(ctx,pivotX-30,pivotY-16,60,16,4); ctx.fill();
+  ctx.fillStyle='#64748b'; ctx.font='11px Segoe UI'; ctx.textAlign='center'; ctx.fillText('pivot (hand)', pivotX, pivotY-22);
+
+  const rx=140, ry=45; // ellipse to suggest circular swing viewed at an angle
+  const bx=pivotX+rx*Math.cos(angle), by=(cy+70)+ry*Math.sin(angle);
+
+  // string
+  ctx.strokeStyle='#cbd5e1'; ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(pivotX,pivotY);ctx.lineTo(bx,by);ctx.stroke();
+
+  // orbit path guide (ellipse)
+  ctx.strokeStyle='rgba(255,255,255,.12)'; ctx.setLineDash([5,5]); ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.ellipse(pivotX,cy+70,rx,ry,0,0,7);ctx.stroke(); ctx.setLineDash([]);
+
+  // tension arrow along string toward pivot
+  const dirx=pivotX-bx, diry=pivotY-by, dlen=Math.hypot(dirx,diry);
+  drawArrow(bx,by, bx+50*dirx/dlen, by+50*diry/dlen, active.color, 3.2);
+
+  // ball
+  const ballGrad=ctx.createRadialGradient(bx-6,by-6,3,bx,by,16);
+  ballGrad.addColorStop(0,'#67e8f9'); ballGrad.addColorStop(1,'#0e7490');
+  ctx.fillStyle=ballGrad;
+  ctx.beginPath();ctx.arc(bx,by,15,0,7);ctx.fill();
+
+  ctx.fillStyle=active.color; ctx.font='bold 13px Segoe UI'; ctx.textAlign='center';
+  ctx.fillText('Tension', bx+dirx/dlen*30, by+diry/dlen*30-10);
+}
+
+/* --- SCENE 3: Moon orbiting Earth in space --- */
+let stars=null;
+function initStars(){
+  stars=[];
+  for(let i=0;i<90;i++) stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+0.3,a:Math.random()*0.6+0.3});
+}
+function drawSpaceScene(angle){
+  ctx.fillStyle='#050a14'; ctx.fillRect(0,0,W,H);
+  if(!stars) initStars();
+  stars.forEach(s=>{ ctx.fillStyle=`rgba(255,255,255,${s.a})`; ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,7);ctx.fill(); });
+
+  const R=150;
+  // orbit trail
+  ctx.strokeStyle='rgba(255,255,255,.12)'; ctx.setLineDash([4,6]); ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke(); ctx.setLineDash([]);
+
+  // Earth
+  const eg=ctx.createRadialGradient(cx-12,cy-12,6,cx,cy,34);
+  eg.addColorStop(0,'#5eead4'); eg.addColorStop(0.5,'#0ea5e9'); eg.addColorStop(1,'#0c4a6e');
+  ctx.fillStyle=eg; ctx.beginPath();ctx.arc(cx,cy,34,0,7);ctx.fill();
+  ctx.fillStyle='#94a3b8'; ctx.font='11px Segoe UI'; ctx.textAlign='center'; ctx.fillText('Earth', cx, cy+50);
+
+  const mx=cx+R*Math.cos(angle), my=cy+R*Math.sin(angle)*0.55;
+  drawArrow(mx,my,cx,cy,active.color,3.2);
+
+  const mg=ctx.createRadialGradient(mx-4,my-4,2,mx,my,12);
+  mg.addColorStop(0,'#e2e8f0'); mg.addColorStop(1,'#64748b');
+  ctx.fillStyle=mg; ctx.beginPath();ctx.arc(mx,my,11,0,7);ctx.fill();
+  ctx.fillStyle='#94a3b8'; ctx.font='10.5px Segoe UI'; ctx.fillText('Moon', mx, my-18);
+
+  ctx.fillStyle=active.color; ctx.font='bold 13px Segoe UI'; ctx.textAlign='center';
+  ctx.fillText('Gravity', cx+(mx-cx)*0.55, cy+(my-cy)*0.55-10);
+}
+
+function drawScene(angle){
+  ctx.clearRect(0,0,W,H);
+  if(active.id==='car') drawCarScene(angle);
+  else if(active.id==='string') drawStringScene(angle);
+  else drawSpaceScene(angle);
+}
+drawScene(-Math.PI/2);
+
+function animateValue(id,end,suffix,decimals=2,useExp=false){
+  const el=document.getElementById(id);
+  const dur=700, t0=performance.now();
+  function step(ts){
+    const p=Math.min(1,(ts-t0)/dur);
+    const val=end*(1-Math.pow(1-p,3));
+    el.textContent=(useExp? val.toExponential(2) : val.toFixed(decimals))+suffix;
+    if(p<1) requestAnimationFrame(step);
+    else el.textContent=(useExp? end.toExponential(2): end.toFixed(decimals))+suffix;
+  }
+  requestAnimationFrame(step);
+}
+
+function runAnimation(){
+  document.getElementById('forcePill').textContent=active.title;
+  document.getElementById('forcePill').style.color=active.color;
+  document.getElementById('forcePill').style.background=active.color+'22';
+  const revolutions=1.5, dur=3200;
+  const t0=performance.now();
+  function frame(ts){
+    const el=ts-t0; const p=Math.min(1,el/dur);
+    const angle=-Math.PI/2 + p*revolutions*2*Math.PI;
+    drawScene(angle);
+    if(p<1) requestAnimationFrame(frame);
+    else finish();
+  }
+  requestAnimationFrame(frame);
+}
+
+function finish(){
+  running=false; document.getElementById('runBtn').disabled=false;
+  const F=calc(active);
+  const big = Math.abs(F) > 1e6 || (Math.abs(F)<0.001 && F!==0);
+  document.getElementById('valSource').textContent=active.source;
+  document.getElementById('valMass').textContent = active.m>=1e6? active.m.toExponential(2)+' kg' : active.m+' kg';
+  document.getElementById('valRad').textContent = active.r>=1e6? active.r.toExponential(2)+' m' : active.r+' m';
+  animateValue('valForce', F, ' N', big?2:1, big);
+
+  const c=document.getElementById('conclusion');
+  c.innerHTML=`In this situation the inward pull is supplied by <b>${active.source.toLowerCase()}</b> — there is no separate "centripetal force" as a new physical force. Using <b>F = mv²/r</b> with m = ${active.m} kg, v = ${active.v} m/s and r = ${active.r} m gives <b>F ≈ ${big? F.toExponential(2): F.toFixed(1)} N</b>. Remove that force (icy road, snapped string, or gravity switched off) and the object would fly off in a <b>straight line</b>, tangent to the circle — exactly as Newton's First Law predicts.`;
+  c.classList.add('show');
+}
+
+document.getElementById('runBtn').onclick=()=>{
+  if(running) return;
+  running=true; document.getElementById('runBtn').disabled=true;
+  document.getElementById('conclusion').classList.remove('show');
+  runAnimation();
+};
+
+function reset(){
+  running=false; document.getElementById('runBtn').disabled=false;
+  document.getElementById('forcePill').textContent='Choose a scenario →';
+  document.getElementById('forcePill').style.color='var(--dim)';
+  document.getElementById('forcePill').style.background='rgba(148,163,184,.12)';
+  drawScene(-Math.PI/2);
+  ['valSource','valForce','valMass','valRad'].forEach(id=>document.getElementById(id).textContent='—');
+  document.getElementById('conclusion').classList.remove('show');
+}
+document.getElementById('resetBtn').onclick=reset;
+reset();
+</script>
+</body>
+</html>

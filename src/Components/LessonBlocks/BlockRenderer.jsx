@@ -113,8 +113,6 @@ export const BlockRenderer = ({ block, onInteract }) => {
       return <OverviewBlock block={block} />;
     case 'objectives':
       return <ObjectiveBlock block={block} />;
-    case 'definitions':
-      return <DefinitionBlock block={block} />;
     case 'core_explanation':
     case 'visual_learning':
       return <CoreExplanationBlock block={block} />;
