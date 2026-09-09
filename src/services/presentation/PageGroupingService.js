@@ -56,7 +56,7 @@ export class PageGroupingService {
     const sortedBlocks = PresentationNormalizer.sortBlocks(blocks);
 
     const MEDIA_TYPES = new Set([
-      'image', 'diagram', 'video', 'youtube', 'gif',
+      'image', 'diagram', 'video', 'youtube', 'gif', 'visualization',
       'suggested_diagram', 'suggested_image', 'suggested_video',
       'image_placeholder', 'diagram_placeholder', 'video_ref',
       'repository_asset', 'simulation_placeholder'

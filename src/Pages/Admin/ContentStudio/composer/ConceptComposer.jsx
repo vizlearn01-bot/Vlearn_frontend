@@ -8,7 +8,7 @@ import {
 } from './ComponentEditors';
 import VisualizationEditor from './VisualizationEditor';
 import { MediaSlot } from './MediaSlot';
-import { RotateCcw, Trash2, Copy, ArrowUp, ArrowDown, Plus } from 'lucide-react';
+import { RotateCcw, Trash2, Copy, ArrowUp, ArrowDown, Plus, X } from 'lucide-react';
 
 const SUGGESTED_TYPES = new Set([
     'suggested_diagram', 'suggested_illustration', 'suggested_image', 
@@ -130,7 +130,8 @@ function groupBlocksIntoSections(blocks) {
             type.startsWith('suggested_') ||
             type.endsWith('_placeholder') ||
             type === 'video_ref' ||
-            type === 'repository_asset'
+            type === 'repository_asset' ||
+            ['youtube', 'video', 'image', 'visualization', 'diagram'].includes(type)
         ) {
             sections['Visuals & Interactions'].push(block);
 
@@ -310,54 +311,79 @@ export default function ConceptComposer({
                             </button>
                             
                             {showAddMenu && (
-                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-max min-w-[600px] bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-gray-100 overflow-hidden z-50">
-                                    <div className="grid grid-cols-3 divide-x divide-y divide-gray-100">
-                                        {Object.entries(COMPONENT_CATEGORIES).map(([category, items]) => (
-                                            <div key={category} className="p-4 bg-white hover:bg-gray-50/50 transition-colors">
-                                                <h3 className="text-[10px] font-extrabold text-custom-blue uppercase tracking-widest mb-3 px-2">{category}</h3>
-                                                <div className="space-y-1">
-                                                    {items.map((item) => {
-                                                        if (item.upload) {
-                                                            return (
-                                                                <label
-                                                                    key={item.type}
-                                                                    className="block w-full text-left px-3 py-2 text-xs font-medium text-gray-700 hover:bg-orange-50 hover:text-custom-terracotta rounded-lg transition-colors cursor-pointer"
-                                                                >
-                                                                    {item.label}
-                                                                    <input
-                                                                        type="file"
-                                                                        className="hidden"
-                                                                        accept="image/*,video/*,.gif,.pdf"
-                                                                        onChange={(e) => {
-                                                                            const file = e.target.files[0];
-                                                                            if (file) {
-                                                                                onAddBlockWithFile(concept.pageNum, item.type, item.label, file);
-                                                                                setShowAddMenu(false);
-                                                                            }
-                                                                        }}
-                                                                    />
-                                                                </label>
-                                                            );
-                                                        }
-                                                        return (
-                                                            <button
-                                                                key={item.type}
-                                                                onClick={() => {
-                                                                    onAddBlock(concept.pageNum, item.type, item.label);
-                                                                    setShowAddMenu(false);
-                                                                }}
-                                                                className="w-full text-left px-3 py-2 text-xs font-medium text-gray-700 hover:bg-orange-50 hover:text-custom-terracotta rounded-lg transition-colors"
-                                                            >
-                                                                {item.label}
-                                                            </button>
-                                                        );
-                                                    })}
-                                                </div>
+                                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+                                    <div className="fixed inset-0" onClick={() => setShowAddMenu(false)} />
+                                    <div className="relative bg-white rounded-2xl shadow-2xl border border-gray-100 max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-150">
+                                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+                                            <div>
+                                                <h3 className="text-sm font-bold text-gray-900">Add Component</h3>
+                                                <p className="text-xs text-gray-500">Choose a component type to add to this card</p>
                                             </div>
-                                        ))}
-                                    </div>
-                                    <div className="bg-gray-50/80 p-3 text-center border-t border-gray-100">
-                                        <button onClick={() => setShowAddMenu(false)} className="text-xs font-semibold text-gray-500 hover:text-gray-700">Close</button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowAddMenu(false)}
+                                                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                                            >
+                                                <X size={18} />
+                                            </button>
+                                        </div>
+                                        <div className="p-6 overflow-y-auto max-h-[calc(85vh-130px)]">
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                                {Object.entries(COMPONENT_CATEGORIES).map(([category, items]) => (
+                                                    <div key={category} className="space-y-2">
+                                                        <h4 className="text-[10px] font-extrabold text-custom-blue uppercase tracking-widest px-2">{category}</h4>
+                                                        <div className="space-y-1">
+                                                            {items.map((item) => {
+                                                                if (item.upload) {
+                                                                    return (
+                                                                        <label
+                                                                            key={item.type}
+                                                                            className="block w-full text-left px-3 py-2 text-xs font-medium text-gray-700 hover:bg-orange-50 hover:text-custom-terracotta rounded-lg transition-colors cursor-pointer"
+                                                                        >
+                                                                            {item.label}
+                                                                            <input
+                                                                                type="file"
+                                                                                className="hidden"
+                                                                                accept="image/*,video/*,.gif,.pdf"
+                                                                                onChange={(e) => {
+                                                                                    const file = e.target.files[0];
+                                                                                    if (file) {
+                                                                                        onAddBlockWithFile(concept.pageNum, item.type, item.label, file);
+                                                                                        setShowAddMenu(false);
+                                                                                    }
+                                                                                }}
+                                                                            />
+                                                                        </label>
+                                                                    );
+                                                                }
+                                                                return (
+                                                                    <button
+                                                                        key={item.type}
+                                                                        type="button"
+                                                                        onClick={() => {
+                                                                            onAddBlock(concept.pageNum, item.type, item.label);
+                                                                            setShowAddMenu(false);
+                                                                        }}
+                                                                        className="w-full text-left px-3 py-2 text-xs font-medium text-gray-700 hover:bg-orange-50 hover:text-custom-terracotta rounded-lg transition-colors"
+                                                                    >
+                                                                        {item.label}
+                                                                    </button>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="bg-gray-50/80 px-6 py-3 border-t border-gray-100 flex justify-end">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowAddMenu(false)}
+                                                className="px-4 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-200/60 rounded-lg transition-colors"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             )}

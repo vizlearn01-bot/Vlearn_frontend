@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import {
     Target, FileText, Lightbulb, HelpCircle, Star,
@@ -902,31 +902,71 @@ export function ImageEditor({ block, onChange, onSave, onDelete }) {
 // ──────────────────────────────────────────────────────────
 export function YouTubeEditor({ block, onChange, onSave, onDelete }) {
     const c = parseContent(block.content);
-    const [urlInput, setUrlInput] = useState(c.youtube_url || '');
+    const [urlInput, setUrlInput] = useState(
+        c.youtube_url || c.url || c.video_url || (c.video_id ? `https://www.youtube.com/watch?v=${c.video_id}` : '')
+    );
+    const [captionInput, setCaptionInput] = useState(c.caption || '');
+
+    useEffect(() => {
+        const parsed = parseContent(block.content);
+        const currentUrl = parsed.youtube_url || parsed.url || parsed.video_url || (parsed.video_id ? `https://www.youtube.com/watch?v=${parsed.video_id}` : '');
+        setUrlInput(currentUrl || '');
+        setCaptionInput(parsed.caption || '');
+    }, [block.content]);
 
     const extractVideoId = (url) => {
+        if (!url) return '';
+        const trimmed = url.trim();
+        if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
         try {
-            const u = new URL(url);
-            if (u.hostname.includes('youtu.be')) return u.pathname.slice(1);
-            return u.searchParams.get('v') || '';
+            const u = new URL(trimmed.includes('://') ? trimmed : `https://${trimmed}`);
+            if (u.hostname.includes('youtu.be')) {
+                return u.pathname.replace(/^\//, '').split('/')[0] || '';
+            }
+            return u.searchParams.get('v') || u.pathname.split('/').filter(Boolean).pop() || '';
         } catch { return ''; }
     };
 
-    const save = (url) => {
-        const videoId = extractVideoId(url);
-        const updated = { ...block, content: { ...c, youtube_url: url, video_id: videoId } };
+    const save = (url, caption) => {
+        const finalUrl = url !== undefined ? url : urlInput;
+        const finalCaption = caption !== undefined ? caption : captionInput;
+        const videoId = extractVideoId(finalUrl);
+        const currentC = parseContent(block.content);
+        const updated = {
+            ...block,
+            content: {
+                ...currentC,
+                youtube_url: finalUrl,
+                url: finalUrl,
+                video_url: finalUrl,
+                video_id: videoId,
+                resolved_video_id: videoId,
+                caption: finalCaption,
+            }
+        };
         onChange(updated);
         onSave(updated);
     };
 
     const handleClear = () => {
         setUrlInput('');
-        const updated = { ...block, content: { ...c, youtube_url: '', video_id: '' } };
+        const currentC = parseContent(block.content);
+        const updated = {
+            ...block,
+            content: {
+                ...currentC,
+                youtube_url: '',
+                url: '',
+                video_url: '',
+                video_id: '',
+                resolved_video_id: '',
+            }
+        };
         onChange(updated);
         onSave(updated);
     };
 
-    const videoId = c.video_id || extractVideoId(urlInput);
+    const videoId = extractVideoId(urlInput) || c.video_id || c.resolved_video_id;
 
     return (
         <div className="space-y-4">
@@ -968,8 +1008,8 @@ export function YouTubeEditor({ block, onChange, onSave, onDelete }) {
                     className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-red-400"
                     value={urlInput}
                     onChange={(e) => setUrlInput(e.target.value)}
-                    onBlur={() => save(urlInput)}
-                    placeholder="https://www.youtube.com/watch?v=..."
+                    onBlur={() => save(urlInput, captionInput)}
+                    placeholder="https://www.youtube.com/watch?v=... or youtu.be/..."
                 />
             </div>
             {videoId && (
@@ -986,9 +1026,12 @@ export function YouTubeEditor({ block, onChange, onSave, onDelete }) {
                 <label className="block text-xs font-semibold text-gray-600 mb-1">Caption <span className="text-gray-400 font-normal">(optional)</span></label>
                 <input
                     className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-red-400"
-                    value={c.caption || ''}
-                    onChange={(e) => onChange({ ...block, content: { ...c, caption: e.target.value } })}
-                    onBlur={() => save(urlInput)}
+                    value={captionInput}
+                    onChange={(e) => {
+                        setCaptionInput(e.target.value);
+                        onChange({ ...block, content: { ...c, caption: e.target.value } });
+                    }}
+                    onBlur={() => save(urlInput, captionInput)}
                     placeholder="Video: ..."
                 />
             </div>
@@ -1001,17 +1044,43 @@ export function YouTubeEditor({ block, onChange, onSave, onDelete }) {
 // ──────────────────────────────────────────────────────────
 export function VideoEditor({ block, onChange, onSave, onDelete }) {
     const c = parseContent(block.content);
-    const [urlInput, setUrlInput] = useState(c.video_url || '');
+    const [urlInput, setUrlInput] = useState(c.video_url || c.url || '');
+    const [captionInput, setCaptionInput] = useState(c.caption || '');
 
-    const save = (url) => {
-        const updated = { ...block, content: { ...c, video_url: url } };
+    useEffect(() => {
+        const parsed = parseContent(block.content);
+        setUrlInput(parsed.video_url || parsed.url || '');
+        setCaptionInput(parsed.caption || '');
+    }, [block.content]);
+
+    const save = (url, caption) => {
+        const finalUrl = url !== undefined ? url : urlInput;
+        const finalCaption = caption !== undefined ? caption : captionInput;
+        const currentC = parseContent(block.content);
+        const updated = {
+            ...block,
+            content: {
+                ...currentC,
+                video_url: finalUrl,
+                url: finalUrl,
+                caption: finalCaption,
+            }
+        };
         onChange(updated);
         onSave(updated);
     };
 
     const handleClear = () => {
         setUrlInput('');
-        const updated = { ...block, content: { ...c, video_url: '' } };
+        const currentC = parseContent(block.content);
+        const updated = {
+            ...block,
+            content: {
+                ...currentC,
+                video_url: '',
+                url: '',
+            }
+        };
         onChange(updated);
         onSave(updated);
     };
@@ -1056,8 +1125,8 @@ export function VideoEditor({ block, onChange, onSave, onDelete }) {
                     className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-violet-400"
                     value={urlInput}
                     onChange={(e) => setUrlInput(e.target.value)}
-                    onBlur={() => save(urlInput)}
-                    placeholder="https://cdn.example.com/video.mp4"
+                    onBlur={() => save(urlInput, captionInput)}
+                    placeholder="https://example.com/video.mp4"
                 />
             </div>
             {urlInput && (
@@ -1073,9 +1142,12 @@ export function VideoEditor({ block, onChange, onSave, onDelete }) {
                 <label className="block text-xs font-semibold text-gray-600 mb-1">Caption <span className="text-gray-400 font-normal">(optional)</span></label>
                 <input
                     className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-violet-400"
-                    value={c.caption || ''}
-                    onChange={(e) => onChange({ ...block, content: { ...c, caption: e.target.value } })}
-                    onBlur={() => save(urlInput)}
+                    value={captionInput}
+                    onChange={(e) => {
+                        setCaptionInput(e.target.value);
+                        onChange({ ...block, content: { ...c, caption: e.target.value } });
+                    }}
+                    onBlur={() => save(urlInput, captionInput)}
                     placeholder="Video description..."
                 />
             </div>

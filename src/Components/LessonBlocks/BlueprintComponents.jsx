@@ -811,15 +811,15 @@ export const SuggestedMediaBlock = ({ block }) => {
     const path = fileStr.startsWith('/') ? fileStr : `/media/${fileStr}`;
     return `${BASE_URL}${path}`;
   };
-  const rawUrl = asset?.url || asset?.file || c.resolved_url || c.url || c.resolved_video_id || c.playback_url || c.cloudflare_video_id;
+  const rawUrl = asset?.url || asset?.file || c.resolved_url || c.youtube_url || c.video_url || c.url || c.resolved_video_id || c.video_id || c.playback_url || c.cloudflare_video_id;
   const isVideo = asset 
-    ? ['video', 'youtube'].includes(asset.asset_type) 
-    : (['suggested_video', 'video_ref'].includes(block.block_type) || Boolean(c?.cloudflare_video_id || c?.playback_url || c?.resolved_video_id || (c?.url && (c.url.includes('youtube') || c.url.includes('youtu.be') || c.url.includes('videodelivery.net')))));
+    ? (['video', 'youtube'].includes(asset.asset_type) || Boolean(asset.url && (asset.url.includes('youtube') || asset.url.includes('youtu.be'))))
+    : (['suggested_video', 'video_ref', 'video', 'youtube'].includes(block.block_type) || Boolean(c?.youtube_url || c?.video_url || c?.video_id || c?.cloudflare_video_id || c?.playback_url || c?.resolved_video_id || (c?.url && (c.url.includes('youtube') || c.url.includes('youtu.be') || c.url.includes('videodelivery.net')))));
   const resolvedUrl = isVideo ? (rawUrl || c.resolved_video_id || c.cloudflare_video_id) : getFileUrl(rawUrl);
   const resolvedImageUrl = !isVideo ? (resolvedUrl || getFileUrl(c.resolved_image_url)) : getFileUrl(c.resolved_image_url);
 
   // Direct SVG XML support (from metadata, content, or fetched)
-  const inlineSvg = asset?.metadata?.svg_content || block?.metadata?.svg_content || c?.svg_content || c?.svg_markup || c?.svg || fetchedSvg;
+  const inlineSvg = asset?.metadata?.svg_content || block?.metadata?.svg_content || c?.svg_content || c?.svg_markup || c?.svg || (c?.generated_code && typeof c.generated_code === 'string' && c.generated_code.includes('<svg') ? c.generated_code : null) || fetchedSvg;
 
   // If we have an SVG file URL but no inline SVG yet, proactively fetch it to bypass cross-origin image header restrictions
   useEffect(() => {
@@ -947,12 +947,23 @@ export const SuggestedMediaBlock = ({ block }) => {
     let videoElement = null;
 
     if (isYouTube) {
-      let videoId = resolvedUrl;
-      if (resolvedUrl.includes('youtube.com') || resolvedUrl.includes('youtu.be')) {
+      let videoId = c?.video_id || c?.resolved_video_id || '';
+      if (!videoId || resolvedUrl.includes('youtube.com') || resolvedUrl.includes('youtu.be')) {
         try {
-          const u = new URL(resolvedUrl);
-          videoId = u.searchParams.get('v') || u.pathname.split('/').pop() || '';
-        } catch { /* ignore */ }
+          const u = new URL(resolvedUrl.includes('://') ? resolvedUrl : `https://${resolvedUrl}`);
+          if (u.hostname.includes('youtu.be')) {
+            videoId = u.pathname.replace(/^\//, '').split('/')[0] || videoId;
+          } else {
+            videoId = u.searchParams.get('v') || u.pathname.split('/').filter(Boolean).pop() || videoId;
+          }
+        } catch {
+          if (!videoId && /^[a-zA-Z0-9_-]{11}$/.test(resolvedUrl.trim())) {
+            videoId = resolvedUrl.trim();
+          }
+        }
+      }
+      if (!videoId && /^[a-zA-Z0-9_-]{11}$/.test(resolvedUrl.trim())) {
+        videoId = resolvedUrl.trim();
       }
       videoElement = (
         <iframe

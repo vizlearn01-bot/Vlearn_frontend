@@ -86,6 +86,9 @@ export const BlockRenderer = ({ block, onInteract }) => {
     // Suggested media (pending or resolved)
     case 'diagram':
     case 'image':
+    case 'youtube':
+    case 'video':
+    case 'visualization':
     case 'suggested_diagram':
     case 'suggested_illustration':
     case 'suggested_infographic':
@@ -133,6 +136,7 @@ export const BlockRenderer = ({ block, onInteract }) => {
       if (compType === 'step_process') return <StepProcessBlock block={block} />;
       if (compType === 'suggested_image' || compType === 'photo_view') return <SuggestedMediaBlock block={block} />;
       if (compType === 'suggested_diagram' || compType === 'svg_viewer') return <SuggestedMediaBlock block={block} />;
+      if (compType === 'youtube' || compType === 'video' || compType === 'visualization') return <SuggestedMediaBlock block={block} />;
       if (compType === 'knowledge_check' || compType === 'mcq_interactive') return <KnowledgeCheckBlock block={block} onInteract={onInteract} />;
       if (compType === 'concept_card' || compType === 'concept_explanation') return <ConceptExplanationBlock block={block} />;
 

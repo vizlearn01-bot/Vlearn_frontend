@@ -16,7 +16,8 @@ export const SpatialStructuralLayout = ({ page, renderBlock, context }) => {
       type.startsWith('suggested_') ||
       type.endsWith('_placeholder') ||
       type === 'video_ref' ||
-      type === 'simulation'
+      type === 'simulation' ||
+      ['youtube', 'video', 'image', 'visualization', 'diagram'].includes(type)
     );
   };
 

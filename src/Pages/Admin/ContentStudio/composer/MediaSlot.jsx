@@ -353,7 +353,10 @@ export function MediaSlot({ asset, lessonId, blockId, onAssetUpdated, onDeleteBl
                                 <input type="file" className="hidden" onChange={handleFileUpload} />
                             </label>
                             <button
-                                onClick={() => setMode('url')}
+                                onClick={() => {
+                                    setUrlInput(asset.url || '');
+                                    setMode('url');
+                                }}
                                 className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 flex items-center gap-1.5"
                             >
                                 <Link2 size={11} /> Change URL
@@ -432,7 +435,8 @@ function AttachedPreview({ asset }) {
 
     if (!url) return null;
 
-    if (asset.asset_type === 'youtube') {
+    const isYouTubeUrl = Boolean(url && (url.includes('youtube.com') || url.includes('youtu.be') || /^[a-zA-Z0-9_-]{11}$/.test(url.trim())));
+    if (asset.asset_type === 'youtube' || ((asset.asset_type === 'video' || asset.asset_type === 'suggested_video') && isYouTubeUrl)) {
         const videoId = extractYouTubeId(url);
         if (videoId) {
             return (
@@ -532,9 +536,15 @@ function RepositoryBrowser({ onSelect, onCancel, isVideo = false }) {
 }
 
 function extractYouTubeId(url) {
+    if (!url) return null;
+    const trimmed = url.trim();
+    if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
     try {
-        const u = new URL(url);
-        return u.searchParams.get('v') || u.pathname.split('/').pop() || null;
+        const u = new URL(trimmed.includes('://') ? trimmed : `https://${trimmed}`);
+        if (u.hostname.includes('youtu.be')) {
+            return u.pathname.replace(/^\//, '').split('/')[0] || null;
+        }
+        return u.searchParams.get('v') || u.pathname.split('/').filter(Boolean).pop() || null;
     } catch {
         return null;
     }
