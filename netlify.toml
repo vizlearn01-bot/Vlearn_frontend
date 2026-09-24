@@ -2,35 +2,35 @@
   publish = "dist"
   command = "vite build"
 
-# 1. Normalize bare /knowledge to trailing slash for canonical SEO & proxy matching
+# 1. Proxy public knowledge base root (/knowledge) directly to Django backend
 [[redirects]]
   from = "/knowledge"
-  to = "/knowledge/"
-  status = 301
+  to = "https://vlearn-backend-4y9z.onrender.com/knowledge/"
+  status = 200
   force = true
 
-# 2. Proxy public knowledge articles to Django backend
+# 2. Proxy public knowledge articles and subpaths (/knowledge/*) to Django backend
 [[redirects]]
   from = "/knowledge/*"
-  to = "https://api.vizlearn.co/knowledge/:splat"
+  to = "https://vlearn-backend-4y9z.onrender.com/knowledge/:splat"
   status = 200
   force = true
 
-# Proxy sitemap.xml to Django backend
+# 3. Proxy sitemap.xml to Django backend
 [[redirects]]
   from = "/sitemap.xml"
-  to = "https://api.vizlearn.co/sitemap.xml"
+  to = "https://vlearn-backend-4y9z.onrender.com/sitemap.xml"
   status = 200
   force = true
 
-# Proxy robots.txt to Django backend
+# 4. Proxy robots.txt to Django backend
 [[redirects]]
   from = "/robots.txt"
-  to = "https://api.vizlearn.co/robots.txt"
+  to = "https://vlearn-backend-4y9z.onrender.com/robots.txt"
   status = 200
   force = true
 
-# SPA fallback for all remaining routes
+# 5. SPA fallback for all remaining routes
 [[redirects]]
   from = "/*"
   to = "/index.html"
