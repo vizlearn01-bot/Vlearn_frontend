@@ -5,6 +5,7 @@ import { GraduationCap, LockKeyhole, ArrowLeft, CheckCircle2, Phone, X } from 'l
 import { useNavigate, Link } from 'react-router';
 import Swal from 'sweetalert2';
 import usePaymentPolling from '../hooks/usePaymentPolling';
+import SEO from './Common/SEO';
 
 const SubscriptionPlan = () => {
     const { token, user } = useContext(UserContext);
@@ -175,6 +176,11 @@ const SubscriptionPlan = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 py-10 px-2 sm:px-4 lg:px-6 font-light">
+            <SEO
+                title="Subscription Plans & Pricing — VizLearn"
+                description="Affordable student and school subscription plans for VizLearn's interactive STEM learning platform, virtual science labs, and KCSE simulations."
+                canonicalPath="/subscription"
+            />
             {/* Header */}
             <div className="max-w-7xl mx-auto text-center mb-10">
                 <h1 className="text-4xl font-extrabold sm:text-5xl lg:text-6xl text-gray-900">

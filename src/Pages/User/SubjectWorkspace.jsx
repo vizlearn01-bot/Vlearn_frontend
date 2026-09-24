@@ -122,6 +122,52 @@ export const SubjectWorkspace = () => {
           return simTopic.includes('radioactivity') || simTitle.includes('decay') || simTitle.includes('fission');
         }
 
+        // Biology Form 4 keywords
+        if (tRaw.includes('genetic') || tRaw.includes('dna') || tRaw.includes('punnett') || tRaw.includes('blood') || tRaw.includes('karyotype') || tRaw.includes('meiosis') || tRaw.includes('heredity')) {
+          return simTopic.includes('genetic') || simTitle.includes('dna') || simTitle.includes('genetics') || simTitle.includes('karyotype') || simTitle.includes('pedigree') || simTitle.includes('meiosis') || simTitle.includes('sex-linked');
+        }
+        if (tRaw.includes('evolution') || tRaw.includes('natural selection') || tRaw.includes('limb') || tRaw.includes('moth') || tRaw.includes('speciation') || tRaw.includes('isolation')) {
+          return simTopic.includes('evolution') || simTitle.includes('evolution') || simTitle.includes('moth') || simTitle.includes('limb') || simTitle.includes('speciation');
+        }
+        if (tRaw.includes('reception') || tRaw.includes('response') || tRaw.includes('coordination') || tRaw.includes('eye') || tRaw.includes('ear') || tRaw.includes('reflex') || tRaw.includes('tropism') || tRaw.includes('nerve') || tRaw.includes('synapse')) {
+          return simTopic.includes('reception') || simTitle.includes('eye') || simTitle.includes('ear') || simTitle.includes('reflex') || simTitle.includes('tropism') || simTitle.includes('nerve') || simTitle.includes('synapse');
+        }
+        if (tRaw.includes('support') || tRaw.includes('movement') || tRaw.includes('vertebra') || tRaw.includes('muscle') || tRaw.includes('joint') || tRaw.includes('turgor') || tRaw.includes('sliding') || tRaw.includes('filament')) {
+          return simTopic.includes('support') || simTitle.includes('vertebra') || simTitle.includes('muscle') || simTitle.includes('joint') || simTitle.includes('turgor') || simTitle.includes('sliding');
+        }
+
+        // Physics Form 4 keywords
+        if (tRaw.includes('lens') || tRaw.includes('optics') || tRaw.includes('refraction')) {
+          return simTopic.includes('lens') || simTopic.includes('optic') || simTitle.includes('lens') || simTitle.includes('microscope') || simTitle.includes('telescope');
+        }
+        if (tRaw.includes('circular motion')) {
+          return simTopic.includes('circular') || simTitle.includes('circular') || simTitle.includes('centripetal') || simTitle.includes('loop');
+        }
+        if (tRaw.includes('float') || tRaw.includes('sink') || tRaw.includes('archimedes')) {
+          return simTopic.includes('float') || simTopic.includes('sink') || simTitle.includes('archimedes') || simTitle.includes('hydrometer');
+        }
+        if (tRaw.includes('electromagnetic spectrum') || tRaw.includes('em spectrum')) {
+          return simTopic.includes('spectrum') || simTitle.includes('spectrum') || simTitle.includes('radiation');
+        }
+        if (tRaw.includes('electromagnetic induction') || tRaw.includes('induction')) {
+          return simTopic.includes('induction') || simTitle.includes('faraday') || simTitle.includes('lenz') || simTitle.includes('generator') || simTitle.includes('transformer');
+        }
+        if (tRaw.includes('mains') || tRaw.includes('power distribution')) {
+          return simTopic.includes('mains') || simTitle.includes('grid') || simTitle.includes('wiring') || simTitle.includes('costing');
+        }
+        if (tRaw.includes('cathode') || tRaw.includes('crt')) {
+          return simTopic.includes('cathode') || simTitle.includes('crt') || simTitle.includes('cro') || simTitle.includes('thomson');
+        }
+        if (tRaw.includes('x-ray') || tRaw.includes('xray')) {
+          return simTopic.includes('x-ray') || simTopic.includes('xray') || simTitle.includes('x-ray') || simTitle.includes('bragg') || simTitle.includes('transition');
+        }
+        if (tRaw.includes('photoelectric')) {
+          return simTopic.includes('photoelectric') || simTitle.includes('photoelectric') || simTitle.includes('planck') || simTitle.includes('electroscope');
+        }
+        if (tRaw.includes('electronic') || tRaw.includes('semiconductor')) {
+          return simTopic.includes('electronic') || simTitle.includes('junction') || simTitle.includes('logic gate') || simTitle.includes('transistor');
+        }
+
         return false;
       });
 
@@ -190,7 +236,7 @@ export const SubjectWorkspace = () => {
               {[
                 { id: 'topics', label: 'Topics', icon: BookOpen, count: topics.length, show: true },
                 { id: 'experiments', label: 'Experiments', icon: Video, count: experiments.length, show: experiments.length > 0 },
-                { id: 'simulations', label: 'Simulations', icon: Cpu, count: matchedSimulationsCount, show: matchedSimulationsCount > 0 },
+                { id: 'simulations', label: 'Simulations', icon: Cpu, count: matchedSimulationsCount, show: matchedSimulationsCount > 0 || ['biology', 'physics', 'chemistry', 'mathematics'].some(s => (subject?.name || '').toLowerCase().includes(s)) },
                 { id: 'practice', label: 'Practice', icon: HelpCircle, count: quizAttempts.length, show: true },
               ].filter(tab => tab.show).map((tab) => (
                 <button

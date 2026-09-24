@@ -1514,7 +1514,16 @@ export const InteractiveSimulationBlock = ({ block }) => {
   const combinedText = ((content?.text || '') + ' ' + title + ' ' + (block?.page_title || '')).toLowerCase();
 
   if (!simKey && !archetype) {
-    if (combinedText.includes('lens') || combinedText.includes('optics') || combinedText.includes('ray tracing') || combinedText.includes('refraction')) {
+    if (combinedText.includes('microscope') || combinedText.includes('telescope') || combinedText.includes('optical instruments') || combinedText.includes('eyepiece') || combinedText.includes('normal adjustment')) {
+      simKey = 'compound_microscope_telescope';
+      archetype = 'compound_microscope_telescope';
+    } else if (combinedText.includes('rollercoaster') || combinedText.includes('vertical circle') || combinedText.includes('loop-the-loop') || combinedText.includes('loop the loop') || combinedText.includes('critical speed') || combinedText.includes('vertical circular')) {
+      simKey = 'vertical_circle_loop';
+      archetype = 'vertical_circle_loop';
+    } else if (combinedText.includes('atomic transition') || combinedText.includes('characteristic x-ray') || combinedText.includes('k-alpha') || combinedText.includes('k-beta') || combinedText.includes('bohr shell') || combinedText.includes('x-ray spectra')) {
+      simKey = 'xray_atomic_transitions';
+      archetype = 'xray_atomic_transitions';
+    } else if (combinedText.includes('lens') || combinedText.includes('optics') || combinedText.includes('ray tracing') || combinedText.includes('refraction')) {
       simKey = 'optics';
       archetype = 'optics';
     } else if (combinedText.includes('thomson') || combinedText.includes('specific charge') || combinedText.includes('e/m') || combinedText.includes('velocity selector')) {
@@ -1547,9 +1556,12 @@ export const InteractiveSimulationBlock = ({ block }) => {
     } else if (combinedText.includes('photocell') || combinedText.includes('burglar alarm') || combinedText.includes('solar cell')) {
       simKey = 'photocell_circuit_applications';
       archetype = 'photocell_circuit_applications';
+    } else if (combinedText.includes('electroscope') || combinedText.includes('gold leaf') || combinedText.includes('gold-leaf') || combinedText.includes('zinc plate') || combinedText.includes('hallwachs') || combinedText.includes('hertz')) {
+      simKey = 'gold_leaf_electroscope_uv';
+      archetype = 'gold_leaf_electroscope_uv';
     } else if (combinedText.includes('photocurrent') || combinedText.includes('photon flux') || combinedText.includes('intensity vs current')) {
-      simKey = 'photon_intensity_vs_current';
-      archetype = 'photon_intensity_vs_current';
+      simKey = 'gold_leaf_electroscope_uv';
+      archetype = 'gold_leaf_electroscope_uv';
     } else if (combinedText.includes('photoelectric') || combinedText.includes('work function') || combinedText.includes('threshold frequency')) {
       simKey = 'photoelectric';
       archetype = 'photoelectric';
@@ -1631,6 +1643,42 @@ export const InteractiveSimulationBlock = ({ block }) => {
     } else if (combinedText.includes('buoyancy') || combinedText.includes('archimedes') || combinedText.includes('upthrust')) {
       simKey = 'archimedes_principle_buoyancy';
       archetype = 'archimedes_principle_buoyancy';
+    } else if (combinedText.includes('meiosis') || combinedText.includes('crossing over') || combinedText.includes('chiasma') || combinedText.includes('gamete variation')) {
+      simKey = 'meiosis_genetic_variation';
+      archetype = 'meiosis_genetic_variation';
+    } else if (combinedText.includes('punnett') || combinedText.includes('mendel') || combinedText.includes('monohybrid') || combinedText.includes('test cross') || combinedText.includes('genotypic ratio')) {
+      simKey = 'monohybrid_dihybrid_punnett_genetics';
+      archetype = 'monohybrid_dihybrid_punnett_genetics';
+    } else if (combinedText.includes('sex-linked') || combinedText.includes('sex linked') || combinedText.includes('haemophilia') || combinedText.includes('hemophilia') || combinedText.includes('colour blind') || combinedText.includes('color blind')) {
+      simKey = 'sex_linked_inheritance';
+      archetype = 'sex_linked_inheritance';
+    } else if (combinedText.includes('peppered moth') || combinedText.includes('melanism') || combinedText.includes('natural selection') || combinedText.includes('biston betularia')) {
+      simKey = 'natural_selection_peppered_moth_simulation';
+      archetype = 'natural_selection_peppered_moth_simulation';
+    } else if (combinedText.includes('speciation') || combinedText.includes('allopatric') || combinedText.includes('geographic isolation') || combinedText.includes('reproductive isolation')) {
+      simKey = 'speciation_geographic_isolation';
+      archetype = 'speciation_geographic_isolation';
+    } else if (combinedText.includes('homologous') || combinedText.includes('pentadactyl') || combinedText.includes('divergent evolution') || combinedText.includes('adaptive radiation')) {
+      simKey = 'homologous_pentadactyl_limb_evolution_3d';
+      archetype = 'homologous_pentadactyl_limb_evolution_3d';
+    } else if (combinedText.includes('reflex') || combinedText.includes('spinal arc') || combinedText.includes('dorsal root ganglion')) {
+      simKey = 'reflex_arc_synaptic_transmission_sim';
+      archetype = 'reflex_arc_synaptic_transmission_sim';
+    } else if (combinedText.includes('eye') || combinedText.includes('accommodation') || combinedText.includes('myopia') || combinedText.includes('hypermetropia') || combinedText.includes('ciliary muscle')) {
+      simKey = 'human_eye_accommodation_defects_3d';
+      archetype = 'human_eye_accommodation_defects_3d';
+    } else if (combinedText.includes('synapse') || combinedText.includes('action potential') || combinedText.includes('neurotransmitter') || combinedText.includes('nerve impulse') || combinedText.includes('acetylcholine')) {
+      simKey = 'nerve_impulse_synaptic_transmission';
+      archetype = 'nerve_impulse_synaptic_transmission';
+    } else if (combinedText.includes('synovial') || combinedText.includes('joint') || combinedText.includes('cartilage') || combinedText.includes('ligament')) {
+      simKey = 'synovial_joint_biomechanics_3d';
+      archetype = 'synovial_joint_biomechanics_3d';
+    } else if (combinedText.includes('antagonistic') || combinedText.includes('biceps') || combinedText.includes('triceps') || combinedText.includes('arm flexion')) {
+      simKey = 'human_arm_antagonistic_muscles_3d';
+      archetype = 'human_arm_antagonistic_muscles_3d';
+    } else if (combinedText.includes('sliding filament') || combinedText.includes('sarcomere') || combinedText.includes('cross-bridge') || combinedText.includes('actin') || combinedText.includes('myosin') || combinedText.includes('rigor mortis')) {
+      simKey = 'muscle_sliding_filament_mechanism';
+      archetype = 'muscle_sliding_filament_mechanism';
     } else {
       simKey = 'optics';
       archetype = 'optics';

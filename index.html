@@ -2,12 +2,97 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/images/vlearn_icon.png" />
+    <link rel="icon" type="image/png" href="/images/vlearn_icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vizlearn</title>
+    <title>VizLearn — Interactive STEM Learning & Virtual Labs for CBC & KCSE</title>
+    <meta name="description" content="VizLearn brings secondary school STEM concepts to life with interactive virtual science labs, curriculum-aligned simulations, and visual explanations." />
+    <meta name="keywords" content="VizLearn, STEM, virtual science lab, simulations, KCSE, CBC, secondary school science, physics simulations, chemistry simulations, biology simulations" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.vizlearn.org/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="VizLearn" />
+    <meta property="og:title" content="VizLearn — Interactive STEM Learning & Virtual Labs for CBC & KCSE" />
+    <meta property="og:description" content="VizLearn brings secondary school STEM concepts to life with interactive virtual science labs, curriculum-aligned simulations, and visual explanations." />
+    <meta property="og:url" content="https://www.vizlearn.org/" />
+    <meta property="og:image" content="https://www.vizlearn.org/images/og-knowledge.png" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@VizLearn01" />
+    <meta name="twitter:title" content="VizLearn — Interactive STEM Learning & Virtual Labs for CBC & KCSE" />
+    <meta name="twitter:description" content="VizLearn brings secondary school STEM concepts to life with interactive virtual science labs, curriculum-aligned simulations, and visual explanations." />
+    <meta name="twitter:image" content="https://www.vizlearn.org/images/og-knowledge.png" />
+
+    <!-- Baseline Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "EducationalOrganization",
+          "@id": "https://www.vizlearn.org/#organization",
+          "name": "VizLearn",
+          "url": "https://www.vizlearn.org",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.vizlearn.org/images/logo.png"
+          },
+          "description": "Visual, interactive STEM learning platform with virtual laboratories for secondary school education.",
+          "sameAs": [
+            "https://twitter.com/VizLearn01"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.vizlearn.org/#website",
+          "url": "https://www.vizlearn.org",
+          "name": "VizLearn",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.vizlearn.org/knowledge/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
+    </script>
+    <!-- Optional Google Analytics 4 (Only activated if VITE_GA4_MEASUREMENT_ID is defined and valid) -->
+    <script>
+      (function() {
+        var gaId = "%VITE_GA4_MEASUREMENT_ID%";
+        if (gaId && gaId.indexOf("%") !== 0 && gaId.indexOf("G-") === 0) {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(gaId);
+          document.head.appendChild(script);
+
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          window.gtag = gtag;
+          gtag('js', new Date());
+          gtag('config', gaId);
+        }
+      })();
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Accessibility Skip Link -->
+    <a href="#root" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#002040] focus:text-white focus:font-semibold focus:rounded-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#02A0BF]">
+      Skip to main content
+    </a>
+
+    <!-- Noscript Fallback -->
+    <noscript>
+      <div style="padding: 2.5rem 1rem; text-align: center; font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #0f172a; border-bottom: 1px solid #e2e8f0;">
+        <h1 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; color: #002040;">JavaScript Required</h1>
+        <p style="font-size: 0.95rem; color: #475569; max-width: 600px; margin: 0 auto 1.5rem; line-height: 1.5;">VizLearn interactive laboratory features and simulations require JavaScript to function properly. Please enable JavaScript in your browser settings to access our full interactive platform.</p>
+        <p><a href="/knowledge/" style="display: inline-block; padding: 0.5rem 1.25rem; background-color: #002040; color: #ffffff; text-decoration: none; border-radius: 9999px; font-weight: 600; font-size: 0.875rem;">Browse static educational articles on VizLearn Knowledge &rarr;</a></p>
+      </div>
+    </noscript>
+
+    <div id="root" tabindex="-1"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

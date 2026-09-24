@@ -10,6 +10,7 @@ import AnchorLink from 'react-anchor-link-smooth-scroll';
 import Swal from 'sweetalert2';
 import emailjs from '@emailjs/browser';
 import BASE_URL from '../config';
+import SEO from '../Components/Common/SEO';
 
 function Home() {
   // const [categories, setCategories] = useState([]);
@@ -158,6 +159,11 @@ function Home() {
   ];
   return (
     <>
+      <SEO
+        title="VizLearn — Interactive STEM Learning & Virtual Labs for CBC & KCSE"
+        description="VizLearn brings secondary school STEM concepts to life with interactive virtual science labs, curriculum-aligned simulations, and visual explanations."
+        canonicalPath="/"
+      />
       <Navbar />
       <section className='relative h-fit bg-[url(/images/Vlearn_bg1.png)] bg-cover bg-fixed bg-no-repeat'>
         <div className="absolute inset-0 bg-white/70 md:bg-white/50 z-0"></div>

@@ -510,13 +510,14 @@ const teacherCurriculumService = {
     }
   },
 
-  // Get simulations (Only applicable to Chemistry and Physics)
+  // Get simulations (Chemistry, Physics, and Biology)
   async getSimulations(subjectName = '', topicName = '') {
     if (subjectName) {
       const sLower = subjectName.toLowerCase();
       const isChem = sLower.includes('chem');
       const isPhys = sLower.includes('phys');
-      if (!isChem && !isPhys) {
+      const isBio = sLower.includes('bio');
+      if (!isChem && !isPhys && !isBio) {
         return [];
       }
     }
@@ -543,6 +544,18 @@ const teacherCurriculumService = {
           if (tLower.includes('circuit') || tLower.includes('electric')) return simTopic.includes('circuit') || simTitle.includes('circuit');
           if (tLower.includes('kinematic') || tLower.includes('gravity')) return simTopic.includes('kinematic') || simTitle.includes('freefall');
           if (tLower.includes('lens') || tLower.includes('optics') || tLower.includes('light')) return simTopic.includes('optic') || simTitle.includes('optic') || simTitle.includes('lens');
+          if (tLower.includes('genetic') || tLower.includes('dna') || tLower.includes('punnett') || tLower.includes('blood') || tLower.includes('karyotype')) {
+            return simTopic.includes('genetic') || simTitle.includes('dna') || simTitle.includes('genetics') || simTitle.includes('karyotype') || simTitle.includes('pedigree');
+          }
+          if (tLower.includes('evolution') || tLower.includes('natural selection') || tLower.includes('limb') || tLower.includes('moth')) {
+            return simTopic.includes('evolution') || simTitle.includes('evolution') || simTitle.includes('moth') || simTitle.includes('limb') || simTitle.includes('prebiotic');
+          }
+          if (tLower.includes('reception') || tLower.includes('response') || tLower.includes('coordination') || tLower.includes('eye') || tLower.includes('ear') || tLower.includes('reflex') || tLower.includes('tropism')) {
+            return simTopic.includes('reception') || simTitle.includes('eye') || simTitle.includes('ear') || simTitle.includes('reflex') || simTitle.includes('tropism');
+          }
+          if (tLower.includes('support') || tLower.includes('movement') || tLower.includes('vertebra') || tLower.includes('muscle') || tLower.includes('joint') || tLower.includes('turgor')) {
+            return simTopic.includes('support') || simTitle.includes('vertebra') || simTitle.includes('muscle') || simTitle.includes('joint') || simTitle.includes('turgor');
+          }
           return simTopic.includes(tLower) || tLower.includes(simTopic) || simTitle.includes(tLower);
         });
       }

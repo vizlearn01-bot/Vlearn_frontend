@@ -1,13 +1,16 @@
 import React, { useContext } from "react";
-import { Navigate } from "react-router";
+import { Navigate, useLocation } from "react-router";
 import UserContext from "../../../Context/UserContext";
 import LoadingScreen from "../../utils/LoadingScreen";
+import SEO from "../../../Components/Common/SEO";
 
 const RequireRole = ({ children, allowedRoles = [], fallbackUrl }) => {
   const { user, token } = useContext(UserContext) || {};
+  const location = useLocation();
 
   if (token == null) {
-    return <Navigate to="/login" replace />;
+    const redirectTarget = location.pathname + location.search;
+    return <Navigate to={`/login?next=${encodeURIComponent(redirectTarget)}`} replace state={{ from: location }} />;
   }
 
   if (user == null) {
@@ -35,7 +38,12 @@ const RequireRole = ({ children, allowedRoles = [], fallbackUrl }) => {
     return <Navigate to={fallbackUrl || target} replace />;
   }
 
-  return children;
+  return (
+    <>
+      <SEO noindex={true} />
+      {children}
+    </>
+  );
 };
 
 export default RequireRole;

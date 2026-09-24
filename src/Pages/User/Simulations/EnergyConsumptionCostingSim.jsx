@@ -1908,8 +1908,8 @@ export default function EnergyConsumptionCostingSim({ config = {}, onTelemetry }
                   The SI unit of electrical energy is the <strong>Joule (J)</strong>. However, the Joule is too small for commercial utility billing:
                 </p>
                 <div className="bg-slate-950 rounded-xl p-3 font-mono text-cyan-300 text-[11px] space-y-1 border border-slate-800">
-                  <div>$1 kWh} = 1000 W} × 3600 seconds}$</div>
-                  <div className="font-bold text-emerald-400">$1 kWh} = 3,600,000 J} = 3.6 × 10^6 J}$</div>
+                  <div>1 kWh = 1000 W × 3600 s</div>
+                  <div className="font-bold text-emerald-400">1 kWh = 3,600,000 J = 3.6 × 10⁶ J</div>
                 </div>
                 <p className="text-slate-400 text-[11px] leading-relaxed">
                   When answering KCSE exam questions, remember that electricity utilities sell electrical <strong>energy</strong>, not electrical power!

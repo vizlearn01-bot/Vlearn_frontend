@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import { useState, useContext } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -15,6 +15,7 @@ function Login() {
   const [error, setError] = useState(null);
   const { login } = useContext(UserContext);
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false)
 
   const handleInputChange = (e) => {
@@ -41,6 +42,14 @@ function Login() {
           timer: 1200,
           showConfirmButton: false,
         });
+
+        const searchParams = new URLSearchParams(location.search);
+        const nextUrl = searchParams.get("next");
+
+        if (nextUrl && nextUrl.startsWith("/") && !nextUrl.startsWith("//")) {
+          navigate(nextUrl);
+          return;
+        }
 
         if (role === "teacher") {
           navigate("/teacher");

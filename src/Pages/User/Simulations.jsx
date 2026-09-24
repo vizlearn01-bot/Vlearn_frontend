@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import UserContext from '../../Context/UserContext';
 import SimulationCard from '../../Components/User/SimulationCard';
 import FullscreenSimulationModal from '../../Components/Simulations/FullscreenSimulationModal';
@@ -29,6 +29,8 @@ const SUBJECT_CONFIG = {
 
 export default function Simulations() {
   const { user } = useContext(UserContext);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const simParam = searchParams.get('sim');
   const [simulations, setSimulations] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState('ALL');
   const [selectedGrade, setSelectedGrade] = useState('ALL');
@@ -53,6 +55,24 @@ export default function Simulations() {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  // Deep-link simulation activation: auto-launch simulation if ?sim=<key> is provided
+  useEffect(() => {
+    if (!simParam || simulations.length === 0) return;
+
+    const norm = (str) => (str || '').trim().toLowerCase().replace(/-/g, '_');
+    const target = norm(simParam);
+
+    const matched = simulations.find((s) => {
+      const sKey = norm(s.key);
+      const aKey = norm(s.archetype);
+      return sKey === target || aKey === target || sKey.includes(target) || target.includes(sKey);
+    });
+
+    if (matched) {
+      setActiveSimulation(matched);
+    }
+  }, [simParam, simulations]);
 
   const getSubjectCount = (subKey) => {
     if (subKey === 'ALL') return simulations.length;
@@ -293,7 +313,14 @@ export default function Simulations() {
       <FullscreenSimulationModal
         simulation={activeSimulation}
         isOpen={Boolean(activeSimulation)}
-        onClose={() => setActiveSimulation(null)}
+        onClose={() => {
+          setActiveSimulation(null);
+          if (searchParams.get('sim')) {
+            const nextParams = new URLSearchParams(searchParams);
+            nextParams.delete('sim');
+            setSearchParams(nextParams, { replace: true });
+          }
+        }}
       />
     </div>
   );

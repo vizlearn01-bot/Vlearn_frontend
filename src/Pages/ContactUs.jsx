@@ -1,5 +1,6 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import Navbar from '../Components/Navbar';
+import SEO from '../Components/Common/SEO';
 
 function ContactUs() {
   const [formData, setFormData] = useState({
@@ -25,6 +26,11 @@ function ContactUs() {
 
   return (
     <>
+      <SEO
+        title="Contact Us — VizLearn"
+        description="Get in touch with the VizLearn team for inquiries, school partnerships, STEM simulations, or platform support."
+        canonicalPath="/contact"
+      />
       <Navbar />
       <section className="relative w-full mt-16 h-96">
         <img
@@ -35,7 +41,7 @@ function ContactUs() {
         <div className="absolute inset-0 h-full w-full bg-black/50"></div>
         <div className="relative pt-28 text-center">
           <h2 className="text-3xl lg:text-4xl font-semibold text-white">Get in touch with us</h2>
-          <p className="text-xl text-white opacity-70">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+          <p className="text-xl text-white opacity-80 max-w-xl mx-auto mt-2">Have questions about VizLearn, school onboarding, or curriculum alignment? Reach out to our academic support team.</p>
         </div>
       </section>
       
@@ -44,9 +50,9 @@ function ContactUs() {
           {/* Contact Information on the left */}
           <div className="mx-auto lg:mx-0">
             <h3 className="text-2xl font-semibold mb-4">Contact Information</h3>
-            <p className=" font-bold mb-20">Email: support@nexus.com</p>
-            <p className=" font-bold mb-20">Phone: (123) 456-7890</p>
-            <p className=" font-bold mb-20">Address: 123 Example St, City, Country</p>
+            <p className=" font-bold mb-6">Email: info@vizlearn.co</p>
+            <p className=" font-bold mb-6">Phone: +254 794 771 949</p>
+            <p className=" font-bold mb-6">Address: Nairobi, Kenya</p>
           </div>
 
           {/* Contact Form on the right */}

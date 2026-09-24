@@ -102,7 +102,13 @@ export default function RegistrationForm({ selectedRole, onBack }) {
         });
         // login() is identical to Login.jsx — stores token in localStorage and returns effectiveRole
         const role = login(response.data);
-        navigate(resolvePostRegistrationRoute(role));
+        const searchParams = new URLSearchParams(window.location.search);
+        const nextUrl = searchParams.get("next");
+        if (nextUrl && nextUrl.startsWith("/") && !nextUrl.startsWith("//")) {
+          navigate(nextUrl);
+        } else {
+          navigate(resolvePostRegistrationRoute(role));
+        }
       }
     } catch (err) {
       const errorData = err.response?.data;
